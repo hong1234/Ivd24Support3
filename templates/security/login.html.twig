@@ -1,0 +1,60 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{# {% block navigation %}
+
+{% endblock %} #}
+
+{% block content %}
+
+{% if error %}
+    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+
+<!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>ivd24 Login</h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-body">
+
+                            <form action="{{ path('login') }}" method="post">
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" /></br>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password">Password:</label>
+                                    <input type="password" class="form-control" id="password" name="_password" /></br>
+                                </div>
+
+                                {#
+                                If you want to control the URL the user
+                                is redirected to on success (more details below)
+                                <input type="hidden" name="_target_path" value="/account" />
+                                #}
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                                <div class="box-footer">
+                                    {# <button type="submit" class="btn btn-primary" name="savebutton" value="true">Speichern</button>  #}
+                                    <button type="submit" class="btn btn-primary">Login</button>               
+                                </div>   
+                            </form>
+                        </div>            
+                    </div>
+                </div>  
+            </div>
+        </section>
+    </div>
+  <!-- /.content-wrapper -->
+{% endblock %}

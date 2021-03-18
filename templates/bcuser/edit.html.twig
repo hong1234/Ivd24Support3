@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BClub-User Edit{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bower_components/jquery-ui/themes/base/jquery-ui.css') }}">
+{% endblock %}
+
+{# {% block navigation %}
+    
+{% endblock %} #}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>BusinessClub User editieren</h1>
+            </section>          
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6">
+                        {# <form action="/admin/bcuser/{{user_id}}/edit" method="POST"> #}
+                        <form action="{{ path('bcuser_edit', {'uid': user_id}) }}" method="POST">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Header Bereich</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label for="UserId">UserId</label>
+                                        <input type="text" class="form-control" id="userid" name="userid" placeholder="" value="{{user_id}}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Buchungsdatum">Buchungsdatum</label>
+                                        <input type="text" class="form-control" id="buchungsdatum" name="buchungsdatum" placeholder="" value="{{bcuser.buchungsdatum|date('Y-m-d')}}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Name">Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="" value="{{bcuser.name}}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Vorname">Vorname</label>
+                                        <input type="text" class="form-control" id="vorname" name="vorname" placeholder="" value="{{bcuser.vorname}}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Firma">Firma</label>
+                                        <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" value="{{bcuser.firma}}" required readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="SEO URL">SEO URL</label>
+                                        <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="" value="{{bcuser.seo_url}}" required readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="IP Adresse">IP Adresse</label>
+                                        <input type="text" class="form-control" id="ip_adresse" name="ip_adresse" placeholder="Ip Adresse" value="{{bcuser.ip_adresse}}" required readonly>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                    </div>
+                    <!--/.col (left) -->
+                    <!-- right column -->
+                    <div class="col-md-6">
+                        
+                        <div class="box box-warning">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Body Bereich</h3>
+                            </div>
+                            
+                            <div class="box-body">
+                            
+                                <div class="form-group">
+                                    <label for="Abo Start">Abo Start</label>
+                                    <input type="text" class="form-control" id="start_abo" name="start_abo" value="{{bcuser.start_abo|date('Y-m-d')}}" placeholder="">
+                                </div>
+				                <div class="form-group">
+                                    <label for="Abo Ende">Abo Ende</label>
+                                    <input type="text" class="form-control" id="end_abo" name="end_abo" value="{{bcuser.end_abo|date('Y-m-d')}}" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Buchungspreis">Buchungspreis</label>
+                                    <input type="text" class="form-control" id="total_amount" name="total_amount" value="{{bcuser.total_amount}}" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Paket">Paket</label>
+                                    <select id="paket_id" name="paket_id" class="form-control" required>
+                                        <option value="1" {% if bcuser.paketid == '1' %} selected {% endif %}>BC</option>
+                                        <option value="2" {% if bcuser.paketid == '2' %} selected {% endif %}>BC+SB</option> 
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bezahlt">bezahlt</label>
+                                    <select id="paid" name="paid" class="form-control" required>
+                                        <option value="0" {% if bcuser.paid == '0' %} selected {% endif %}>Nein</option>
+                                        <option value="1" {% if bcuser.paid == '1' %} selected {% endif %}>Ja</option> 
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Email-Adresse</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{bcuser.email}}" placeholder="E-Mailadresse" required>
+                                </div>
+
+                            </div>
+                        
+                        </div>
+
+                        <div class="box box-warning">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Grundriss Bereich</h3>
+                            </div>
+                                
+                            <div class="box-body">   
+                                <div class="form-group">
+                                    <label for="Anzahl Grundrisse">Anzahl Grundrisse</label>
+                                    <input type="text" class="form-control" id="grundriss_count" name="grundriss_count" placeholder="" value="{{bcuser.grundriss_count}}" readonly required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Bereits verwendete Grundrisse">Bereits verwendete Grundrisse</label>
+                                    <input type="text" class="form-control" id="used_grundriss_count" name="used_grundriss_count" placeholder="" value="{{bcuser.used_grundriss_count}}" readonly required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Ende Grundriss Paket">Ende Grundriss Paket</label>
+                                    <input type="text" class="form-control" id="end_grundriss" name="end_grundriss" placeholder="" value="{{bcuser.end_grundriss|date('Y-m-d')}}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Grundriss Gutschein">Grundriss Gutschein</label>
+                                    <input type="text" class="form-control" id="grundriss_voucher" name="grundriss_voucher" placeholder="" value="{{bcuser.grundriss_voucher}}">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="box box-warning">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">StoryBox Bereich</h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="Anzahl Geräte">Anzahl Geräte</label>
+                                    <input type="text" class="form-control" id="geraete" name="geraete" value="{{bcuser.geraete}}" placeholder="">
+                                </div>
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary" name="savebutton" value="true">Speichern</button>                
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                
+                </div>
+           
+            </section>
+            
+            </form>
+        </div>
+
+        <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+    <script src="{{ asset('bower_components/jquery-ui/jquery-ui.js') }}"></script>
+    <script>
+        $(function(){
+            $("#end_grundriss").datepicker({ dateFormat: 'yy-mm-dd' });
+            $("#start_abo").datepicker({ dateFormat: 'yy-mm-dd' });
+            $("#end_abo").datepicker({ dateFormat: 'yy-mm-dd' });
+        });
+    </script>
+{% endblock %}

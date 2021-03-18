@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Interessent Delete{% endblock %}
+
+{# {% block head %}
+    {{ parent() }}
+{% endblock %} #}
+
+{# {% block navigation %}
+    
+{% endblock %} #}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>Interessent Delete</h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+              
+                    {# <form action="/interessent/{{user_id}}/delete" method="POST"> #}
+                    <form action="{{ path('interessent_delete', {'uid': user_id}) }}" method="POST">
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Persönliche Daten</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="Anrede">Anrede</label>
+                                <input type="text" class="form-control" id="anrede" name="anrede" placeholder="" value="{{interessent.anrede}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="Titel">Titel</label>
+                                <input type="text" class="form-control" id="titel" name="titel" placeholder="Prof. Dr." value="{{interessent.titel}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="Namenstitel">Namenstitel</label>
+                                <input type="text" class="form-control" id="namenstitel" name="namenstitel" placeholder="Kfm./ Ing(FH)/ B.Sc. (usw.)" value="{{interessent.namenstitel}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="Vorname">Vorname</label>
+                                <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname" value="{{interessent.vorname}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Nachname</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Nachname" value="{{interessent.name}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="Firma">Firma</label>
+                                <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" value="{{interessent.firma}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="Strasse">Straße Nr.</label>
+                                <input type="text" class="form-control" id="strasse" name="strasse" placeholder="Straße & Hausnummer" value="{{interessent.strasse}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="plz">PLZ</label>
+                                <input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ" value="{{interessent.plz}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="ort">Ort</label>
+                                <input type="text" class="form-control" id="ort" name="ort" placeholder="Ort" value="{{interessent.ort}}" readonly>
+                            </div>
+                        </div>            
+                    </div>
+                    <!-- /.box -->
+            </div>
+            <!--/.col (left) -->
+            <!-- right column -->
+            <div class="col-md-6">
+            
+            <div class="box box-warning">
+              <div class="box-header with-border">
+                <h3 class="box-title"></h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <!-- text input -->
+				  <div class="form-group">
+                    <label for="Telefon">Telefon</label>
+                    <input type="text" class="form-control" id="telefon" name="telefon" placeholder="Telefon" value="{{interessent.telefon}}" readonly>
+                  </div>
+				  <div class="form-group">
+                    <label for="Telefon">Mobiltelefon</label>
+                    <input type="text" class="form-control" id="mobil" name="mobil" placeholder="Mobil" value="{{interessent.mobil}}" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="Telefax">Telefax</label>
+                    <input type="text" class="form-control" id="telefax" name="telefax" placeholder="Telefax" value="{{interessent.fax}}" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="Homepage">Homepage</label>
+                    <input type="text" class="form-control" id="homepage" name="homepage" placeholder="Homepage" value="{{interessent.homepage}}" readonly>
+                  </div>
+                   <div class="form-group">
+                    <label for="Email">Email-Adresse</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" value="{{interessent.email}}" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="username">Benutzername</label>
+                    <input type="username" class="form-control" id="username" name="username" placeholder="Benutzername" value="{{interessent.username}}" readonly>
+                  </div>
+                  <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" name="123button" value="true">BACK TO LIST</button>                
+                    <button type="submit" class="btn btn-danger" name="savebutton" value="true">LÖSCHEN</button> 
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </form>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{# {% block footer %}
+    {{ parent() }}
+{% endblock %} #}

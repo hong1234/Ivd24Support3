@@ -1,0 +1,167 @@
+{% extends "base.html.twig" %}
+
+{% block title %}New Makler{% endblock %}
+{# {% block head %}
+    {{ parent() }}
+{% endblock %} #}
+{# {% block navigation %}
+    
+{% endblock %} #}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>Makler anlegen</h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        {# <form action="/admin/makler/new" method="POST"> #}
+                        <form action="{{ path('makler_new') }}" method="POST">
+                            <!-- /.box-header -->
+                            <!-- form start -->
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Persönliche Daten</h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="Anrede">Anrede</label>
+                                    <select id="anrede" name="anrede" class="form-control" required>
+                                        <option value="Herr">Herr</option>
+                                        <option value="Frau">Frau</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Titel">Titel</label>
+                                    <input type="text" class="form-control" id="titel" name="titel" placeholder="Prof. Dr.">
+                                </div>
+                                <div class="form-group">
+                                    <label for="mnummer">Mitgliedsnummer</label>
+                                    <input type="text" class="form-control" id="mnummer" name="mnummer" placeholder="mnummer">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Namenstitel">Namenstitel</label>
+                                    <input type="text" class="form-control" id="namenstitel" name="namenstitel" placeholder="Kfm./ Ing(FH)/ B.Sc. (usw.)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Vorname">Vorname</label>
+                                    <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Nachname</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nachname" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Firma">Firma</label>
+                                    <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Strasse">Straße Nr.</label>
+                                    <input type="text" class="form-control" id="strasse" name="strasse" placeholder="Straße & Hausnummer" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="plz">PLZ</label>
+                                    <input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ort">Ort</label>
+                                    <input type="text" class="form-control" id="ort" name="ort" placeholder="Ort" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Bundesland">Bundesland</label>
+                                    <select id="bundesland" name="bundesland" class="form-control" required>
+                                        {% for land in Bundeslaender %}
+                                            <option value={{ land.geo_bundesland_id|e }}>{{ land.bundesland|e }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Telefon">Telefon</label>
+                                    <input type="text" class="form-control" id="telefon" name="telefon" placeholder="Telefon">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Telefax">Telefax</label>
+                                    <input type="text" class="form-control" id="telefax" name="telefax" placeholder="Telefax">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Homepage">Homepage</label>
+                                    <input type="text" class="form-control" id="homepage" name="homepage" placeholder="Homepage">
+                                </div>
+				                <div class="form-group">
+                                    <label for="Homepage">SEO-URL</label>
+                                    <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="seo_url">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Geschaefststelle">Geschäftsstelle</label>
+                                    <select id="geschaeftsstelle" name="geschaeftsstelle" class="form-control" required>
+                                        {% for stelle in Geschaeftsstelle %}
+                                            <option value={{ stelle.geschaeftsstelle_id|e }}>{{ stelle.name|e }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                    </div>            
+                </div>
+                <!-- /.box -->
+                </div>
+                <!--/.col (left) -->
+                <!-- right column -->
+                <div class="col-md-6">
+                <!-- Horizontal Form -->
+            
+                <!-- /.box -->
+                <!-- general form elements disabled -->
+                    <div class="box box-warning">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">User Daten</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label for="Email">Email address</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Benutzername</label>
+                                <input type="username" class="form-control" id="username" name="username" placeholder="Benutzername" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="UserPasswort">Passwort <small>Klartext</small></label>
+                                <input type="text" class="form-control" id="userpasswort" name="userpasswort" placeholder="Passwort" required>
+                            </div>
+                        </div>
+                    <!-- /.box-body -->
+                    </div>
+
+                    <div class="box box-warning">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">FTP Daten</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="FTP-Passwort">FTP Passwort <small>Klartext</small></label>
+                                <input type="text" class="form-control" id="ftppasswort" name="ftppasswort" placeholder="FTP-Passwort" required>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary" name="savebutton" value="true">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</form>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{# {% block footer %}
+    {{ parent() }}
+{% endblock %} #}

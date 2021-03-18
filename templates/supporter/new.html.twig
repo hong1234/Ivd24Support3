@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Supporter{% endblock %}
+
+{# {% block head %}
+    {{ parent() }}
+{% endblock %} #}
+
+{# {% block navigation %}
+
+{% endblock %} #}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <section class="content-header">
+        <h1>Supporter anlegen</h1>
+      </section>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+
+          {# <form action="/supporter/new" method="POST"> #}
+          <form action="{{ path('supporter_new') }}" method="POST">
+            <div class="box box-warning">
+                {# <div class="box-header with-border">
+                    <h3 class="box-title">Supporter anlegen</h3>
+                </div> #}
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label for="Email">Email-Adresse</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" value="{{email}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="username" class="form-control" id="username" name="username" placeholder="Username" value="{{username}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Passwort">Passwort <small>Klartext</small></label>
+                        <input type="text" class="form-control" id="passwort" name="passwort" placeholder="Passwort" value="{{passwort}}" required>
+                    </div>
+                </div>
+			          <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" name="savebutton" value="true">Speichern</button>
+                </div>
+                <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </form>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{# {% block footer %}
+    {{ parent() }}
+{% endblock %} #}

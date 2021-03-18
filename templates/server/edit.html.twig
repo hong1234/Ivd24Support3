@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FTP-Importe pausieren{% endblock %}
+
+{# {% block head %}
+    {{ parent() }}
+{% endblock %} #}
+
+{# {% block navigation %}
+    
+{% endblock %} #}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <section class="content-header">
+        <h1>FTP-Importe pausieren</h1>
+      </section>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+
+          {# <form action="/server/{{user_id}}/edit" method="POST"> #}
+          <form action="{{ path('server_edit', {'uid': user_id}) }}" method="POST">
+            <div class="box box-warning">
+                {# <div class="box-header with-border">
+                    <h3 class="box-title">Statistic User</h3>
+                </div> #}
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label for="username">FTP-User</label>
+                        <input type="text" class="form-control" id="ftpuser" name="ftpuser" placeholder="Ftpuser" value="{{server.ftp_benutzer}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="ftp_pause">Ftp_pause</label>
+                        <select id="ftp_pause" name="ftp_pause" class="form-control" required>
+                            <option value="N" {% if server.ftp_pause == 'N' %} selected {% endif %}>Nein</option>
+                            <option value="J" {% if server.ftp_pause == 'J' %} selected {% endif %}>Ja</option> 
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ftp_import_after_break">Ftp_import_after_break</label>
+                        <select id="after_break" name="after_break" class="form-control" required>
+                            <option value="0" {% if server.ftp_import_after_break == '0' %} selected {% endif %}>Nein</option>
+                            <option value="1" {% if server.ftp_import_after_break == '1' %} selected {% endif %}>Ja</option> 
+                        </select>
+                    </div>
+                </div>
+			          <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" name="savebutton" value="true">Speichern</button>
+                </div>
+                <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </form>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{# {% block footer %}
+    {{ parent() }}
+{% endblock %} #}

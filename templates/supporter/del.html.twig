@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supporter Delete{% endblock %}
+
+{# {% block head %}
+    {{ parent() }}
+{% endblock %} #}
+
+{# {% block navigation %}
+    
+{% endblock %} #}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <section class="content-header">
+        <h1>Supporter löschen</h1>
+      </section>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+
+          {# <form action="/supporter/{{user_id}}/delete" method="POST"> #}
+          <form action="{{ path('supporter_delete', {'uid': user_id}) }}" method="POST">
+            <div class="box box-warning">
+                {# <div class="box-header with-border">
+                    <h3 class="box-title">Statistic User</h3>
+                </div> #}
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label for="Email">Email-Adresse</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" value="{{email}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="username" class="form-control" id="username" name="username" placeholder="Username" value="{{username}}" readonly>
+                    </div>
+                </div>
+			          <div class="box-footer">
+                    <label for="Loeschen">Löschen?</label><br>
+                    <button type="submit" class="btn btn-primary" name="123button" value="true">NEIN</button>
+                    <button type="submit" class="btn btn-danger" name="savebutton" value="true">- JA -</button>
+                </div>
+                <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </form>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{# {% block footer %}
+    {{ parent() }}
+{% endblock %} #}

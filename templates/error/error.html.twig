@@ -1,0 +1,29 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Error Page{% endblock %}
+
+{# {% block head %}
+    {{ parent() }}
+{% endblock %} #}
+
+{# {% block navigation %}
+    
+{% endblock %} #}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <section class="content-header">
+        <h1>Error!!</h1>
+        <h3>{{code}} : {{message}}</h3>
+      </section>
+      <!-- Main content -->
+      
+    </div>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{# {% block footer %}
+    {{ parent() }}
+{% endblock %} #}
