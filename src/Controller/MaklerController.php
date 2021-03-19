@@ -6,8 +6,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 // use App\Repository\ProductRepository;
 
-use App\Dao\MaklerDao;
 use App\Dao\UserDao;
+use App\Dao\MaklerDao;
+
+use App\Service\MaklerService;
 
 /**
  *
@@ -15,155 +17,62 @@ use App\Dao\UserDao;
  */
 class MaklerController extends AbstractController
 {
-    public function rand_str($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'){
-        $str = '';
-        $count = strlen($charset);
-        while ($length--) {
-            $str .= $charset[mt_rand(0, $count-1)];
-        }
-        return $str;
-    }
-
     /**
      * @Route("/makler/new", name="makler_new")
      */
-    public function newMakler(Request $request, UserDao $uDao)
+    public function newMakler(Request $request, MaklerDao $mDao, MaklerService $mService)
     {
         //if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // post parameters
             // $safePost = filter_input_array(INPUT_POST);
             // var_dump($safePost); exit;
-
             $safePost = $request->request;
+            $mService->newMakler($safePost);
+            return $this->redirectToRoute('makler_list', [
+                //'paramName' => 'value'
+            ]);  
+        }
+
+        $bundeslaender    = $mDao->getBundeslaender();
+        $geschaeftsstelle = $mDao->getAllGeschaeftsstelle();
         
-            $regdate              = time();
-            $kennwort_plain       = $safePost->get('userpasswort');
-            $kennwort             = md5($kennwort_plain);
-            $benutzername         = $safePost->get('username');
-            $email                = $safePost->get('email');
-            $geschaeftsstelle_id  = $safePost->get('geschaeftsstelle');
-            $mitgliedsnummer      = $safePost->get('mnummer');
-            //$mkategorien        = $safePost->get('mkategorien'];
-            $anrede               = $safePost->get('anrede');
-            $titel                = $safePost->get('titel');
-            $namenstitel          = $safePost->get('namenstitel');
-            $vorname              = $safePost->get('vorname');
-            $name                 = $safePost->get('name');
-            $firma                = $safePost->get('firma');
-            $strasse              = $safePost->get('strasse');
-            $plz                  = $safePost->get('plz');
-            $ort                  = $safePost->get('ort');
-            $telefon              = $safePost->get('telefon');
-            $telefax              = $safePost->get('telefax');
-            $homepage             = $safePost->get('homepage');
-	        $seo_url              = $safePost->get('seo_url');
-            $bundesland_id        = $safePost->get('bundesland');
-            $ftppasswort          = $safePost->get('ftppasswort');
+        return $this->render('makler/new.html.twig', [
+            'bundeslaender' => $bundeslaender,
+            'geschaeftsstelle' => $geschaeftsstelle
+        ]);
+    }
 
-            $mySalt 			= $this->rand_str(rand(100,200));
-	        $ftppasswortcrypt	= crypt($ftppasswort, $mySalt);
-
-            $gs_werte = $uDao->getGeschaeftsstelle([
-                'geschaeftsstelle_id' => $geschaeftsstelle_id
-            ]);
-
-            $bilderserver_id    = $gs_werte['bilderserver_id'];
-            $ftp_server_id      = $gs_werte['ftp_server_id'];
-            $move_robot_id      = $gs_werte['move_robot_id'];
-            //$import_robot_id    = $gs_werte['import_robot_id'];
-
-            $em = $uDao->getEm();
-            $em->getConnection()->beginTransaction();
-            try {
-
-                $uDao->insertAccountForMakler([
-                    'art_id'            => '2',
-                    'recht_id'          => '3',
-                    'kennwort'          => $kennwort,
-                    'benutzername'      => $benutzername,
-                    'email'             => $email,
-                    'regdate'           => $regdate,
-                    'authentifiziert'   => '1',
-                    'gesperrt'          => '0',
-                    'kennwort_plain'    => $kennwort_plain
-                ]);
-
-                $user_id = $em->getConnection()->lastInsertId();
-
-                $bilderordner  = "b00".$bilderserver_id.$user_id;
-                $ftp_benutzer  = "f00".$ftp_server_id.$user_id;
-                $homeftp       = "/home/ftpuser/".$ftp_benutzer;
-    
-                $uDao->insertMakler([
-                    'user_id'               => $user_id,
-                    'mitgliedsnummer'       => $mitgliedsnummer,
-                    'm_konfig_id'           => '1',
-                    'geschaeftsstelle_id'   => $geschaeftsstelle_id,
-                    'anrede'                => $anrede,
-                    'titel'                 => $titel,
-                    'namenstitel'           => $namenstitel,
-                    'name'                  => $name,
-                    'vorname'               => $vorname,
-                    'firma'                 => $firma,
-                    'strasse'               => $strasse,
-                    'plz'                   => $plz,
-                    'ort'                   => $ort,
-                    'geodb_laender_id'      => '60',
-                    'email'                 => $email,
-                    'telefon'               => $telefon,
-                    'telefax'               => $telefax,
-                    'homepage'              => $homepage,
-                    'seo_url'               => $seo_url,
-                    'sortierung'            => '1',
-                    'bundesland_id'         => $bundesland_id
-                    // 'mkategorien'           => $mkategorien
-                ]);
-   
-                $uDao->insertUserMaklerConfig([
-                    'user_id'         => $user_id,
-                    'bilderserver_id' => $bilderserver_id,
-                    'bilderordner'    => $bilderordner,
-                    'ftp_server_id'   => $ftp_server_id,
-                    'ftp_benutzer'    => $ftp_benutzer,
-                    'ftppasswort'     => $ftppasswort,
-                    'move_robot_id'   => $move_robot_id,
-                ]);
-
-                $uDao->insertRobotQueue([
-                    'homeftp'           => $homeftp,
-                    'user_id'           => $user_id,
-                    'ftppasswortcrypt'  => $ftppasswortcrypt,
-                    'ftp_benutzer'      => $ftp_benutzer
-                ]);
-  
-                $uDao->updateMaklerAhuGeoPoint([
-                    'user_id' => $user_id
-                ]);
-
-                $em->getConnection()->commit();     
-
-            } catch (\Exception $e) {
-                $em->getConnection()->rollBack();
-                throw $e;
-            }
-
+    /**
+     * @Route("/makler/{uid}/edit", name="makler_edit", requirements={"uid"="\d+"})
+     */
+    public function maklerEdit($uid, Request $request, MaklerDao $mDao, MaklerService $mService)
+    {
+        $user_id = $uid;
+        // if(isset($_POST['savebutton'])) { // savebutton: true
+        if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+            //$safePost = filter_input_array(INPUT_POST);
+            //var_dump($safePost); exit;
+            $safePost = $request->request;
+            $mService->maklerEdit($user_id, $safePost);
             return $this->redirectToRoute('makler_list', [
                 //'paramName' => 'value'
             ]);
-            
         }
-
-        $stmt = $uDao->getBundeslaender();
-        $Bundeslaender = $stmt->fetchAllAssociative();
-
-        $stmt = $uDao->getAllGeschaeftsstelle();
-        $geschaeftsstelle = $stmt->fetchAllAssociative();
         
-        return $this->render('makler/new.html.twig', [
-            'Bundeslaender' => $Bundeslaender,
-            'Geschaeftsstelle' => $geschaeftsstelle
+        $user_makler  = $mDao->getMakler([
+            'user_id' => $user_id
         ]);
+    
+        $user_makler2  = $mDao->getUserAccount([
+            'user_id' => $user_id
+        ]);
+        
+        return $this->render('makler/edit.html.twig', [
+            'user_id'  => $user_id,
+            'makler'   => array_merge($user_makler, $user_makler2)
+        ]);
+
     }
 
     /**
@@ -184,44 +93,13 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/{uid}/ftpedit", name="makler_ftp_edit", requirements={"uid"="\d+"})
      */
-    public function maklerFtpEdit($uid, Request $request, MaklerDao $mDao)
+    public function maklerFtpPwEdit($uid, Request $request, MaklerDao $mDao, MaklerService $mService)
     {
         $user_id = $uid;
-
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-
             // $safePost = filter_input_array(INPUT_POST);
-            // var_dump($safePost); exit;
-
             $safePost = $request->request;
-            
-            $ftppasswort    = $safePost->get('ftppasswort');
-            $ftp_benutzer   = $safePost->get('ftp_user');
-            $user_id        = $safePost->get('userid');
-
-            //srand ((double)microtime()*1000000);
-            $mySalt = $this->rand_str(rand(100,200));
-            $crypt_ftppasswort = crypt($ftppasswort, $mySalt);
-
-            $em = $mDao->getEm();
-            $em->getConnection()->beginTransaction();
-            try {
-                $mDao->updateUserMaklerConfig([
-                    'ftppasswort' => $ftppasswort,
-                    'user_id'     => $user_id
-                ]);
-        
-                $mDao->insertRobotQueue2([
-                    'crypt_ftppasswort' => $crypt_ftppasswort,
-                    'ftp_benutzer'      => $ftp_benutzer
-                ]);
-
-                $em->getConnection()->commit();
-
-            } catch (\Exception $e) {
-                $em->getConnection()->rollBack();
-                throw $e;
-            }
+            $mService->maklerFtpPwEdit($user_id, $safePost);
         }
 
         $user_makler = $mDao->getMaklerConfig([
@@ -246,8 +124,8 @@ class MaklerController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // $safePost = filter_input_array(INPUT_POST);
             // var_dump($safePost); exit;
-
             $safePost = $request->request;
+
             $passwort   = $safePost->get('passwort');
             $crypt_passwort = md5($passwort);
 
@@ -265,87 +143,6 @@ class MaklerController extends AbstractController
         return $this->render('makler/pwedit.html.twig', [
             'user_id'    => $user_id,
             'username'   => $username
-        ]);
-    }
-
-    /**
-     * @Route("/makler/{uid}/edit", name="makler_edit", requirements={"uid"="\d+"})
-     */
-    public function maklerEdit($uid, Request $request, MaklerDao $mDao, UserDao $uDao)
-    {
-        $user_id = $uid;
-
-        // if(isset($_POST['savebutton'])) { // savebutton: true
-        if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-
-            //$safePost = filter_input_array(INPUT_POST);
-            //var_dump($safePost); exit;
-            // $email          = $safePost['email'];
-
-            $safePost = $request->request;
-            //$request->request->get('name');
-            $email          = $safePost->get('email');
-            $anrede         = $safePost->get('anrede');
-            $titel          = $safePost->get('titel');
-            $namenstitel    = $safePost->get('namenstitel');
-            $vorname        = $safePost->get('vorname');
-            $name           = $safePost->get('name');
-            $firma          = $safePost->get('firma');
-            $strasse        = $safePost->get('strasse');
-            $plz            = $safePost->get('plz');
-            $ort            = $safePost->get('ort');
-            $telefon        = $safePost->get('telefon');
-            $telefax        = $safePost->get('telefax');
-            $homepage       = $safePost->get('homepage');
-            $mobil          = $safePost->get('mobil');
-            $seo_url        = $safePost->get('seo_url');
-
-            $em = $uDao->getEm();
-            $em->getConnection()->beginTransaction();
-            try {
-                $uDao->updateUserAccountEmail([
-                    'email'     => $email,
-                    'user_id'   => $user_id
-                ]);
-    
-                $mDao->updateMakler([
-                    'anrede'      => $anrede,
-                    'titel'       => $titel,
-                    'namenstitel' => $namenstitel,
-                    'name'        => $name,
-                    'vorname'     => $vorname,
-                    'firma'       => $firma,
-                    'strasse'     => $strasse,
-                    'plz'         => $plz,
-                    'ort'         => $ort,
-                    'email'       => $email,
-                    'telefon'     => $telefon,
-                    'telefax'     => $telefax,
-                    'homepage'    => $homepage,
-                    'seo_url'     => $seo_url,
-                    'mobil'       => $mobil,
-                    'user_id'     => $user_id
-                ]);
-         
-                $em->getConnection()->commit();     
-
-            } catch (\Exception $e) {
-                $em->getConnection()->rollBack();
-                throw $e;
-            }
-        }
-        
-        $user_makler  = $mDao->getMakler([
-            'user_id' => $user_id
-        ]);
-    
-        $user_makler2  = $uDao->getUserAccount([
-            'user_id' => $user_id
-        ]);
-        
-        return $this->render('makler/edit.html.twig', [
-            'user_id'  => $user_id,
-            'makler'   => array_merge($user_makler, $user_makler2)
         ]);
     }
 
@@ -386,8 +183,6 @@ class MaklerController extends AbstractController
         ]);
     }
 
-    //----------------
-
     /**
      * @Route("/makler/delete", name="makler_delete_list")
      */
@@ -421,62 +216,26 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/{uid}/delete", name="makler_delete", requirements={"uid"="\d+"})
      */
-    public function maklerDelete($uid, Request $request, MaklerDao $mDao, UserDao $uDao)
+    public function maklerDelete($uid, Request $request, MaklerDao $mDao, MaklerService $mService)
     {
         $user_id = $uid;
 
         if ($request->isMethod('POST')) {
 
             if ($request->request->get('savebutton')) {
-
-                $user_makler = $mDao->getMaklerConfig(['user_id' => $user_id]);
-    
-                $bildpfad   =   $user_makler['bilderordner'];     // string 'b00111561' (length=9)
-	            $bildserver =   $user_makler['bilderserver_id'];  // string '3' (length=1)
-	            $ftppfad    =   $user_makler['ftp_benutzer'];     // string 'f00111561' (length=9)
-	            $ftpserver  =   $user_makler['ftp_server_id'];    // string '5' (length=1)
-
-                $stmt = $mDao->getObjectsByUserId(['user_id' => $user_id]);
-
-                $em = $mDao->getEm();
-                $em->getConnection()->beginTransaction();
-                try {
-
-                    $mDao->insertUserDelete([
-                        'user_id'    => $user_id,
-                        'status'     => '1',
-                        'bildpfad'   => $bildpfad,
-                        'bildserver' => $bildserver,
-                        'ftppfad'    => $ftppfad,
-                        'ftpserver'  => $ftpserver
-                    ]);
-        
-                    while ($row = $stmt->fetchAssociative()) {
-                        $objekt_id = $row['objekt_id'];
-                        $mDao->deleteAttachmentsByObjectId(['objekt_id' => $objekt_id]);
-                    }
-
-                    $mDao->deleteAllByUserId(['user_id' => $user_id]);
-         
-                    $em->getConnection()->commit();     
-
-                } catch (\Exception $e) {
-                    $em->getConnection()->rollBack();
-                    throw $e;
-                }
+                $mService->deleteMakler($user_id);
             }
 
             return $this->redirectToRoute('makler_delete_list', [
                 //'paramName' => 'value'
-            ]);
-                
+            ]);  
         }
 
         $user_makler  = $mDao->getMakler([
             'user_id' => $user_id
         ]);
     
-        $user_makler2  = $uDao->getUserAccount([
+        $user_makler2  = $mDao->getUserAccount([
             'user_id' => $user_id
         ]); 
         

@@ -1,0 +1,475 @@
+<?php
+require_once 'config.php';
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Support | UserAdd</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+  <header class="main-header">
+    <!-- Logo -->
+    <a href="../../index2.html" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>ivd24</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>Support</b>Backend</span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="treeview active">
+          <a href="#">
+            <i class="fa fa-edit"></i> <span>Usermanagement</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+           <li class="active"><a href="/support/pages/forms/userAdd.php"><i class="fa fa-circle-o"></i>Makler hinzufügen</a></li>
+			<li><a href="/support/pages/forms/maklerOverview.php"><i class="fa fa-circle-o"></i>Makler bearbeiten</a></li>
+			<li><a href="/support/pages/forms/userDelOverview.php"><i class="fa fa-circle-o"></i>Makler löschen</a></li>
+			<li><a href="/support/pages/forms/userOverview.php"><i class="fa fa-circle-o"></i>Interessent bearbeiten</a></li>
+			<li ><a href="/support/pages/forms/interessentDelOverview.php"><i class="fa fa-circle-o"></i>Interessent löschen</a></li>
+          </ul>
+        </li>
+        
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+  
+  
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          ivd24 Makler anlegen
+          <small>Benutzer hinzufügen</small>
+        </h1>
+        
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+              <?php
+               
+
+                $mysqli = new mysqli($_DB_server, $_DB_user, $_DB_passwort,  $_DB_name);
+                if ($mysqli->connect_errno) {
+                    die("Verbindung fehlgeschlagen: " . $mysqli->connect_error);
+                }
+                $button = $_POST['savebutton'];
+
+                if(isset($button)){
+                  $regdate        = time();
+                  $kennwort_plain = $_POST['userpasswort'];
+                  $kennwort       = md5($kennwort_plain);
+                  $benutzername   = $_POST['username'];
+                  $email          = $_POST['email'];
+
+                  $sql1 = "INSERT INTO user_account
+                            SET 
+                                art_id                = '2', 
+                                recht_id              = '3',
+                                kennwort              = '$kennwort',
+                                username              = '$benutzername',
+                                email                 = '$email',
+                                registrierungsdatum   = '$regdate',
+                                authentifiziert       = '1', 
+                                gesperrt              = '0', 
+                                kennwort_plain        = '$kennwort_plain'
+                              ";
+                  $mysqli->query($sql1);
+
+                  if ($mysqli->error) {
+                     printf("Errormessage: %s\n", $mysqli->error);
+                  } 
+                    $user_id              = $mysqli->insert_id;
+                    $geschaeftsstelle_id  = $_POST['geschaeftsstelle'];
+                    $mitgliedsnummer      = $_POST['mnummer'];
+                    //IVD-87
+                    $mkategorien          = $_POST['mkategorien'];
+                    $anrede               = $_POST['anrede'];
+                    $titel                = $_POST['titel'];
+                    $namenstitel          = $_POST['namenstitel'];
+                    $vorname              = utf8_decode($_POST['vorname']);
+                    $name                 = utf8_decode($_POST['name']);
+                    $firma                = utf8_decode($_POST['firma']);
+                    $strasse              = utf8_decode($_POST['strasse']);
+                    $plz                  = $_POST['plz'];
+                    $ort                  = utf8_decode($_POST['ort']);
+                    $telefon              = $_POST['telefon'];
+                    $telefax              = $_POST['telefax'];
+                    $homepage             = $_POST['homepage'];
+					$seo_url             = $_POST['seo_url'];
+                    $bundesland_id        = $_POST['bundesland'];
+                  
+                    //IVD-87: Remove code above when open comment code below
+                    $sql3     = "INSERT INTO user_makler SET
+                                    user_id             = '$user_id', 
+                                    mitgliedsnummer     = '$mitgliedsnummer', 
+                                    m_konfig_id         = '1', 
+                                    geschaeftsstelle_id = '$geschaeftsstelle_id', 
+                                    anrede              = '$anrede', 
+                                    titel               = '$titel', 
+                                    namenstitel         = '$namenstitel', 
+                                    name                = '$name', 
+                                    vorname             = '$vorname', 
+                                    firma               = '$firma', 
+                                    strasse             = '$strasse', 
+                                    plz                 = '$plz', 
+                                    ort                 = '$ort', 
+                                    geodb_laender_id    = '60', 
+                                    email               = '$email', 
+                                    telefon             = '$telefon', 
+                                    fax                 = '$telefax', 
+                                    homepage            = '$homepage', 
+                                    seo_url             = '$seo_url', 
+                                    sortierung          = '1',
+				    ahu_geo_point	= GeomFromText('POINT(1 1)'),  
+                                    bundesland_id       = '$bundesland_id',
+                                    mitgliedskategorien = '$mkategorien' ";
+
+                    $mysqli->query($sql3);
+
+                    if ($mysqli->error) {
+                      printf("sql3 Errormessage: %s\n", $mysqli->error);
+                    }
+
+                    function rand_str($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+						{
+							$str = '';
+							$count = strlen($charset);
+							while ($length--) {
+								$str .= $charset[mt_rand(0, $count-1)];
+							}
+							return $str;
+						}
+
+                  		$sql_gs_werte       = "SELECT * FROM user_geschaeftsstelle WHERE geschaeftsstelle_id = $geschaeftsstelle_id";
+                  		$result_gs_werte    = $mysqli->query($sql_gs_werte);
+                  		$row_gs_werte       = mysqli_fetch_object($result_gs_werte);
+                  		$bilderserver_id    = $row_gs_werte->bilderserver_id;
+                  		$ftp_server_id      = $row_gs_werte->ftp_server_id;
+                  		$move_robot_id      = $row_gs_werte->move_robot_id;
+                  		$import_robot_id    = $row_gs_werte->import_robot_id;
+                  		$bilderordner       = "b00".$bilderserver_id.$user_id;
+                  		$ftp_benutzer       = "f00".$ftp_server_id.$user_id;
+                  		$ftppasswort        = $_POST['ftppasswort'];
+                  		$_pass 				= $ftppasswort;
+                  		srand ((double)microtime()*1000000);
+						$mySalt 			= rand_str(rand(100,200));
+						$ftppasswortcrypt	= crypt($_pass,$mySalt);
+
+
+                     $sql4     = "INSERT INTO user_makler_config 
+                                    SET 
+                                     user_id            = '$user_id', 
+                                     anrede_anzeigen    = '1', 
+                                     anrede_pflicht     = '0', 
+                                     vorname_anzeigen   = '1', 
+                                     vorname_pflicht    = '0', 
+                                     nachname_anzeigen  = '1', 
+                                     nachname_pflicht   = '1', 
+                                     strasse_anzeigen   = '0', 
+                                     strasse_pflicht    = '0',  
+                                     plz_anzeigen       = '0',
+                                     plz_pflicht        = '0', 
+                                     ort_anzeigen       = '0', 
+                                     ort_pflicht        = '0', 
+                                     email_anzeigen     = '1', 
+                                     email_pflicht      = '1', 
+                                     telefon_anzeigen   = '1', 
+                                     telefon_pflicht    = '0', 
+                                     nachricht_anzeigen = '1', 
+                                     nachricht_pflicht  = '0', 
+                                     nachricht_text     = '', 
+                                     widerruf_jn        = '0', 
+                                     bilderserver_id    = '$bilderserver_id', 
+                                     bilderordner       = '$bilderordner', 
+                                     ftp_server_id      = '$ftp_server_id', 
+                                     ftp_benutzer       = '$ftp_benutzer', 
+                                     ftp_passwort       = '$ftppasswort', 
+                                     ftp_aktiv          = 'J', 
+                                     ftp_pause          = 'N', 
+                                     ftp_mod            = 'N', 
+                                     ftp_del            = 'N', 
+                                     move_robot_id      = '$move_robot_id', 
+                                     anzahl_objekte_pro_seite = '10',
+                                     logo_pfad = ''
+                                     ";
+                                    
+                      $mysqli->query($sql4);
+                      if ($mysqli->error) {
+                        printf("sql4 Errormessage: %s\n", $mysqli->error);
+                      }
+                        $homeftp = "/home/ftpuser/".$ftp_benutzer;
+                       $sql5     = "INSERT INTO robot_queue SET 
+                          config_server_id  = '5',
+                          robot_id          = '1',
+                          status            = 'QUEUED',
+                          robot_name        = 'FTPUserAdd',
+                          parameter1        = '$homeftp',
+                          parameter2        = 'makler',
+                          parameter3        = '$user_id',
+                          parameter4        = '/bin/false',
+                          parameter5        = '/etc/skel',
+                          parameter6        = '$ftppasswortcrypt',
+                          parameter7        = '$ftp_benutzer',
+                          parameter8        = '/usr/sbin/useradd'";
+                      $mysqli->query($sql5);
+                      if ($mysqli->error) {
+                        printf("sql5 Errormessage: %s\n", $mysqli->error);
+                      }
+
+		      $sql6     = "UPDATE user_makler SET ahu_geo_point = ST_GeomFromText('Point(0 0)') WHERE user_id = '".$user_id."'";
+                      $mysqli->query($sql6);
+                      if ($mysqli->error) {
+                        printf("sql6 Errormessage: %s\n", $mysqli->error);
+                      }
+
+                }
+              ?>
+             <form action="./userAdd.php" method="POST">
+              <!-- /.box-header -->
+              <!-- form start -->
+                <div class="box-header with-border">
+                  <h3 class="box-title">Persönliche Daten</h3>
+                </div>
+                <div class="box-body">
+                  <div class="form-group">
+                    <label for="Anrede">Anrede</label>
+                    <select id="anrede" name="anrede" class="form-control" required>
+                      <option value="Herr">Herr</option>
+                      <option value="Frau">Frau</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="Titel">Titel</label>
+                    <input type="text" class="form-control" id="titel" name="titel" placeholder="Prof. Dr.">
+                  </div>
+                  <div class="form-group">
+                    <label for="mnummer">Mitgliedsnummer</label>
+                    <input type="text" class="form-control" id="mnummer" name="mnummer" placeholder="mnummer">
+                  </div>
+                  <!-- IVD-87 -->
+                  <div class="form-group">
+                    <label for="mkategorien">Mitgliedskategorien</label>
+                    <select id="mkategorien" name="mkategorien" class="form-control" required>
+                      <option value="OM">ordentliches Mitglied</option>
+                      <option value="ZM">Zweitmitglied</option>
+                      <option value="Ex1">Existenzgründer im 1. Jahr</option>
+                      <option value="Ex2">Existenzgründer im 2. Jahr</option>
+                      <option value="EM">Ehrenmitglieder</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="Namenstitel">Namenstitel</label>
+                    <input type="text" class="form-control" id="namenstitel" name="namenstitel" placeholder="Kfm./ Ing(FH)/ B.Sc. (usw.)">
+                  </div>
+                  <div class="form-group">
+                    <label for="Vorname">Vorname</label>
+                    <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="name">Nachname</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Nachname" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="Firma">Firma</label>
+                    <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="Strasse">Straße Nr.</label>
+                    <input type="text" class="form-control" id="strasse" name="strasse" placeholder="Straße & Hausnummer" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="plz">PLZ</label>
+                    <input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="ort">Ort</label>
+                    <input type="text" class="form-control" id="ort" name="ort" placeholder="Ort" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="Bundesland">Bundesland</label>
+                    <select id="bundesland" name="bundesland" class="form-control" required>
+                      <?php
+                        $sql_bl     = "SELECT * FROM geo_bundesland";
+                        $result1     = $mysqli->query($sql_bl);
+                        while($rowbl = mysqli_fetch_object($result1)){
+                      ?>
+                          <option value='<?php echo $rowbl->geo_bundesland_id; ?>'><?php echo utf8_encode($rowbl->bundesland); ?></option>
+                      <?php
+                        }
+                      ?>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="Telefon">Telefon</label>
+                    <input type="text" class="form-control" id="telefon" name="telefon" placeholder="Telefon">
+                  </div>
+                  <div class="form-group">
+                    <label for="Telefax">Telefax</label>
+                    <input type="text" class="form-control" id="telefax" name="telefax" placeholder="Telefax">
+                  </div>
+                  <div class="form-group">
+                    <label for="Homepage">Homepage</label>
+                    <input type="text" class="form-control" id="homepage" name="homepage" placeholder="Homepage">
+                  </div>
+				  <div class="form-group">
+                    <label for="Homepage">SEO-URL</label>
+                    <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="seo_url">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="Geschaefststelle">Geschäftsstelle</label>
+                    <select id="geschaeftsstelle" name="geschaeftsstelle" class="form-control" required>
+                      <?php
+                        $sql_gs     = "SELECT * FROM user_geschaeftsstelle";
+                        $result     = $mysqli->query($sql_gs);
+                        while($row = mysqli_fetch_object($result)){
+                      ?>
+                          <option value='<?php echo $row->geschaeftsstelle_id; ?>'><?php echo utf8_encode($row->name); ?></option>
+                      <?php
+                        }
+                      ?>
+                      
+                    </select>
+                  </div>
+                  
+                </div>            
+            </div>
+            <!-- /.box -->
+
+          </div>
+          <!--/.col (left) -->
+          <!-- right column -->
+          <div class="col-md-6">
+            <!-- Horizontal Form -->
+            
+            <!-- /.box -->
+            <!-- general form elements disabled -->
+            <div class="box box-warning">
+              <div class="box-header with-border">
+                <h3 class="box-title">User Daten</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <!-- text input -->
+                   <div class="form-group">
+                    <label for="Email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="username">Benutzername</label>
+                    <input type="username" class="form-control" id="username" name="username" placeholder="Benutzername" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="UserPasswort">Passwort <small>Klartext</small></label>
+                    <input type="text" class="form-control" id="userpasswort" name="userpasswort" placeholder="Passwort" required>
+                  </div>
+              </div>
+              <!-- /.box-body -->
+            </div>
+
+            <div class="box box-warning">
+              <div class="box-header with-border">
+                <h3 class="box-title">FTP Daten</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <!-- text input -->
+                   <div class="form-group">
+                    <label for="FTP-Passwort">FTP Passwort <small>Klartext</small></label>
+                    <input type="text" class="form-control" id="ftppasswort" name="ftppasswort" placeholder="FTP-Passwort" required>
+                  </div>
+              </div>
+                <div class="box-footer">
+                  <button type="submit" class="btn btn-primary" name="savebutton" value="true">Submit</button>
+                </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+          </div>
+          <!--/.col (right) -->
+        </div>
+        <!-- /.row -->
+      </section>
+      <!-- /.content -->
+    </div>
+  </form>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+    <strong>Copyright &copy; 2018 <a href="https://www.ivd24immobilien.de">ivd24</a>.</strong> All rights
+    reserved.
+  </footer>
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 3 -->
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="../../bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+</body>
+</html>

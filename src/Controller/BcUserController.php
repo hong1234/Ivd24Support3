@@ -56,21 +56,14 @@ class BcUserController extends AbstractController
         $user_id = $uid;
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')){
-
             //$safePost = filter_input_array(INPUT_POST);
             //var_dump($safePost); exit;
 
             $safePost = $request->request;
-
-            $userid         =  $safePost->get('userid');                 //: 10262
-            $buchungsdatum  =  $safePost->get('buchungsdatum');          //: 2021-01-15
-            //$name         = $safePost->get('name');                    //: Eurich
-            //$vorname      = $safePost->get('vorname');                 //: Andreas
-            $firma          =  $safePost->get('firma');                  //: Eurich Immobilien
-            $seo_url        =  $safePost->get('seo_url');                //: eurich-immobilien
-            // ip_adresse: 84.133.45.200
-            // grundriss_count: 10
-            // used_grundriss_count: 0
+            $userid             = $safePost->get('userid');                 
+            $buchungsdatum      = $safePost->get('buchungsdatum');          //: 2021-01-15           
+            $firma              = $safePost->get('firma');                  
+            $seo_url            = $safePost->get('seo_url');                //eurich-immobilien
             $start_abo          = $safePost->get('start_abo');               //: 2021-02-01
             $end_abo            = $safePost->get('end_abo');                 //: 2022-01-31
             $total_amount       = $safePost->get('total_amount');            //: 360

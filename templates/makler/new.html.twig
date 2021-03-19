@@ -76,7 +76,7 @@
                                 <div class="form-group">
                                     <label for="Bundesland">Bundesland</label>
                                     <select id="bundesland" name="bundesland" class="form-control" required>
-                                        {% for land in Bundeslaender %}
+                                        {% for land in bundeslaender %}
                                             <option value={{ land.geo_bundesland_id|e }}>{{ land.bundesland|e }}</option>
                                         {% endfor %}
                                     </select>
@@ -100,7 +100,7 @@
                                 <div class="form-group">
                                     <label for="Geschaefststelle">Geschäftsstelle</label>
                                     <select id="geschaeftsstelle" name="geschaeftsstelle" class="form-control" required>
-                                        {% for stelle in Geschaeftsstelle %}
+                                        {% for stelle in geschaeftsstelle %}
                                             <option value={{ stelle.geschaeftsstelle_id|e }}>{{ stelle.name|e }}</option>
                                         {% endfor %}
                                     </select>

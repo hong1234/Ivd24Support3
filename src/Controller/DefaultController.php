@@ -38,8 +38,8 @@ class DefaultController extends AbstractController
         $stmt = $sDao->getAllServerConfig(); 
 
         $i =0;
-        $beginn = 1601;
-        $end    = 1650;
+        $beginn = 2801;
+        $end    = 2850;
         while ($row=$stmt->fetchAssociative()) {
 
             $i++;
@@ -87,7 +87,7 @@ class DefaultController extends AbstractController
     public function testPage(ServerDao $sDao)
     {
 
-        $user_id = 10169;//11408;//10346 ;//105081;//11408;//10346 ;//19003;
+        $user_id = 14478;//11408;//10346 ;//105081;//11408;//10346 ;//19003;
 
         $makler_server  = $sDao->getServerOfMakler([
             'user_id' => $user_id
