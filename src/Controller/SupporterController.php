@@ -11,7 +11,7 @@ use App\Service\SupporterService;
 
 /**
  *
- * @Route(path="/admin")
+ * @Route(path="")
  */
 class SupporterController extends AbstractController
 {

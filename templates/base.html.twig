@@ -64,7 +64,6 @@
                                 {% endif %}
                                     <li {% if route_name == "default_find" %} class="active"{% endif %}><a href="{{ path('default_find') }}"><i class="fa fa-circle-o"></i>findPage</a></li>
                                     <li {% if route_name == "default_test" %} class="active"{% endif %}><a href="{{ path('default_test') }}"><i class="fa fa-circle-o"></i>testPage</a></li>
-
                                     <li {% if route_name == "default_home" %} class="active"{% endif %}><a href="{{ path('default_home') }}"><i class="fa fa-circle-o"></i>Home Page</a></li>
                                     <li {% if route_name in ["server_list", "server_edit"] %} class="active"{% endif %}><a href="{{ path('server_list') }}"><i class="fa fa-circle-o"></i>FTP-Import pausieren</a></li>
                                     <li {% if route_name in ["server_pause_list"] %} class="active"{% endif %}><a href="{{ path('server_pause_list') }}"><i class="fa fa-circle-o"></i>Pausierte FTP-Importe </a></li>

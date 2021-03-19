@@ -11,7 +11,7 @@ use App\Dao\UserDao;
 
 /**
  *
- * @Route(path="")
+ * @Route(path="/support")
  */
 class MaklerController extends AbstractController
 {

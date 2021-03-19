@@ -21,7 +21,7 @@ class BUserDao extends BaseDao {
     }
 
     public function updateBUser(iterable $values=[]) {
-        $sql     = "UPDATE businessclubuser 
+        $sql     = "UPDATE businessClubUser 
                     SET
                     user_id                 = :userid, 
                     date_of_registration    = :buchungsdatum,

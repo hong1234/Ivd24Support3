@@ -30,28 +30,28 @@ class UserFixtures extends Fixture
         $manager->persist($user);
         $manager->flush();
 
-        $user = new User();//-------support 'hong2' 'hong3'
+        // $user = new User();//-------support 'hong2' 'hong3'
 
-        $user->setEmail('hong2@yahoo.de');
-        $user->setRoles(['ROLE_SUPPORT']);
-        $user->setPassword($this->passwordEncoder->encodePassword(
-            $user,
-            'hong2'
-        ));
+        // $user->setEmail('hong2@yahoo.de');
+        // $user->setRoles(['ROLE_SUPPORT']);
+        // $user->setPassword($this->passwordEncoder->encodePassword(
+        //     $user,
+        //     'hong2'
+        // ));
 
-        $manager->persist($user);
-        $manager->flush();
+        // $manager->persist($user);
+        // $manager->flush();
 
-        $user = new User();//-------statistic  'hong4'  'hong5'
+        // $user = new User();//-------statistic  'hong4'  'hong5'
 
-        $user->setEmail('hong4@yahoo.de');
-        $user->setRoles(['ROLE_STATISTIC']);
-        $user->setPassword($this->passwordEncoder->encodePassword(
-            $user,
-            'hong4'
-        ));
+        // $user->setEmail('hong4@yahoo.de');
+        // $user->setRoles(['ROLE_STATISTIC']);
+        // $user->setPassword($this->passwordEncoder->encodePassword(
+        //     $user,
+        //     'hong4'
+        // ));
 
-        $manager->persist($user);
-        $manager->flush();
+        // $manager->persist($user);
+        // $manager->flush();
     }
 }
