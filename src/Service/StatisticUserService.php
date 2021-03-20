@@ -16,7 +16,12 @@ class StatisticUserService
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function newStatisticUser($username, $email, $passwort, $gs_id) {
+    public function newStatisticUser($safePost) {
+        $username  =  $safePost->get('username');
+        $email     =  $safePost->get('email');
+        $passwort  =  $safePost->get('passwort');
+        $gs_id     =  $safePost->get('geschaeftsstelle');
+
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
@@ -58,7 +63,12 @@ class StatisticUserService
         }
     }
 
-    public function updateStatisticUser($user_id, $username, $email, $passwort, $gs_id) {
+    public function updateStatisticUser($user_id, $safePost) {
+        $username = $safePost->get('username');
+        $email    = $safePost->get('email');
+        $passwort = $safePost->get('passwort');
+        $gs_id    = $safePost->get('geschaeftsstelle');
+
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {

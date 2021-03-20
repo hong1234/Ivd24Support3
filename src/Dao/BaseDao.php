@@ -32,4 +32,20 @@ class BaseDao {
     public function getEm(){
         return $this->em;
     }
+
+    //---------------
+    public function getBundeslaender(iterable $values=[]) {
+        $sql = "SELECT * FROM geo_bundesland";
+        return $this->doQuery($sql, $values)->fetchAllAssociative();
+    }
+
+    public function getAllGeschaeftsstelle(iterable $values=[]) {
+        $sql = "SELECT * FROM user_geschaeftsstelle";
+        return $this->doQuery($sql, $values)->fetchAllAssociative();
+    }
+
+    public function getGeschaeftsstelle(iterable $values=[]) {
+        $sql = "SELECT * FROM user_geschaeftsstelle WHERE geschaeftsstelle_id = :geschaeftsstelle_id";
+        return $this->doQuery($sql, $values)->fetchAssociative();
+    }
 }

@@ -45,29 +45,26 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser/new", name="statisticuser_new")
      */
-    public function newStatisticUser(Request $request, UserDao $uDao, StatisticUserService $stuse)
+    public function newStatisticUser(Request $request, UserDao $uDao, StatisticUserService $staSer)
     {
         $username = '';
         $email    = '';
         $passwort = '';
         $gs_id    = '1';
-        $geschaeftsstelle = $uDao->getAllGeschaeftsstelle()->fetchAllAssociative();
+        $geschaeftsstelle = $uDao->getAllGeschaeftsstelle();
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             //post parameters
             //$safePost = filter_input_array(INPUT_POST);
             //var_dump($safePost); exit;
-
             $safePost = $request->request;
-
             $username  =  $safePost->get('username');
             $email     =  $safePost->get('email');
             $passwort  =  $safePost->get('passwort');
             $gs_id     =  $safePost->get('geschaeftsstelle');
             
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-                $stuse->newStatisticUser($username, $email, $passwort, $gs_id);
+                $staSer->newStatisticUser($safePost);
                 return $this->redirectToRoute('statisticuser_list', [
                     //'paramName' => 'value'
                 ]);
@@ -78,37 +75,34 @@ class StatisticUserController extends AbstractController
         }
 
         return $this->render('statisticuser/new.html.twig', [
-            'email'    => $email,
-            'username' => $username,
-            'passwort' => $passwort,
-            'geschaeftsstelleId'  => $gs_id,
-            'geschaeftsstelle' => $geschaeftsstelle
+            'username'           => $username,
+            'email'              => $email,
+            'passwort'           => $passwort,
+            'geschaeftsstelleId' => $gs_id,
+            'geschaeftsstelle'   => $geschaeftsstelle
         ]);
     }
 
     /**
      * @Route("/statisticuser/{uid}/edit", name="statisticuser_edit", requirements={"uid"="\d+"})
      */
-    public function statisticuserEdit($uid, Request $request, UserDao $uDao, StatisticUserService $stuse)
+    public function statisticuserEdit($uid, Request $request, UserDao $uDao, StatisticUserService $staSer)
     {
         $user_id = $uid;
-        $geschaeftsstellen = $uDao->getAllGeschaeftsstelle()->fetchAllAssociative();
+        $username = '';
+        $email    = '';
+        $gs_id    = '1';
+        $geschaeftsstellen = $uDao->getAllGeschaeftsstelle();
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // post parameters
-            //$safePost = filter_input_array(INPUT_POST);
-            //var_dump($safePost); exit;
-
             $safePost = $request->request;
-
             $username = $safePost->get('username');
             $email    = $safePost->get('email');
-            $passwort = $safePost->get('passwort');
             $gs_id    = $safePost->get('geschaeftsstelle');
 
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-                $stuse->updateStatisticUser($user_id, $username, $email, $passwort, $gs_id);
+                $staSer->updateStatisticUser($user_id, $safePost);
                 return $this->redirectToRoute('statisticuser_list', [
                     //'paramName' => 'value'
                 ]);    
@@ -125,9 +119,7 @@ class StatisticUserController extends AbstractController
 
             $username = $suser['username'];
             $email    = $suser['email'];
-            //$passwort = $safePost->get('passwort');
             $gs_id    = $suser['geschaeftsstelleId'];
-
         }
 
         return $this->render('statisticuser/edit.html.twig', [
@@ -143,14 +135,14 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser/{uid}/delete", name="statisticuser_delete", requirements={"uid"="\d+"})
      */
-    public function statisticuserDelete($uid, Request $request, UserDao $uDao, SupporterService $supSer)
+    public function statisticuserDelete($uid, Request $request, UserDao $uDao, SupporterService $staSer)
     {
         $user_id = $uid;
 
         if ($request->isMethod('POST')){
             
             if($request->request->get('savebutton')){
-                $supSer->deleteSupporter($user_id);
+                $staSer->deleteSupporter($user_id);
             }
             return $this->redirectToRoute('statisticuser_list', [
                 //'paramName' => 'value'

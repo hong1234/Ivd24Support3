@@ -44,16 +44,13 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter/new", name="supporter_new")
      */
-    public function newSupporter(Request $request,  SupporterService $supser)
+    public function newSupporter(Request $request,  SupporterService $supSer)
     {
         $username = '';
         $email    = '';
         $passwort = '';
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-            // post parameters
-            //$safePost = filter_input_array(INPUT_POST);
-            //var_dump($safePost); exit;
 
             $safePost = $request->request;
             $username  =  $safePost->get('username');
@@ -62,7 +59,7 @@ class SupporterController extends AbstractController
             
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 // $manager = $this->getDoctrine()->getManager();
-                $supser->newSupporter($username, $email, $passwort);
+                $supSer->newSupporter($safePost);
                 return $this->redirectToRoute('supporter_list', [
                     //'paramName' => 'value'
                 ]);
@@ -83,7 +80,7 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter/{uid}/edit", name="supporter_edit", requirements={"uid"="\d+"})
      */
-    public function supporterEdit($uid, Request $request, UserDao $uDao, SupporterService $supser)
+    public function supporterEdit($uid, Request $request, UserDao $uDao, SupporterService $supSer)
     {
         $user_id  = $uid;
         $username = '';
@@ -94,7 +91,6 @@ class SupporterController extends AbstractController
             // post parameters
             //$safePost = filter_input_array(INPUT_POST);
             //var_dump($safePost); exit;
-
             $safePost = $request->request;
             $username = $safePost->get('username');
             $email    = $safePost->get('email');
@@ -102,7 +98,7 @@ class SupporterController extends AbstractController
             
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-                $supser->updateSupporter($user_id, $username, $email, $passwort);
+                $supSer->updateSupporter($user_id, $safePost);
                 return $this->redirectToRoute('supporter_list', [
                     //'paramName' => 'value'
                 ]);    
@@ -110,7 +106,6 @@ class SupporterController extends AbstractController
             else {
                 $email = $email."<--Invalid email format";
             }
-
         }
 
         if ($request->isMethod('GET')) {
@@ -128,7 +123,6 @@ class SupporterController extends AbstractController
             'email'      => $email,
             'passwort'   => $passwort
         ]);
-
     }
 
     /**
@@ -137,11 +131,8 @@ class SupporterController extends AbstractController
     public function supporterDelete($uid, Request $request, UserDao $uDao, SupporterService $supSer)
     {
         $user_id = $uid;
-
         if ($request->isMethod('POST')){
-            
-            if($request->request->get('savebutton')){
-                
+            if($request->request->get('savebutton')){  
                 $supSer->deleteSupporter($user_id);
             }
             return $this->redirectToRoute('supporter_list', [
@@ -158,7 +149,5 @@ class SupporterController extends AbstractController
             'username'   => $suser['username'],
             'email'      => $suser['email']
         ]);
-
     }
-
 }

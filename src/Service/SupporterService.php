@@ -16,7 +16,11 @@ class SupporterService
         $this->passwordEncoder = $passwordEncoder; 
     }
 
-    public function newSupporter($username, $email, $passwort) {
+    public function newSupporter($safePost) {
+        $username  =  $safePost->get('username');
+        $email     =  $safePost->get('email');
+        $passwort  =  $safePost->get('passwort');
+
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
@@ -58,7 +62,11 @@ class SupporterService
         }
     }
 
-    public function updateSupporter($user_id, $username, $email, $passwort) {
+    public function updateSupporter($user_id, $safePost) {
+        $username = $safePost->get('username');
+        $email    = $safePost->get('email');
+        $passwort = $safePost->get('passwort');
+            
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {

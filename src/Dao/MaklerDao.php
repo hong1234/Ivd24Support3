@@ -5,21 +5,6 @@ namespace App\Dao;
 class MaklerDao extends UserDao {
 
     //----new Makler--------
-    public function getBundeslaender(iterable $values=[]) {
-        $sql = "SELECT * FROM geo_bundesland";
-        return $this->doQuery($sql, $values)->fetchAllAssociative();
-    }
-
-    public function getAllGeschaeftsstelle(iterable $values=[]) {
-        $sql = "SELECT * FROM user_geschaeftsstelle";
-        return $this->doQuery($sql, $values)->fetchAllAssociative();
-    }
-
-    public function getGeschaeftsstelle(iterable $values=[]) {
-        $sql = "SELECT * FROM user_geschaeftsstelle WHERE geschaeftsstelle_id = :geschaeftsstelle_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
-    }
-
     public function insertAccountForMakler(iterable $values=[]){
         $sql = "INSERT INTO user_account SET 
                     art_id                = :art_id, 
