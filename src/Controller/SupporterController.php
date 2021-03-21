@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use App\Dao\UserDao;
 use App\Service\SupporterService;
+use App\Service\UserAccount;
 
 /**
  *
@@ -44,68 +45,71 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter/new", name="supporter_new")
      */
-    public function newSupporter(Request $request,  SupporterService $supSer)
+    public function newSupporter(Request $request, UserAccount $accSer, SupporterService $supSer)
     {
+        // $manager = $this->getDoctrine()->getManager();
         $username = '';
         $email    = '';
         $passwort = '';
+        $error    = '';
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
             $safePost = $request->request;
-            $username  =  $safePost->get('username');
-            $email     =  $safePost->get('email');
+
+            $username  =  $safePost->get('username');//validation
+            $email     =  $safePost->get('email'); //validation
             $passwort  =  $safePost->get('passwort');
+
+            $error = $accSer-> isValidAccountName($username, $email, $passwort);
             
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                // $manager = $this->getDoctrine()->getManager();
+            if ($error == '') {
                 $supSer->newSupporter($safePost);
                 return $this->redirectToRoute('supporter_list', [
                     //'paramName' => 'value'
-                ]);
+                ]);   
             } 
-            else {
-                $email = $email."<--Invalid email format";
-            }
 
         }
 
         return $this->render('supporter/new.html.twig', [
             'username' => $username,
             'email'    => $email,
-            'passwort' => $passwort
+            'passwort' => $passwort,
+            'error'    => $error
         ]);
     }
 
     /**
      * @Route("/supporter/{uid}/edit", name="supporter_edit", requirements={"uid"="\d+"})
      */
-    public function supporterEdit($uid, Request $request, UserDao $uDao, SupporterService $supSer)
+    public function supporterEdit($uid, Request $request, UserDao $uDao, UserAccount $accSer, SupporterService $supSer)
     {
         $user_id  = $uid;
         $username = '';
         $email    = '';
         $passwort = '';
+        $error    = '';
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // post parameters
             //$safePost = filter_input_array(INPUT_POST);
             //var_dump($safePost); exit;
             $safePost = $request->request;
+
             $username = $safePost->get('username');
             $email    = $safePost->get('email');
             $passwort = $safePost->get('passwort');
-            
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
+            $error = $accSer-> isValidAccountNameByUpdate($user_id, $username, $email, $passwort);
+            
+            if ($error == '') {
                 $supSer->updateSupporter($user_id, $safePost);
                 return $this->redirectToRoute('supporter_list', [
                     //'paramName' => 'value'
-                ]);    
-            }
-            else {
-                $email = $email."<--Invalid email format";
-            }
+                ]);  
+            } 
+             
         }
 
         if ($request->isMethod('GET')) {
@@ -121,7 +125,8 @@ class SupporterController extends AbstractController
             'user_id'    => $user_id,
             'username'   => $username,
             'email'      => $email,
-            'passwort'   => $passwort
+            'passwort'   => $passwort,
+            'error'      => $error
         ]);
     }
 

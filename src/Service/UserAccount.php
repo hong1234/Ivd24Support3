@@ -1,0 +1,112 @@
+<?php
+namespace App\Service;
+
+use App\Dao\UserDao;
+
+class UserAccount
+{
+    private $uDao;
+
+    function __construct(UserDao $uDao) {
+        $this->uDao = $uDao;
+    }
+
+    public function isValidAccountName($username, $email, $passwort){
+
+        $error = '';
+        if($username == ''){
+            $error = $error."--username leer--";
+        }
+        if($email == ''){
+            $error = $error."--email leer--";
+        }
+        if($passwort == ''){
+            $error = $error."--passwort leer--";
+        }
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+            if($this->occupiedEmailName($email)){
+                $error = $error."--email schon belegt--";
+            } 
+
+            if($this->occupiedUserName($username)){
+                $error = $error."--username schon belegt--";
+            } 
+            
+        } else {
+            $error = $error."--invalid email format--";
+        }
+        return $error;
+    }
+
+    public function occupiedEmailName($email){
+        $status = false;
+        if(count($this->uDao->getUserAccountByEmail(['email' => $email]))>0){
+            $status = true;
+        }
+        return $status;
+    }
+
+    public function occupiedUserName($username){
+        $status = false;
+        if(count($this->uDao->getUserAccountByUserName(['username' => $username]))>0){
+            $status = true;
+        }
+        return $status; 
+    }
+
+    //------------------------
+
+    public function isValidAccountNameByUpdate($user_id, $username, $email, $passwort){
+
+        $error = '';
+        if($username == ''){
+            $error = $error."--username leer--";
+        }
+        if($email == ''){
+            $error = $error."--email leer--";
+        }
+        if($passwort == ''){
+            $error = $error."--passwort leer--";
+        }
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+            $ac = $this->uDao->getUserAccount([
+                'user_id' => $user_id
+            ]);
+
+            $pre_email = $ac['email'];
+            $pre_username = $ac['username'];
+
+            if($this->occupiedEmailNameByUpdate($pre_email, $email)){
+                $error = $error."--email schon belegt--";
+            } 
+
+            if($this->occupiedUserNameByUpdate($pre_username, $username)){
+                $error = $error."--username schon belegt--";
+            } 
+            
+        } else {
+            $error = $error."--invalid email format--";
+        }
+        return $error;
+    }
+
+    public function occupiedEmailNameByUpdate($pre_email, $email){
+        $status = false;
+        if(count($this->uDao->getUserAccountByEmail2(['pre_email' => $pre_email, 'email' => $email]))>0){
+            $status = true;
+        }
+        return $status;
+    }
+
+    public function occupiedUserNameByUpdate($pre_username, $username){
+        $status = false;
+        if(count($this->uDao->getUserAccountByUserName2(['pre_username' => $pre_username, 'username' => $username]))>0){
+            $status = true;
+        }
+        return $status; 
+    }
+
+}

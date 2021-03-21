@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Dao\UserDao;
 use App\Service\StatisticUserService;
 use App\Service\SupporterService;
+use App\Service\UserAccount;
 
 /**
  *
@@ -45,12 +46,13 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser/new", name="statisticuser_new")
      */
-    public function newStatisticUser(Request $request, UserDao $uDao, StatisticUserService $staSer)
+    public function newStatisticUser(Request $request, UserDao $uDao, UserAccount $accSer, StatisticUserService $staSer)
     {
         $username = '';
         $email    = '';
         $passwort = '';
         $gs_id    = '1';
+        $error    = '';
         $geschaeftsstelle = $uDao->getAllGeschaeftsstelle();
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
@@ -58,20 +60,21 @@ class StatisticUserController extends AbstractController
             //$safePost = filter_input_array(INPUT_POST);
             //var_dump($safePost); exit;
             $safePost = $request->request;
+
             $username  =  $safePost->get('username');
             $email     =  $safePost->get('email');
             $passwort  =  $safePost->get('passwort');
             $gs_id     =  $safePost->get('geschaeftsstelle');
+
+            $error = $accSer-> isValidAccountName($username, $email, $passwort);
             
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if ($error == '') {
                 $staSer->newStatisticUser($safePost);
                 return $this->redirectToRoute('statisticuser_list', [
                     //'paramName' => 'value'
                 ]);
             } 
-            else {
-                $email = $email."<--Invalid email format";
-            }
+            
         }
 
         return $this->render('statisticuser/new.html.twig', [
@@ -79,19 +82,22 @@ class StatisticUserController extends AbstractController
             'email'              => $email,
             'passwort'           => $passwort,
             'geschaeftsstelleId' => $gs_id,
-            'geschaeftsstelle'   => $geschaeftsstelle
+            'geschaeftsstelle'   => $geschaeftsstelle,
+            'error'              => $error
         ]);
     }
 
     /**
      * @Route("/statisticuser/{uid}/edit", name="statisticuser_edit", requirements={"uid"="\d+"})
      */
-    public function statisticuserEdit($uid, Request $request, UserDao $uDao, StatisticUserService $staSer)
+    public function statisticuserEdit($uid, Request $request, UserDao $uDao, UserAccount $accSer, StatisticUserService $staSer)
     {
         $user_id = $uid;
         $username = '';
         $email    = '';
+        $passwort = '';
         $gs_id    = '1';
+        $error    = '';
         $geschaeftsstellen = $uDao->getAllGeschaeftsstelle();
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
@@ -99,17 +105,17 @@ class StatisticUserController extends AbstractController
             $safePost = $request->request;
             $username = $safePost->get('username');
             $email    = $safePost->get('email');
+            $passwort  =  $safePost->get('passwort');
             $gs_id    = $safePost->get('geschaeftsstelle');
 
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = $accSer-> isValidAccountNameByUpdate($user_id, $username, $email, $passwort);
+            
+            if ($error == '') {
                 $staSer->updateStatisticUser($user_id, $safePost);
                 return $this->redirectToRoute('statisticuser_list', [
                     //'paramName' => 'value'
-                ]);    
+                ]);     
             } 
-            else {
-                 $email = $email."<--Invalid email format";
-            }
         }
 
         if ($request->isMethod('GET')) {
@@ -127,7 +133,8 @@ class StatisticUserController extends AbstractController
             'username'            => $username,
             'email'               => $email,
             'geschaeftsstelleId'  => $gs_id,
-            'geschaeftsstellen'   => $geschaeftsstellen
+            'geschaeftsstellen'   => $geschaeftsstellen,
+            'error'              => $error
         ]);
 
     }

@@ -9,30 +9,84 @@ class SendQueue
     private $bDao;
     private $twig;
 
-    function __construct( BaseDao $bDao, Environment $twig) {
+    function __construct(BaseDao $bDao, Environment $twig) {
         $this->bDao = $bDao;
         $this->twig = $twig;
     }
 
-    public function addToSendQueue($template,  $data){
+    public function addToSendQueue($modus, $data=[]){
 
-        //$abc = 'ABC';
-        //$xyz = 'XYZ';
+        $username = $data['username'];
+        $email    = $data['email'];
+        $passwort = $data['passwort'];
+        $geschaeftsstelle = '';
+        if(isset($data['geschaeftsstelle'])){
+            $geschaeftsstelle = $data['geschaeftsstelle'];
+        }
 
-        // $template = 'supporter/email.html.twig';
-        // $data = [
-        //     'abc' => $abc,
-        //     'xyz' => $xyz 
-        // ];
+        $sendername      = 'Ivd24Admin';
+        $absender_mail   = 'noreply@ivd24immobilien.de';
+        $empfaenger_name = $username;
+        $empfaenger_mail = $email;
+        $insertdate      = time();
 
-        //$tpl = $this->twig->render($template, $data);
-        $tpl = $this->getHtmlCode($template, $data);
-        //$file = $this->parameterBag->get('kernel.project_dir')."/zipfiles/people.txt";
-        //file_put_contents($file, $tpl);
-    }
+        $betreff  = '';
+        $nachricht_plain = '';
+        $nachricht_html  = '';
 
-    public function getHtmlCode($template,  $data=[]){
-        return $this->twig->render($template, $data);
+        if($modus=='supporter_new'){
+            $betreff  = 'You are registered as Supporter !';
+            $nachricht_plain = "You are registered as Supporter! with username=$username ; email=$email ; passwort=$passwort";
+            $nachricht_html = $this->twig->render('email/new.email.html.twig', [
+                'username'  => $username,
+                'email'     => $email,
+                'passwort'  => $passwort
+            ]);
+        }
+
+        if($modus=='supporter_edit'){
+            $betreff         = 'Your data are updated!';
+            $nachricht_plain = "Your data are updated! with (new)username=$username ; (new)email=$email ; (new)passwort=$passwort";
+            $nachricht_html = $this->twig->render('email/update.email.html.twig', [
+                'username'  => $username,
+                'email'     => $email,
+                'passwort'  => $passwort
+            ]); 
+        }
+
+        if($modus=='statisticuser_new'){
+            $betreff  = 'You are registered as Statistic-User!';
+            $nachricht_plain = "You are registered as Statistic-User! with username=$username ; email=$email ; passwort=$passwort ; geschaeftsstelle=$geschaeftsstelle";
+            $nachricht_html = $this->twig->render('email/sta.new.email.html.twig', [
+                'username'  => $username,
+                'email'     => $email,
+                'passwort'  => $passwort,
+                'geschaeftsstelle' => $geschaeftsstelle
+            ]);
+        }
+
+        if($modus=='statisticuser_edit'){
+            $betreff         = 'Your data are updated!';
+            $nachricht_plain = "Your data are updated! with (new)username=$username ; (new)email=$email ; (new)passwort=$passwort ; (new)geschaeftsstelle=$geschaeftsstelle";
+            $nachricht_html = $this->twig->render('email/sta.update.email.html.twig', [
+                'username'  => $username,
+                'email'     => $email,
+                'passwort'  => $passwort,
+                'geschaeftsstelle' => $geschaeftsstelle
+            ]);  
+        }
+        
+        $this->bDao->insertSendQueue([
+            'sendername'        => $sendername, 
+            'absender_mail'     => $absender_mail,
+            'empfaenger_name'   => $empfaenger_name,
+            'empfaenger_mail'   => $empfaenger_mail,
+            'betreff'           => $betreff,
+            'nachricht_html'    => $nachricht_html,
+            'nachricht_plain'   => $nachricht_plain,
+            'insertdate'        => $insertdate
+        ]);
+
     }
 
 }

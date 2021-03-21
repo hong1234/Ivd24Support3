@@ -68,9 +68,7 @@
                                     <li {% if route_name in ["server_list", "server_edit"] %} class="active"{% endif %}><a href="{{ path('server_list') }}"><i class="fa fa-circle-o"></i>FTP-Import pausieren</a></li>
                                     <li {% if route_name in ["server_pause_list"] %} class="active"{% endif %}><a href="{{ path('server_pause_list') }}"><i class="fa fa-circle-o"></i>Pausierte FTP-Importe </a></li>
                                 <br>
-                                {# {% if is_granted("ROLE") %}
-                                    Hi {{ app.user.username }}
-                                {% endif %} #}
+                                
                                 {% if is_granted("ROLE_STATISTIC") %}
                                     <li {% if route_name == "statistic_dashboard" %} class="active"{% endif %}><a href="{{ path('statistic_dashboard') }}"><i class="fa fa-circle-o"></i>Statistic</a></li>
                                 {% endif %}

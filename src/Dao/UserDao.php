@@ -97,10 +97,29 @@ class UserDao extends BaseDao {
     }
 
     //--------
-
     public function getUserAccount(iterable $values=[]){
-        $sql = "SELECT username FROM user_account WHERE user_id = :user_id";
+        $sql = "SELECT username, email FROM user_account WHERE user_id = :user_id";
         return $this->doQuery($sql, $values)->fetchAssociative();
+    }
+
+    public function getUserAccountByEmail(iterable $values=[]){
+        $sql = "SELECT * FROM user_account WHERE email = :email";
+        return $this->doQuery($sql, $values)->fetchAllAssociative();
+    }
+
+    public function getUserAccountByEmail2(iterable $values=[]){
+        $sql = "SELECT * FROM user_account WHERE email = :email AND email !=:pre_email";
+        return $this->doQuery($sql, $values)->fetchAllAssociative();
+    }
+
+    public function getUserAccountByUserName(iterable $values=[]){
+        $sql = "SELECT * FROM user_account WHERE username = :username";
+        return $this->doQuery($sql, $values)->fetchAllAssociative();
+    }
+
+    public function getUserAccountByUserName2(iterable $values=[]){
+        $sql = "SELECT * FROM user_account WHERE username = :username AND username !=:pre_username";
+        return $this->doQuery($sql, $values)->fetchAllAssociative();
     }
 
     public function updateUserAccountEmail(iterable $values=[]){
@@ -109,7 +128,7 @@ class UserDao extends BaseDao {
     }
 
     public function updateUserAccountPW(iterable $values=[]){
-        $sql  =  "UPDATE user_account SET kennwort  = :crypt_passwort WHERE user_id = :user_id";
+        $sql  =  "UPDATE user_account SET kennwort = :crypt_passwort WHERE user_id = :user_id";
         return $this->doSQL($sql, $values);
     }
 

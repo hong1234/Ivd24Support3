@@ -17,12 +17,23 @@
     <div class="content-wrapper">
       <section class="content-header">
         <h1>ivd24 Support | Home Page</h1>
-        <div>
-        <p>You are registered as Supporter !</p>
-        <p> username=<b>hong9</b> </p>
-        <p> email=<b>hong9@yahoo.de</b> </p>
-        <p> passwort=<b>hong9</b> </p>
-      </div>
+
+        {% if is_granted("ROLE_SUPPORT") %} 
+          <div>
+            <p>Hi {{ app.user.username }} You are logged in as Supporter!</p>
+            {# <p>Your email={{ app.user.email }} </p> #}
+          </div>
+        {% endif %}
+
+        {% if is_granted("ROLE_ADMIN") %} 
+          <div>
+            <p>Hi {{ app.user.username }} You are logged in as Admin!</p>
+            {# <p>Your email={{ app.user.email }} </p> #}
+          </div>
+        {% endif %}
+
+        
+
       </section>
       <!-- Main content -->
      

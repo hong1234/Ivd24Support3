@@ -18,10 +18,15 @@
       </section>
       <!-- Main content -->
       <section class="content">
+        
         <div class="row">
+          
           <!-- left column -->
           <div class="col-md-6">
 
+          <div>
+            <p style="color:red;">{{error}}</p>
+          </div>
           {# <form action="/supporter/new" method="POST"> #}
           <form action="{{ path('supporter_new') }}" method="POST">
             <div class="box box-warning">

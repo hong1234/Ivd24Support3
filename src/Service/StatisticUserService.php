@@ -5,22 +5,34 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Dao\UserDao;
 use App\Entity\User;
+use App\Service\SendQueue;
 
 class StatisticUserService
 {
     private $uDao;
     private $passwordEncoder;
+    private $sqSer;
 
-    function __construct(UserDao $uDao, UserPasswordEncoderInterface $passwordEncoder) {
+    function __construct(UserDao $uDao, UserPasswordEncoderInterface $passwordEncoder, SendQueue $sqSer) {
         $this->uDao = $uDao;  
+        $this->sqSer = $sqSer;
         $this->passwordEncoder = $passwordEncoder;
     }
 
+    public function geschaeftsstelleName($gs_id) {
+        $gs = $this->uDao->getGeschaeftsstelle([
+            'geschaeftsstelle_id' => $gs_id
+        ]);
+        return $gs['name'];
+    }
+
     public function newStatisticUser($safePost) {
+
         $username  =  $safePost->get('username');
         $email     =  $safePost->get('email');
         $passwort  =  $safePost->get('passwort');
         $gs_id     =  $safePost->get('geschaeftsstelle');
+        $geschaeftsstelle = $this->geschaeftsstelleName($gs_id);
 
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
@@ -53,6 +65,13 @@ class StatisticUserService
     
             $em->persist($user);
             $em->flush();
+            //--------------
+            $this->sqSer->addToSendQueue('statisticuser_new', [
+                'username' => $username, 
+                'email' => $email, 
+                'passwort' => $passwort,
+                'geschaeftsstelle' => $geschaeftsstelle
+            ]);
     
             //------------- 
             $em->getConnection()->commit();   
@@ -64,10 +83,12 @@ class StatisticUserService
     }
 
     public function updateStatisticUser($user_id, $safePost) {
+
         $username = $safePost->get('username');
         $email    = $safePost->get('email');
         $passwort = $safePost->get('passwort');
         $gs_id    = $safePost->get('geschaeftsstelle');
+        $geschaeftsstelle = $this->geschaeftsstelleName($gs_id);
 
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
@@ -89,6 +110,13 @@ class StatisticUserService
             ));
 
             $em->flush();
+            //--------------
+            $this->sqSer->addToSendQueue('statisticuser_edit', [
+                'username' => $username, 
+                'email' => $email, 
+                'passwort' => $passwort,
+                'geschaeftsstelle' => $geschaeftsstelle
+            ]);
             
             //---------- 
             $em->getConnection()->commit();   
