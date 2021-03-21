@@ -10,6 +10,7 @@ use App\Dao\UserDao;
 use App\Dao\MaklerDao;
 
 use App\Service\MaklerService;
+use App\Service\UserAccount;
 
 /**
  *
@@ -20,26 +21,89 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/new", name="makler_new")
      */
-    public function newMakler(Request $request, MaklerDao $mDao, MaklerService $mService)
+    public function newMakler(Request $request, MaklerDao $mDao, UserAccount $accSer, MaklerService $mService)
     {
-        //if(isset($_POST['savebutton'])) { // savebutton: true
-        if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-            // post parameters
-            // $safePost = filter_input_array(INPUT_POST);
-            // var_dump($safePost); exit;
-            $safePost = $request->request;
-            $mService->newMakler($safePost);
-            return $this->redirectToRoute('makler_list', [
-                //'paramName' => 'value'
-            ]);  
-        }
+        $mitgliedsnummer = '';
+        $vorname = '';
+        $name    = '';
+        $firma   = '';
+        $strasse = '';
+        $plz     = '';
+        $ort     = '';
+        $bundesland_id = '';
+        $telefon = '';
+        $telefax = '';
+        $homepage = '';
+        $seo_url = '';
+        $geschaeftsstelle_id = '';
+        $username = '';
+        $email    = '';
+        $passwort = '';
+        $error    = '';
 
         $bundeslaender    = $mDao->getBundeslaender();
         $geschaeftsstelle = $mDao->getAllGeschaeftsstelle();
+
+        //if(isset($_POST['savebutton'])) { // savebutton: true
+        if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+            // post parameters
+            //$safePost = filter_input_array(INPUT_POST);
+            //var_dump($safePost); exit;
+
+            $safePost = $request->request;
+            //-----------------
+            $mitgliedsnummer = $safePost->get('mnummer');
+            $vorname  = $safePost->get('vorname');
+            $name     = $safePost->get('name');
+            $firma    = $safePost->get('firma');
+            $strasse  = $safePost->get('strasse');
+            $plz      = $safePost->get('plz');
+            $ort      = $safePost->get('ort');
+            $bundesland_id = $safePost->get('bundesland');
+            $telefon  = $safePost->get('telefon');
+            $telefax  = $safePost->get('telefax');
+            $homepage = $safePost->get('homepage');
+	        $seo_url  = $safePost->get('seo_url');
+            $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
+
+            $username  = $safePost->get('username');     //"username"
+            $email     = $safePost->get('email');        //"email"
+            $passwort  = $safePost->get('userpasswort'); //"userpasswort"
+
+            //validation
+            $error = $accSer-> isValidAccountName($username, $email, $passwort);
+
+            if ($error == '') {
+                $mService->newMakler($safePost);
+                return $this->redirectToRoute('makler_list', [
+                    //'paramName' => 'value'
+                ]);
+            }
+
+        }
         
         return $this->render('makler/new.html.twig', [
+            'mitgliedsnummer' => $mitgliedsnummer,
+            'vorname' => $vorname,
+            'name'    => $name,
+            'firma'   => $firma,
+            'strasse' => $strasse,
+            'plz'     => $plz,
+            'ort'     => $ort,
+            'bundesland_id' => $bundesland_id,
+            'telefon' => $telefon,
+            'telefax' => $telefax,
+            'homepage' => $homepage,
+            'seo_url' => $seo_url,
+            'geschaeftsstelle_id' => $geschaeftsstelle_id,
+
             'bundeslaender' => $bundeslaender,
-            'geschaeftsstelle' => $geschaeftsstelle
+            'geschaeftsstelle' => $geschaeftsstelle,
+
+            'username' => $username,
+            'email'    => $email,
+            'passwort' => $passwort,
+            'error'    => $error  
         ]);
     }
 

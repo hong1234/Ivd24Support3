@@ -14,6 +14,9 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>Makler anlegen</h1>
+            <div>
+                <p style="color:red;">{{error}}</p>
+            </div>
         </section>
         <!-- Main content -->
         <section class="content">
@@ -49,59 +52,61 @@
                                     <label for="Namenstitel">Namenstitel</label>
                                     <input type="text" class="form-control" id="namenstitel" name="namenstitel" placeholder="Kfm./ Ing(FH)/ B.Sc. (usw.)">
                                 </div>
+
+
                                 <div class="form-group">
                                     <label for="Vorname">Vorname</label>
-                                    <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname" required>
+                                    <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname" value="{{vorname}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="name">Nachname</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nachname" required>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nachname" value="{{name}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="Firma">Firma</label>
-                                    <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" required>
+                                    <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" value="{{firma}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="Strasse">Straße Nr.</label>
-                                    <input type="text" class="form-control" id="strasse" name="strasse" placeholder="Straße & Hausnummer" required>
+                                    <input type="text" class="form-control" id="strasse" name="strasse" placeholder="Straße & Hausnummer" value="{{strasse}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="plz">PLZ</label>
-                                    <input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ" required>
+                                    <input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ" value="{{plz}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="ort">Ort</label>
-                                    <input type="text" class="form-control" id="ort" name="ort" placeholder="Ort" required>
+                                    <input type="text" class="form-control" id="ort" name="ort" placeholder="Ort" value="{{ort}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="Bundesland">Bundesland</label>
                                     <select id="bundesland" name="bundesland" class="form-control" required>
                                         {% for land in bundeslaender %}
-                                            <option value={{ land.geo_bundesland_id|e }}>{{ land.bundesland|e }}</option>
+                                            <option value={{ land.geo_bundesland_id|e }} {% if land.geo_bundesland_id == bundesland_id %} selected {% endif %}>{{ land.bundesland|e }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="Telefon">Telefon</label>
-                                    <input type="text" class="form-control" id="telefon" name="telefon" placeholder="Telefon">
+                                    <input type="text" class="form-control" id="telefon" name="telefon" placeholder="Telefon" value="{{telefon}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="Telefax">Telefax</label>
-                                    <input type="text" class="form-control" id="telefax" name="telefax" placeholder="Telefax">
+                                    <input type="text" class="form-control" id="telefax" name="telefax" placeholder="Telefax" value="{{telefax}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="Homepage">Homepage</label>
-                                    <input type="text" class="form-control" id="homepage" name="homepage" placeholder="Homepage">
+                                    <input type="text" class="form-control" id="homepage" name="homepage" placeholder="Homepage" value="{{homepage}}">
                                 </div>
 				                <div class="form-group">
                                     <label for="Homepage">SEO-URL</label>
-                                    <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="seo_url">
+                                    <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="seo_url" value="{{seo_url}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="Geschaefststelle">Geschäftsstelle</label>
                                     <select id="geschaeftsstelle" name="geschaeftsstelle" class="form-control" required>
                                         {% for stelle in geschaeftsstelle %}
-                                            <option value={{ stelle.geschaeftsstelle_id|e }}>{{ stelle.name|e }}</option>
+                                            <option value={{ stelle.geschaeftsstelle_id|e }} {% if stelle.geschaeftsstelle_id == geschaeftsstelle_id %} selected {% endif %}>{{ stelle.name|e }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -113,6 +118,9 @@
                 <!-- right column -->
                 <div class="col-md-6">
                 <!-- Horizontal Form -->
+                {# <div>
+                    <p style="color:red;">{{error}}</p>
+                </div> #}
             
                 <!-- /.box -->
                 <!-- general form elements disabled -->
@@ -125,15 +133,15 @@
                             <!-- text input -->
                             <div class="form-group">
                                 <label for="Email">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" value="{{email}}" required>
                             </div>
                             <div class="form-group">
                                 <label for="username">Benutzername</label>
-                                <input type="username" class="form-control" id="username" name="username" placeholder="Benutzername" required>
+                                <input type="username" class="form-control" id="username" name="username" placeholder="Benutzername" value="{{username}}" required>
                             </div>
                             <div class="form-group">
                                 <label for="UserPasswort">Passwort <small>Klartext</small></label>
-                                <input type="text" class="form-control" id="userpasswort" name="userpasswort" placeholder="Passwort" required>
+                                <input type="text" class="form-control" id="userpasswort" name="userpasswort" placeholder="Passwort" value="{{passwort}}" required>
                             </div>
                         </div>
                     <!-- /.box-body -->

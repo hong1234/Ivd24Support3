@@ -57,8 +57,8 @@ class SupporterController extends AbstractController
 
             $safePost = $request->request;
 
-            $username  =  $safePost->get('username');//validation
-            $email     =  $safePost->get('email'); //validation
+            $username  =  $safePost->get('username');  //validation
+            $email     =  $safePost->get('email');     //validation
             $passwort  =  $safePost->get('passwort');
 
             $error = $accSer-> isValidAccountName($username, $email, $passwort);
