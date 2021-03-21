@@ -108,7 +108,7 @@ class StatisticUserController extends AbstractController
                 ]);    
             } 
             else {
-                 $email = $email."--Invalid email format";
+                 $email = $email."<--Invalid email format";
             }
         }
 

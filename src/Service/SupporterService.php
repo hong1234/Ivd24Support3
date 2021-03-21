@@ -5,21 +5,45 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Dao\UserDao;
 use App\Entity\User;
+// use App\Service\SendQueue;
+
+use Twig\Environment;
 
 class SupporterService
 {
     private $uDao;
+    private $twig;
     private $passwordEncoder;
 
-    function __construct(UserDao $uDao, UserPasswordEncoderInterface $passwordEncoder) {
+    function __construct(UserDao $uDao, Environment $twig, UserPasswordEncoderInterface $passwordEncoder) {
         $this->uDao = $uDao; 
+        $this->twig = $twig;
         $this->passwordEncoder = $passwordEncoder; 
     }
 
     public function newSupporter($safePost) {
+
         $username  =  $safePost->get('username');
         $email     =  $safePost->get('email');
         $passwort  =  $safePost->get('passwort');
+
+        //--------------------
+        $tpl = $this->twig->render('supporter/email.html.twig', [
+            'username'  => $username,
+            'email'     => $email,
+            'passwort'  => $passwort
+        ]);
+
+        $sendername      = 'Ivd24Admin';
+        $absender_mail   = 'noreply@ivd24immobilien.de';
+        $empfaenger_name = $username;
+        $empfaenger_mail = $email;
+        $betreff         = 'You are registered as Supporter !';
+        $nachricht_html  = $tpl;
+        $nachricht_plain = "You are registered as Supporter! with username=$username ; email=$email ; passwort=$passwort";
+        $insertdate      = time();
+
+        //-------------------
 
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
@@ -52,14 +76,27 @@ class SupporterService
     
             $em->persist($user);
             $em->flush();
-            //------------- 
-
+            //-------------
+            
+            $this->uDao->insertSendQueue([
+                'sendername'        => $sendername, 
+                'absender_mail'     => $absender_mail,
+                'empfaenger_name'   => $empfaenger_name,
+                'empfaenger_mail'   => $empfaenger_mail,
+                'betreff'           => $betreff,
+                'nachricht_html'    => $nachricht_html,
+                'nachricht_plain'   => $nachricht_plain,
+                'insertdate'        => $insertdate
+            ]);
+            //-------------
+            
             $em->getConnection()->commit();   
 
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
         }
+        
     }
 
     public function updateSupporter($user_id, $safePost) {

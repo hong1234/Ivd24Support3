@@ -5,8 +5,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 // use Symfony\Component\HttpFoundation\Request;
 // use App\Repository\ProductRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 use App\Dao\ServerDao;
+use App\Service\SendQueue;
 
 /**
  *
@@ -17,7 +19,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/home", name="default_home")
      */
-    public function homePage()
+    public function homePage(SendQueue $queSer)
     {
         // return $this->json([
         //     'message' => 'Welcome to your new controller!',
@@ -25,7 +27,6 @@ class DefaultController extends AbstractController
         // ]);
 
         return $this->render('default/home.html.twig', [
-            
         ]);
     }
 

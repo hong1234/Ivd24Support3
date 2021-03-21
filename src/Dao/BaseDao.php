@@ -34,6 +34,22 @@ class BaseDao {
     }
 
     //---------------
+
+    public function insertSendQueue(iterable $values=[]){
+        $sql = "INSERT INTO send_queue 
+                SET 
+                sendername      = :sendername,
+                absender_mail   = :absender_mail,
+                empfaenger_name = :empfaenger_name,
+                empfaenger_mail = :empfaenger_mail,
+                betreff         = :betreff,
+                nachricht       = :nachricht_html,
+                nachricht_plain = :nachricht_plain,
+                insertdate      = :insertdate
+                ";
+        return $this->doSQL($sql, $values);
+    }
+
     public function getBundeslaender(iterable $values=[]) {
         $sql = "SELECT * FROM geo_bundesland";
         return $this->doQuery($sql, $values)->fetchAllAssociative();
