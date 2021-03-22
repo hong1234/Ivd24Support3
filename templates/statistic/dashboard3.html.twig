@@ -60,144 +60,55 @@
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-      <!-- Sidebar user panel -->
-      <!-- <div class="user-panel">
-        <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-        </div>
-        <div class="pull-left info">
-          <p>Alexander Pierce</p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-        </div>
-      </div> -->
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu" data-widget="tree">
-       
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-edit"></i> <span>IVD24-TOOLS</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          {% set route_name = app.request.attributes.get('_route') %}
-          <ul class="treeview-menu">
+                    <ul class="sidebar-menu" data-widget="tree">
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-edit"></i> 
+                                <span>Usermanagement</span>
+                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                            </a>
+                            {% set route_name = app.request.attributes.get('_route') %}
+                            {% block navigation %}
+                            <ul class="treeview-menu">
                                 {% if app.user %}
-                                <li><a href="/logout"><i class="fa fa-circle-o"></i>Logout</a></li>
+                                    <li><a href="/logout"><i class="fa fa-circle-o"></i>Logout</a></li>
                                 {% else %}
-                                <li {% if route_name == "login" %} class="active"{% endif %}><a href="/login"><i class="fa fa-circle-o"></i>Login</a></li>
+                                    <li {% if route_name == "login" %} class="active"{% endif %}><a href="/login"><i class="fa fa-circle-o"></i>Login</a></li>
                                 {% endif %}
-                                <li {% if route_name == "default_home" %} class="active"{% endif %}><a href="{{ path('default_home') }}"><i class="fa fa-circle-o"></i>Home Page</a></li>
-                                <li {% if route_name == "statistic_dashboard" %} class="active"{% endif %}><a href="{{ path('statistic_dashboard') }}"><i class="fa fa-circle-o"></i>Statistic</a></li>
-                                <li {% if route_name == "makler_new" %} class="active"{% endif %}><a href="{{ path('makler_new') }}"><i class="fa fa-circle-o"></i>Makler hinzufügen</a></li>
+                                    <li {% if route_name == "default_find" %} class="active"{% endif %}><a href="{{ path('default_find') }}"><i class="fa fa-circle-o"></i>findPage</a></li>
+                                    <li {% if route_name == "default_test" %} class="active"{% endif %}><a href="{{ path('default_test') }}"><i class="fa fa-circle-o"></i>testPage</a></li>
+                                    <li {% if route_name == "default_home" %} class="active"{% endif %}><a href="{{ path('default_home') }}"><i class="fa fa-circle-o"></i>Home Page</a></li>
+                                    <li {% if route_name in ["server_list", "server_edit"] %} class="active"{% endif %}><a href="{{ path('server_list') }}"><i class="fa fa-circle-o"></i>FTP-Import pausieren</a></li>
+                                    <li {% if route_name in ["server_pause_list"] %} class="active"{% endif %}><a href="{{ path('server_pause_list') }}"><i class="fa fa-circle-o"></i>Pausierte FTP-Importe </a></li>
+                                <br>
+                                
+                                {% if is_granted("ROLE_STATISTIC") %}
+                                    <li {% if route_name == "statistic_dashboard" %} class="active"{% endif %}><a href="{{ path('statistic_dashboard') }}"><i class="fa fa-circle-o"></i>Statistic</a></li>
+                                {% endif %}
+                                <br>
+                                {% if is_granted("ROLE_SUPPORT") %}
+                                    <li {% if route_name == "makler_new" %} class="active"{% endif %}><a href="{{ path('makler_new') }}"><i class="fa fa-circle-o"></i>Makler hinzufügen</a></li>
 		                            <li {% if route_name in ["makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit"]  %} class="active"{% endif %}><a href="{{ path('makler_list') }}"><i class="fa fa-circle-o"></i>Makler bearbeiten</a></li>
 		                            <li {% if route_name in ["makler_delete_list", "makler_delete"]  %} class="active"{% endif %}><a href="{{ path('makler_delete_list') }}"><i class="fa fa-circle-o"></i>Makler löschen</a></li>
 		                            <li {% if route_name in ["interessent_list", "interessent_edit", "interessent_pw_edit"] %} class="active"{% endif %}><a href="{{ path('interessent_list') }}"><i class="fa fa-circle-o"></i>Interessent bearbeiten</a></li>
 		                            <li {% if route_name in ["interessent_delete_list", "interessent_delete"] %} class="active"{% endif %}><a href="{{ path('interessent_delete_list') }}"><i class="fa fa-circle-o"></i>Interessent löschen</a></li>
-                                <li {% if route_name in ["bcuser_list", "bcuser_edit"] %} class="active"{% endif %}><a href="{{ path('bcuser_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User bearbeiten</a></li>
-                                <li {% if route_name in ["bcuser_delete_list", "bcuser_delete"] %} class="active"{% endif %}><a href="{{ path('bcuser_delete_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User löschen</a></li>
-                                <li {% if route_name == "supporter_new" %} class="active"{% endif %}><a href="{{ path('supporter_new') }}"><i class="fa fa-circle-o"></i>Supporter hinzufügen</a></li>
-                                <li {% if route_name in ["supporter_list", "supporter_edit"] %} class="active"{% endif %}><a href="{{ path('supporter_list') }}"><i class="fa fa-circle-o"></i>Supporter bearbeiten</a></li>
-                                <li {% if route_name == "statisticuser_new" %} class="active"{% endif %}><a href="{{ path('statisticuser_new') }}"><i class="fa fa-circle-o"></i>StatisticUser hinzufügen</a></li>
-                                <li {% if route_name in ["statisticuser_list", "statisticuser_edit"] %} class="active"{% endif %}><a href="{{ path('statisticuser_list') }}"><i class="fa fa-circle-o"></i>StatisticUser bearbeiten</a></li>
-            </ul>
-        </li>
-        
-        <li class="active treeview">
-          <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-pie-chart"></i>
-            <span>Charts</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
-            <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
-            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-laptop"></i>
-            <span>UI Elements</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> General</a></li>
-            <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> Icons</a></li>
-            <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> Buttons</a></li>
-            <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> Sliders</a></li>
-            <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> Timeline</a></li>
-            <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Modals</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-share"></i> <span>Multilevel</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-            <li class="treeview">
-              <a href="#"><i class="fa fa-circle-o"></i> Level One
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
-                <li class="treeview">
-                  <a href="#"><i class="fa fa-circle-o"></i> Level Two
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-                  <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-          </ul>
-        </li>
-        <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-        <li class="header">LABELS</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
-      </ul>
-    </section>
+                                    <li {% if route_name in ["bcuser_list", "bcuser_edit"] %} class="active"{% endif %}><a href="{{ path('bcuser_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User bearbeiten</a></li>
+                                    <li {% if route_name in ["bcuser_delete_list", "bcuser_delete"] %} class="active"{% endif %}><a href="{{ path('bcuser_delete_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User löschen</a></li>
+                                    {# <li {% if route_name in ["server_list"] %} class="active"{% endif %}><a href="{{ path('server_list') }}"><i class="fa fa-circle-o"></i>Server Config</a></li>   #}
+                                {% endif %}
+                                <br>
+                                {% if is_granted("ROLE_ADMIN") %}
+                                    <li {% if route_name == "supporter_new" %} class="active"{% endif %}><a href="{{ path('supporter_new') }}"><i class="fa fa-circle-o"></i>Supporter hinzufügen</a></li>
+                                    <li {% if route_name in ["supporter_list", "supporter_edit"] %} class="active"{% endif %}><a href="{{ path('supporter_list') }}"><i class="fa fa-circle-o"></i>Supporter bearbeiten</a></li>
+                                    <li {% if route_name == "statisticuser_new" %} class="active"{% endif %}><a href="{{ path('statisticuser_new') }}"><i class="fa fa-circle-o"></i>StatisticUser hinzufügen</a></li>
+                                    <li {% if route_name in ["statisticuser_list", "statisticuser_edit"] %} class="active"{% endif %}><a href="{{ path('statisticuser_list') }}"><i class="fa fa-circle-o"></i>StatisticUser bearbeiten</a></li>
+                                {% endif %}
+                            </ul>
+                            {% endblock %}
+                        </li>
+                    </ul>
+                </section>
+      
     <!-- /.sidebar -->
   </aside>
 
@@ -316,7 +227,7 @@
 
       <!-- Makler row -->
       <div class="row">
-        <section class="col-lg-12 connectedSortable">
+        {# <section class="col-lg-12 connectedSortable">
           <div class="box box-info">
             <!-- Content Header (Page header) -->
             <div class="box-header">
@@ -339,7 +250,7 @@
                 </table>     
             </div>
           </div>
-        </section>
+        </section> #}
       </div>
       <!-- Makler row End-->
 
@@ -588,7 +499,7 @@
 <!-- AdminLTE for demo purposes -->
 <!-- <script src="dist/js/demo.js"></script> -->
 <!-- DataTables -->
-<script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+{# <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script>
   $(function (){
@@ -596,6 +507,6 @@
         data: {{dataSet|json_encode|raw}}
     })
   })
-</script>
+</script> #}
 </body>
 </html>

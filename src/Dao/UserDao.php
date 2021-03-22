@@ -96,9 +96,33 @@ class UserDao extends BaseDao {
         return $this->doSQL($sql, $values);
     }
 
+    public function insertAccountForMakler(iterable $values=[]){
+        $sql = "INSERT INTO user_account SET 
+                    art_id                = :art_id, 
+                    recht_id              = :recht_id,
+                    kennwort              = :kennwort,
+                    username              = :benutzername,
+                    email                 = :email,
+                    registrierungsdatum   = :regdate,
+                    authentifiziert       = :authentifiziert, 
+                    gesperrt              = :gesperrt, 
+                    kennwort_plain        = :kennwort_plain
+                ";
+
+        return $this->doSQL($sql, $values);
+    }
+
     //--------
+    public function getUserGeschaeftsstelle(iterable $values=[]){
+        $sql = "SELECT user_id, user_account.geschaeftsstellen_id, user_geschaeftsstelle.name 
+                FROM user_account 
+                LEFT JOIN user_geschaeftsstelle ON  user_account.geschaeftsstellen_id = user_geschaeftsstelle.geschaeftsstelle_id
+                WHERE user_id = :user_id";
+        return $this->doQuery($sql, $values)->fetchAssociative();
+    }
+
     public function getUserAccount(iterable $values=[]){
-        $sql = "SELECT username, email FROM user_account WHERE user_id = :user_id";
+        $sql = "SELECT username, email, geschaeftsstellen_id FROM user_account WHERE user_id = :user_id";
         return $this->doQuery($sql, $values)->fetchAssociative();
     }
 

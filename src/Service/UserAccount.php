@@ -153,7 +153,7 @@ class UserAccount
 
     public function occupiedSeoUrl($seo_url){
         $status = false;
-        if(count($this->mDao->getUserAccountBySeoUrl(['seo_url' => $seo_url]))>0){
+        if(count($this->mDao->getMaklerBySeoUrl(['seo_url' => $seo_url]))>0){
             $status = true;
         }
         return $status;

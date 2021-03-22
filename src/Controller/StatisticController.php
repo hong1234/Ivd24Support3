@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 // use App\Repository\ProductRepository;
 
 use App\Dao\MaklerDao;
+use App\Dao\StatisticDao;
 
 /**
  *
@@ -17,15 +18,42 @@ class StatisticController extends AbstractController
     /**
      * @Route("/dashboard", name="statistic_dashboard")
      */
-    public function Dashboard(MaklerDao $mDao)
+    public function Dashboard(MaklerDao $mDao, StatisticDao $sDao)
     {
-        $stmt = $mDao->getActivMaklerProRegion();
+        //$this->getUser()->getEmail();
+        //$roles = $this->getUser()->getRoles();
+        //var_dump($this->getUser()->getUserid());exit;
+
+        $user_id = $this->getUser()->getUserid();
+
+        $ac = $sDao->getUserGeschaeftsstelle([
+            'user_id' => $user_id
+        ]);
+
+        $geschaeftsstelle_id   = $ac['geschaeftsstellen_id'];
+        $geschaeftsstelle_name = $ac['name'];
+
+        if($geschaeftsstelle_name=='ivd24immobilien AG'){  // $geschaeftsstelle_id =6;
+            $stmt = $sDao->getActivMaklerProRegion();
+        } else {
+            $stmt = $sDao->getActivMaklerOnRegion([
+                'geschaeftsstelle_id' => $geschaeftsstelle_id
+            ]);
+        }
+
         $rows1 = array();
         while($row = $stmt->fetchAssociative()) {
             $rows1[] = $row;
         }
 
-        $stmt = $mDao->getActivMaklerHaveObjectProRegion();
+        if($geschaeftsstelle_name=='ivd24immobilien AG'){
+            $stmt = $sDao->getActivMaklerHaveObjectProRegion();
+        } else {
+            $stmt = $sDao->getActivMaklerHaveObjectOnRegion([
+                'geschaeftsstelle_id' => $geschaeftsstelle_id
+            ]);
+        }
+
         $rows2 = array();
         while($row = $stmt->fetchAssociative()) {
             $rows2[] = $row;
@@ -49,35 +77,37 @@ class StatisticController extends AbstractController
             $i++;
         }
 
-        $stmt = $mDao->getAllMakler();
-        $rows = array();
-        while($row = $stmt->fetchAssociative()) {
-            $row2 = array();
-            $row2[] = $row['userId'];
-            $row2[] = $row['vorname'].' '.$row['name'];
-            $row2[] = $row['firma'];
-            $row2[] = $row['maklerEmail'];
-            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
-            $row2[] = date("Y-m-d", (int)$row['lastlogin']);
+        //makler table-----------
 
-            $str1 = "<a href='/makler/".$row['userId']."/edit'>Daten bearbeiten</a><br>";
-            $str2 = "<a href='/makler/".$row['userId']."/ftpedit'>FTP-Passwort bearbeiten</a><br>";
-            $str3 = "<a href='/makler/".$row['userId']."/pwedit'>Passwort bearbeiten</a><br>";
-            $str4 = "";
-            if($row['gesperrt']==1){
-                $str4 = "<a href='/makler/".$row['userId']."/lock/0'>Account entsperren</a><br><br>";
-            } else {
-                $str4 = "<a href='/makler/".$row['userId']."/lock/1'>Account sperren</a><br><br>";
-            }
-            $row2[] = $str1.$str2.$str3.$str4;
-
-            $rows[] = $row2;
-        }
-
-        //$dataSet = json_encode($rows);
+        // $stmt = $mDao->getAllMakler();
         
-        return $this->render('statistic/dashboard.html.twig', [
-            'dataSet' => $rows,
+        // $rows = array();
+        // while ($row = $stmt->fetchAssociative()) {
+        //     $row2 = array();
+        //     $row2[] = $row['userId'];
+        //     $row2[] = $row['vorname'].' '.$row['name'];
+        //     $row2[] = $row['firma'];
+        //     $row2[] = $row['maklerEmail'];
+        //     $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
+        //     $row2[] = date("Y-m-d", (int)$row['lastlogin']);
+        
+        //     //$str1 = "<a href='/admin/makler/".$row['userId']."/edit'>Daten bearbeiten</a><br>";
+        //     $str1 = "<a href=".$this->generateUrl('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</><br>";
+        //     $str2 = "<a href=".$this->generateUrl('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";
+        //     $str3 = "<a href=".$this->generateUrl('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
+        //     $str4 = "";
+        //     if($row['gesperrt']==1){
+        //         $str4 = "<a href=".$this->generateUrl('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
+        //     } else {
+        //         $str4 = "<a href=".$this->generateUrl('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br>";
+        //     }
+        //     $row2[] = $str1.$str2.$str3.$str4;
+
+        //     $rows[] = $row2;
+        // }
+        
+        return $this->render('statistic/dashboard3.html.twig', [
+            //'dataSet' => $rows,
             'rowsB'   => $rowsB,
             'CssArray' => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
         ]);

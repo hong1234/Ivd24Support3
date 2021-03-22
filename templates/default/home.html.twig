@@ -20,7 +20,7 @@
 
         {% if is_granted("ROLE_SUPPORT") %} 
           <div>
-            <p>Hi {{ app.user.username }} You are logged in as Supporter!</p>
+            <p>Hi {{ app.user.userid }} You are logged in as Supporter!</p>
             {# <p>Your email={{ app.user.email }} </p> #}
           </div>
         {% endif %}

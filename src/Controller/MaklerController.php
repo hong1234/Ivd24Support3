@@ -39,6 +39,7 @@ class MaklerController extends AbstractController
         $username = '';
         $email    = '';
         $passwort = '';
+        $ftppasswort = '';
         $error    = '';
 
         $bundeslaender    = $mDao->getBundeslaender();
@@ -70,6 +71,7 @@ class MaklerController extends AbstractController
             $email     = $safePost->get('email');        //"email"
             $passwort  = $safePost->get('userpasswort'); //"userpasswort"
             $seo_url   = $safePost->get('seo_url');
+            $ftppasswort = $safePost->get('ftppasswort');
 
             //validation
             $error = $accSer->isValidMaklerData($username, $email, $passwort, $seo_url);
@@ -104,6 +106,7 @@ class MaklerController extends AbstractController
             'username' => $username,
             'email'    => $email,
             'passwort' => $passwort,
+            'ftppasswort' => $ftppasswort,
             'error'    => $error  
         ]);
     }

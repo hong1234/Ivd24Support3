@@ -35,7 +35,7 @@ security:
     
     role_hierarchy:
         ROLE_STATISTIC: ROLE_USER
-        ROLE_SUPPORT: ROLE_STATISTIC
+        #ROLE_SUPPORT: ROLE_STATISTIC
         ROLE_ADMIN: ROLE_SUPPORT
         
         #ROLE_SUPPORT: [ROLE_USER, ROLE_STATISTIC]
