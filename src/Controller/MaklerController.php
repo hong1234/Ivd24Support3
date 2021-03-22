@@ -63,15 +63,16 @@ class MaklerController extends AbstractController
             $telefon  = $safePost->get('telefon');
             $telefax  = $safePost->get('telefax');
             $homepage = $safePost->get('homepage');
-	        $seo_url  = $safePost->get('seo_url');
+	        
             $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
 
             $username  = $safePost->get('username');     //"username"
             $email     = $safePost->get('email');        //"email"
             $passwort  = $safePost->get('userpasswort'); //"userpasswort"
+            $seo_url   = $safePost->get('seo_url');
 
             //validation
-            $error = $accSer-> isValidAccountName($username, $email, $passwort);
+            $error = $accSer->isValidMaklerData($username, $email, $passwort, $seo_url);
 
             if ($error == '') {
                 $mService->newMakler($safePost);

@@ -142,6 +142,11 @@ class MaklerDao extends UserDao {
         return $this->doQuery($sql, $values)->fetchAssociative();
     }
 
+    public function getUserAccountBySeoUrl(iterable $values=[]){
+        $sql = "SELECT * FROM user_makler WHERE seo_url = :seo_url";
+        return $this->doQuery($sql, $values)->fetchAllAssociative();
+    }
+
     public function updateMakler(iterable $values=[]){
         $sql   =   "UPDATE user_makler 
                     SET
@@ -314,5 +319,7 @@ class MaklerDao extends UserDao {
 
         return $this->doQuery($sql, $values);
     }
+
+    
 
 }

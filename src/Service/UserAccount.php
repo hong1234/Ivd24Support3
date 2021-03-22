@@ -2,13 +2,16 @@
 namespace App\Service;
 
 use App\Dao\UserDao;
+use App\Dao\MaklerDao;
 
 class UserAccount
 {
     private $uDao;
+    private $mDao;
 
-    function __construct(UserDao $uDao) {
+    function __construct(UserDao $uDao, MaklerDao $mDao) {
         $this->uDao = $uDao;
+        $this->mDao = $mDao;
     }
 
     public function isValidAccountName($username, $email, $passwort){
@@ -107,6 +110,53 @@ class UserAccount
             $status = true;
         }
         return $status; 
+    }
+
+    //------------------
+    public function isValidMaklerData($username, $email, $passwort, $seo_url){
+
+        $error = '';
+
+        if($username == ''){
+            $error = $error."--username leer--";
+        }
+        if($email == ''){
+            $error = $error."--email leer--";
+        }
+        if($passwort == ''){
+            $error = $error."--passwort leer--";
+        }
+        if($seo_url == ''){
+            $error = $error."--seo_url leer--";
+        }
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+            if($this->occupiedEmailName($email)){
+                $error = $error."--email schon belegt--";
+            } 
+
+            if($this->occupiedUserName($username)){
+                $error = $error."--username schon belegt--";
+            } 
+
+            if($this->occupiedSeoUrl($seo_url)){
+                $error = $error."--seo_url schon belegt--";
+            } 
+            
+        } else {
+            $error = $error."--invalid email format--";
+        }
+
+        return $error;
+    }
+
+    public function occupiedSeoUrl($seo_url){
+        $status = false;
+        if(count($this->mDao->getUserAccountBySeoUrl(['seo_url' => $seo_url]))>0){
+            $status = true;
+        }
+        return $status;
     }
 
 }
