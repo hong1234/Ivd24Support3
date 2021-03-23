@@ -34,9 +34,9 @@ security:
             # https://symfony.com/doc/current/security/form_login_setup.html
     
     role_hierarchy:
-        ROLE_STATISTIC: ROLE_USER
+        #ROLE_STATISTIC: ROLE_USER
         #ROLE_SUPPORT: ROLE_STATISTIC
-        ROLE_ADMIN: ROLE_SUPPORT
+        ROLE_ADMIN: [ROLE_SUPPORT, ROLE_STATISTIC]
         
         #ROLE_SUPPORT: [ROLE_USER, ROLE_STATISTIC]
         #ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]

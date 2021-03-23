@@ -18,6 +18,10 @@
       <section class="content-header">
         <h1>ivd24 Support | Home Page</h1>
 
+        {% if app.user==null %} 
+          <h4>Bitte login für Nutzung</h4>
+         {% endif %}
+
         {% if is_granted("ROLE_SUPPORT") %} 
           <div>
             <p>Hi {{ app.user.userid }} You are logged in as Supporter!</p>
