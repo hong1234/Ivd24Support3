@@ -12,7 +12,7 @@ use App\Service\UserAccount;
 
 /**
  *
- * @Route(path="")
+ * @Route(path="/admin")
  */
 class SupporterController extends AbstractController
 {

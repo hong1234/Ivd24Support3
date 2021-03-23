@@ -58,6 +58,7 @@ class StatisticUserService
             $user->setUserid($user_id);
             $user->setEmail($email);
             $user->setRoles(['ROLE_STATISTIC']);
+            //$user->setRoles(['ROLE_ADMIN']);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 $passwort

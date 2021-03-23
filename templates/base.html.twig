@@ -44,6 +44,7 @@
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="main-sidebar">
                 <!-- sidebar: style can be found in sidebar.less -->
+                {% block navigation %}
                 <section class="sidebar">
                     <ul class="sidebar-menu" data-widget="tree">
                         {% set route_name = app.request.attributes.get('_route') %}
@@ -52,29 +53,26 @@
                         {% else %}
                             <li {% if route_name == "login" %} class="active"{% endif %}><a href="/login"><i class="fa fa-circle-o"></i>Login</a></li>
                         {% endif %}
-                        <li class="treeview {% if route_name in ["default_home", "server_list", "server_edit", "server_pause_list"] %}active{% endif %}">
+                        <li class="treeview {% if route_name in ["default_home"] %}active{% endif %}">
                             <a href="#">
-                                <i class="fa fa-edit"></i> 
-                                <span>Usermanagement</span>
+                                <i class="fa fa-laptop"></i> 
+                                <span>Public View</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             
-                            {% block navigation %}
                             <ul class="treeview-menu">
                                 {# <li {% if route_name == "default_find" %} class="active"{% endif %}><a href="{{ path('default_find') }}"><i class="fa fa-circle-o"></i>findPage</a></li>
                                 <li {% if route_name == "default_test" %} class="active"{% endif %}><a href="{{ path('default_test') }}"><i class="fa fa-circle-o"></i>testPage</a></li> #}
                                 <li {% if route_name == "default_home" %} class="active"{% endif %}><a href="{{ path('default_home') }}"><i class="fa fa-circle-o"></i>Home Page</a></li>
-                                <li {% if route_name in ["server_list", "server_edit"] %} class="active"{% endif %}><a href="{{ path('server_list') }}"><i class="fa fa-circle-o"></i>FTP-Import pausieren</a></li>
-                                <li {% if route_name in ["server_pause_list"] %} class="active"{% endif %}><a href="{{ path('server_pause_list') }}"><i class="fa fa-circle-o"></i>Pausierte FTP-Importe </a></li>
                             </ul>
-                            {% endblock %}
+                            
                         </li>
 
                         {% if is_granted("ROLE_STATISTIC") %}
                         <li class="treeview {% if route_name in ["statistic_dashboard"] %}active{% endif %}">
                             <a href="#">
                             <i class="fa fa-laptop"></i>
-                            <span>Statistic Elements</span>
+                            <span>Statistic Views</span>
                             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
@@ -84,11 +82,12 @@
                         {% endif %}
 
                         {% if is_granted("ROLE_SUPPORT") %}
+
                         <li class="treeview {% if route_name in ["makler_new", "makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit", "makler_delete_list", "makler_delete", "interessent_list", "interessent_edit", "interessent_pw_edit", "interessent_delete_list", "interessent_delete", "bcuser_list", "bcuser_edit", "bcuser_delete_list", "bcuser_delete"] %}active{% endif %}">
                             <a href="#">
-                            <i class="fa fa-laptop"></i>
-                            <span>Support Elements</span>
-                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                                <i class="fa fa-edit"></i> 
+                                <span>Usermanagement</span>
+                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
                                 <li {% if route_name == "makler_new" %} class="active"{% endif %}><a href="{{ path('makler_new') }}"><i class="fa fa-circle-o"></i>Makler hinzufügen</a></li>
@@ -98,14 +97,25 @@
 		                        <li {% if route_name in ["interessent_delete_list", "interessent_delete"] %} class="active"{% endif %}><a href="{{ path('interessent_delete_list') }}"><i class="fa fa-circle-o"></i>Interessent löschen</a></li>
                                 <li {% if route_name in ["bcuser_list", "bcuser_edit"] %} class="active"{% endif %}><a href="{{ path('bcuser_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User bearbeiten</a></li>
                                 <li {% if route_name in ["bcuser_delete_list", "bcuser_delete"] %} class="active"{% endif %}><a href="{{ path('bcuser_delete_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User löschen</a></li>
-                                {# <li {% if route_name in ["server_list"] %} class="active"{% endif %}><a href="{{ path('server_list') }}"><i class="fa fa-circle-o"></i>Server Config</a></li>   #}
+                            </ul>
+                        </li>
+
+                        <li class="treeview {% if route_name in ["server_list", "server_edit", "server_pause_list"] %}active{% endif %}">
+                            <a href="#">
+                            <i class="fa fa-edit"></i>
+                            <span>FTP Import</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if route_name in ["server_list", "server_edit"] %} class="active"{% endif %}><a href="{{ path('server_list') }}"><i class="fa fa-circle-o"></i>FTP-Import pausieren</a></li>
+                                <li {% if route_name in ["server_pause_list"] %} class="active"{% endif %}><a href="{{ path('server_pause_list') }}"><i class="fa fa-circle-o"></i>Pausierte FTP-Importe </a></li>
                             </ul>
                         </li>
                         {% endif %}
                         {% if is_granted("ROLE_ADMIN") %}
                         <li class="treeview {% if route_name in ["supporter_new", "supporter_list", "supporter_edit", "statisticuser_new", "statisticuser_list", "statisticuser_edit"] %}active{% endif %}">
                             <a href="#">
-                            <i class="fa fa-laptop"></i>
+                            <i class="fa fa-edit"></i>
                             <span>Admin Elements</span>
                             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
@@ -120,6 +130,7 @@
 
                     </ul>
                 </section>
+                {% endblock %}
             <!-- /.sidebar -->
             </aside>
 

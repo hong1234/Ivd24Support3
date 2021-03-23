@@ -10,7 +10,7 @@ use App\Service\FtpServer;
 
 /**
  *
- * @Route(path="")
+ * @Route(path="/support")
  */
 class ServerController extends AbstractController
 {
