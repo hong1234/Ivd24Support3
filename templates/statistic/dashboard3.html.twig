@@ -38,11 +38,11 @@
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="/home" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      {# <span class="logo-mini"><b>A</b>LT</span> #}
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <span class="logo-lg"><b>Support</b>Backend</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -162,7 +162,7 @@
           <div class="small-box {{CssArray[loop.index % 5]}}">
             <div class="inner">
               <h3>{{ row.count_makler_on_regional_office|e }}</h3>
-              <h4>Mitglieder {{ row.name|e }}</h4>
+              <h5>Mitglieder <b>{{ row.name|e }}</b></h5>
               <p>davon haben {{ row.percent|e }}% aktive Objekte eingestellt</p>
             </div>
             <div class="icon">
