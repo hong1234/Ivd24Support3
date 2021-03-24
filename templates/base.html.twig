@@ -56,7 +56,7 @@
                         <li class="treeview {% if route_name in ["default_home"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-laptop"></i> 
-                                <span>Public View</span>
+                                <span>Public</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             
@@ -82,7 +82,6 @@
                         {% endif %}
 
                         {% if is_granted("ROLE_SUPPORT") %}
-
                         <li class="treeview {% if route_name in ["makler_new", "makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit", "makler_delete_list", "makler_delete", "interessent_list", "interessent_edit", "interessent_pw_edit", "interessent_delete_list", "interessent_delete", "bcuser_list", "bcuser_edit", "bcuser_delete_list", "bcuser_delete"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-edit"></i> 
@@ -112,6 +111,7 @@
                             </ul>
                         </li>
                         {% endif %}
+                        
                         {% if is_granted("ROLE_ADMIN") %}
                         <li class="treeview {% if route_name in ["supporter_new", "supporter_list", "supporter_edit", "statisticuser_new", "statisticuser_list", "statisticuser_edit"] %}active{% endif %}">
                             <a href="#">
