@@ -70,7 +70,7 @@
                         {% endif %}
                         <li class="treeview {% if route_name in ["default_home", "server_list", "server_edit", "server_pause_list"] %}active{% endif %}">
                             <a href="#">
-                                <i class="fa fa-edit"></i> 
+                                <i class="fa fa-laptop"></i> 
                                 <span>Public</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
@@ -130,7 +130,7 @@
                         {% if is_granted("ROLE_ADMIN") %}
                         <li class="treeview {% if route_name in ["supporter_new", "supporter_list", "supporter_edit", "supporter_delete", "statisticuser_new", "statisticuser_list", "statisticuser_edit", "statisticuser_delete"] %}active{% endif %}">
                             <a href="#">
-                            <i class="fa fa-laptop"></i>
+                            <i class="fa fa-edit"></i>
                             <span>Admin Elements</span>
                             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
