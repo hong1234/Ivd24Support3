@@ -113,7 +113,7 @@
                         {% endif %}
                         
                         {% if is_granted("ROLE_ADMIN") %}
-                        <li class="treeview {% if route_name in ["supporter_new", "supporter_list", "supporter_edit", "statisticuser_new", "statisticuser_list", "statisticuser_edit"] %}active{% endif %}">
+                        <li class="treeview {% if route_name in ["supporter_new", "supporter_list", "supporter_edit", "supporter_delete", "statisticuser_new", "statisticuser_list", "statisticuser_edit", "statisticuser_delete"] %}active{% endif %}">
                             <a href="#">
                             <i class="fa fa-edit"></i>
                             <span>Admin Elements</span>
@@ -121,9 +121,9 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li {% if route_name == "supporter_new" %} class="active"{% endif %}><a href="{{ path('supporter_new') }}"><i class="fa fa-circle-o"></i>Supporter hinzufügen</a></li>
-                                <li {% if route_name in ["supporter_list", "supporter_edit"] %} class="active"{% endif %}><a href="{{ path('supporter_list') }}"><i class="fa fa-circle-o"></i>Supporter bearbeiten</a></li>
+                                <li {% if route_name in ["supporter_list", "supporter_edit", "supporter_delete"] %} class="active"{% endif %}><a href="{{ path('supporter_list') }}"><i class="fa fa-circle-o"></i>Supporter bearbeiten</a></li>
                                 <li {% if route_name == "statisticuser_new" %} class="active"{% endif %}><a href="{{ path('statisticuser_new') }}"><i class="fa fa-circle-o"></i>StatisticUser hinzufügen</a></li>
-                                <li {% if route_name in ["statisticuser_list", "statisticuser_edit"] %} class="active"{% endif %}><a href="{{ path('statisticuser_list') }}"><i class="fa fa-circle-o"></i>StatisticUser bearbeiten</a></li>
+                                <li {% if route_name in ["statisticuser_list", "statisticuser_edit", "statisticuser_delete"] %} class="active"{% endif %}><a href="{{ path('statisticuser_list') }}"><i class="fa fa-circle-o"></i>StatisticUser bearbeiten</a></li>
                             </ul>
                         </li>
                         {% endif %}

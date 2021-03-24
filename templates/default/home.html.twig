@@ -38,7 +38,7 @@
 
         {% if is_granted("ROLE_ADMIN") %} 
           <div>
-            <p>Hi {{ app.user.username }} (userID: {{ app.user.userid }})You have logged in as Admin</p>
+            <p>Hi {{ app.user.username }} (userID: {{ app.user.userid }}) You have logged in as Admin</p>
             {# <p>Your email={{ app.user.email }} </p> #}
           </div>
         {% endif %}
