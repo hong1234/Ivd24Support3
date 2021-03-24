@@ -17,26 +17,31 @@
     <div class="content-wrapper">
       <section class="content-header">
         <h1>ivd24 Support | Home Page</h1>
-
+        <br>
         {% if app.user==null %} 
           <h4>Bitte login für Nutzung</h4>
-         {% endif %}
+        {% endif %}
+
+        {% if is_granted("ROLE_STATISTIC") %} 
+          <div>
+            <p>Hi {{ app.user.username }} (userID: {{ app.user.userid }}) You have logged in as StatisticViewer</p>
+            {# <p>Your email={{ app.user.email }} </p> #}
+          </div>
+        {% endif %}
 
         {% if is_granted("ROLE_SUPPORT") %} 
           <div>
-            <p>Hi {{ app.user.userid }} You are logged in as Supporter!</p>
+            <p>Hi {{ app.user.username }} (userID: {{ app.user.userid }}) You have logged in as Supporter</p>
             {# <p>Your email={{ app.user.email }} </p> #}
           </div>
         {% endif %}
 
         {% if is_granted("ROLE_ADMIN") %} 
           <div>
-            <p>Hi {{ app.user.username }} You are logged in as Admin!</p>
+            <p>Hi {{ app.user.username }} (userID: {{ app.user.userid }})You have logged in as Admin</p>
             {# <p>Your email={{ app.user.email }} </p> #}
           </div>
         {% endif %}
-
-        
 
       </section>
       <!-- Main content -->
