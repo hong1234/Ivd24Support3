@@ -18,7 +18,7 @@ class BaseDao {
             //throw new \Exception("DoQuery faild!"); 
         }  
         return $stmt;
-        //return $stmt->fetchAllAssociative(); $stmt->fetchAssociative();
+        //return $stmt->fetchAll(); $stmt->fetch();
     }
 
     public function doSQL($sql, $values){
@@ -52,16 +52,16 @@ class BaseDao {
 
     public function getBundeslaender(iterable $values=[]) {
         $sql = "SELECT * FROM geo_bundesland";
-        return $this->doQuery($sql, $values)->fetchAllAssociative();
+        return $this->doQuery($sql, $values)->fetchAll();
     }
 
     public function getAllGeschaeftsstelle(iterable $values=[]) {
         $sql = "SELECT * FROM user_geschaeftsstelle";
-        return $this->doQuery($sql, $values)->fetchAllAssociative();
+        return $this->doQuery($sql, $values)->fetchAll();
     }
 
     public function getGeschaeftsstelle(iterable $values=[]) {
         $sql = "SELECT * FROM user_geschaeftsstelle WHERE geschaeftsstelle_id = :geschaeftsstelle_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 }

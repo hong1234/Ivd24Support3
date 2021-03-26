@@ -24,7 +24,7 @@ class StatisticUserController extends AbstractController
     {
         $stmt = $uDao->getAllStatisticUser();
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) {
+        while ($row = $stmt->fetch()) {
             $row2 = array();
             $row2[] = $row['user_id'];
             $row2[] = $row['username'];

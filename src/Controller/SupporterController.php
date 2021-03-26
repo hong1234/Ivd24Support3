@@ -24,7 +24,7 @@ class SupporterController extends AbstractController
         $stmt = $uDao->getAllSupportUser();
 
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) {
+        while ($row = $stmt->fetch()) {
             $row2 = array();
             $row2[] = $row['user_id'];
             $row2[] = $row['username'];

@@ -21,7 +21,7 @@ class FtpServer
         $stmt = $this->sDao->getAllFtpServerPause();
 
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) {
+        while ($row = $stmt->fetch()) {
             $row2 = array();
 
             $row2[] = $row['user_id'];
@@ -64,7 +64,7 @@ class FtpServer
         $stmt = $this->sDao->getAllServerConfig();
 
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) {
+        while ($row = $stmt->fetch()) {
             $row2 = array();
 
             $row2[] = $row['user_id'];

@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Dao\MaklerDao;
 use App\Dao\StatisticDao;
+use App\Dao\ObjectDao;
 
 /**
  *
@@ -18,7 +19,7 @@ class StatisticController extends AbstractController
     /**
      * @Route("/dashboard", name="statistic_dashboard")
      */
-    public function Dashboard(MaklerDao $mDao, StatisticDao $sDao)
+    public function Dashboard(MaklerDao $mDao, StatisticDao $sDao, ObjectDao $oDao)
     {
         //$this->getUser()->getEmail();
         //$roles = $this->getUser()->getRoles();
@@ -42,7 +43,7 @@ class StatisticController extends AbstractController
         }
 
         $rows1 = array();
-        while($row = $stmt->fetchAssociative()) {
+        while($row = $stmt->fetch()) {
             $rows1[] = $row;
         }
 
@@ -55,7 +56,7 @@ class StatisticController extends AbstractController
         }
 
         $rows2 = array();
-        while($row = $stmt->fetchAssociative()) {
+        while($row = $stmt->fetch()) {
             $rows2[] = $row;
         }
 
@@ -82,7 +83,7 @@ class StatisticController extends AbstractController
         // $stmt = $mDao->getAllMakler();
         
         // $rows = array();
-        // while ($row = $stmt->fetchAssociative()) {
+        // while ($row = $stmt->fetch()) {
         //     $row2 = array();
         //     $row2[] = $row['userId'];
         //     $row2[] = $row['vorname'].' '.$row['name'];
@@ -105,9 +106,28 @@ class StatisticController extends AbstractController
 
         //     $rows[] = $row2;
         // }
+
+        $total = $oDao->getObjectTotal()['Anzah_Gesamtl_Objekte'];
+        $activ = $oDao->getObjectActiv()['Anzahl_freigegeben_Objekte'];
+        $inact = $oDao->getObjectInActiv()['Anzahl_nicht_freigegeben_Objekte'];
+
+        $rows = array(
+            [
+                'label' => 'Gesamtl Objekte',
+                'value' => $total
+            ],
+            [
+                'label' => 'freigegeben Objekte',
+                'value' => $activ
+            ],
+            [
+                'label' => 'nicht freigegeben Objekte',
+                'value' => $inact
+            ]
+        );
         
         return $this->render('statistic/dashboard3.html.twig', [
-            //'dataSet' => $rows,
+            'dataSet' => $rows,
             'rowsB'   => $rowsB,
             'CssArray' => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
         ]);

@@ -21,7 +21,7 @@ class BcUserController extends AbstractController
         $stmt = $bcuDao->getAllBUser();
 
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) {
+        while ($row = $stmt->fetch()) {
             $row2 = array();
 
             $row2[] = $row['user_id'];
@@ -112,7 +112,7 @@ class BcUserController extends AbstractController
         $stmt = $bcuDao->getAllBUser();
 
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) { 
+        while ($row = $stmt->fetch()) { 
             $row2 = array();
 
             $row2[] = $row['user_id'];

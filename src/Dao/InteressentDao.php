@@ -24,7 +24,7 @@ class InteressentDao extends UserDao {
         $sql = "SELECT anrede, titel, namenstitel, name, vorname, firma, strasse, plz, ort, land, email, telefon, fax, mobil, homepage 
                 FROM user_interessent 
                 WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function updateUserInteressent(iterable $values=[]){

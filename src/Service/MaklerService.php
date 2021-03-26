@@ -253,7 +253,7 @@ class MaklerService
                 'ftpserver'  => $ftpserver
             ]);
         
-            while ($row = $stmt->fetchAssociative()) {
+            while ($row = $stmt->fetch()) {
                 $objekt_id = $row['objekt_id'];
                 $this->mDao->deleteAttachmentsByObjectId(['objekt_id' => $objekt_id]);
             }

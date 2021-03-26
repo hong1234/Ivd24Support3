@@ -23,7 +23,7 @@ class InteressentController extends AbstractController
         $stmt = $iDao->getAllInteressent();
 
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) {    
+        while ($row = $stmt->fetch()) {    
             $row2 = array();
 
             $row2[] = $row['userId'];
@@ -91,7 +91,7 @@ class InteressentController extends AbstractController
         $stmt = $iDao->getDelInteressent();
     
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) {        
+        while ($row = $stmt->fetch()) {        
             $row2 = array();
 
             $row2[] = $row['userId']; 

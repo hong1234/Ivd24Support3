@@ -222,7 +222,7 @@ class MaklerController extends AbstractController
         $stmt = $mDao->getAllMakler();
         
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) {
+        while ($row = $stmt->fetch()) {
             $row2 = array();
             $row2[] = $row['userId'];
             $row2[] = $row['vorname'].' '.$row['name'];
@@ -259,7 +259,7 @@ class MaklerController extends AbstractController
         $stmt = $mDao->getDelMakler();
 
         $rows = array();
-        while ($row = $stmt->fetchAssociative()) {
+        while ($row = $stmt->fetch()) {
             $tmp = array();
   
             $tmp[] = $row['user_id'];

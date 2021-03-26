@@ -117,18 +117,18 @@ class MaklerDao extends UserDao {
     public function getMakler(iterable $values=[]){
         $sql = "SELECT anrede, titel, namenstitel, name, vorname, firma, strasse, plz, ort, email, telefon, fax, mobil, homepage, seo_url 
                 FROM user_makler WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function getMaklerUserByUserid(iterable $values) {
         $sql = "SELECT user_id, username, email, gesperrt, loeschung, authentifiziert, registrierungsdatum, lastlogin 
                 FROM user_account WHERE art_id = 2 and recht_id = 3 and user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function getMaklerBySeoUrl(iterable $values=[]){
         $sql = "SELECT * FROM user_makler WHERE seo_url = :seo_url";
-        return $this->doQuery($sql, $values)->fetchAllAssociative();
+        return $this->doQuery($sql, $values)->fetchAll();
     }
 
     public function updateMakler(iterable $values=[]){
@@ -192,7 +192,7 @@ class MaklerDao extends UserDao {
         $sql = "SELECT bilderserver_id, bilderordner, ftp_server_id, ftp_benutzer 
                 FROM user_makler_config 
                 WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function getObjectsByUserId(iterable $values=[]) {

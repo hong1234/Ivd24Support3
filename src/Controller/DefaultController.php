@@ -41,7 +41,7 @@ class DefaultController extends AbstractController
         $i =0;
         $beginn = 2801;
         $end    = 2850;
-        while ($row=$stmt->fetchAssociative()) {
+        while ($row=$stmt->fetch()) {
 
             $i++;
 

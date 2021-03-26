@@ -12,7 +12,7 @@ class UserDao extends BaseDao {
     public function getSupportUser(iterable $values=[]) {
         $sql = "SELECT user_id, username, email, gesperrt, loeschung, authentifiziert, registrierungsdatum, lastlogin 
                 FROM user_account WHERE art_id = 4 and recht_id = 9 AND user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function updateSupportUser(iterable $values=[]){
@@ -45,7 +45,7 @@ class UserDao extends BaseDao {
                 FROM user_account
                 LEFT JOIN user_geschaeftsstelle ON user_geschaeftsstelle.geschaeftsstelle_id = user_account.geschaeftsstellen_id 
                 WHERE art_id = 4 and recht_id = 8 AND user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function updateStatisticUser(iterable $values=[]){
@@ -118,32 +118,32 @@ class UserDao extends BaseDao {
                 FROM user_account 
                 LEFT JOIN user_geschaeftsstelle ON  user_account.geschaeftsstellen_id = user_geschaeftsstelle.geschaeftsstelle_id
                 WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function getUserAccount(iterable $values=[]){
         $sql = "SELECT username, email, geschaeftsstellen_id FROM user_account WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function getUserAccountByEmail(iterable $values=[]){
         $sql = "SELECT * FROM user_account WHERE email = :email";
-        return $this->doQuery($sql, $values)->fetchAllAssociative();
+        return $this->doQuery($sql, $values)->fetchAll();
     }
 
     public function getUserAccountByEmail2(iterable $values=[]){
         $sql = "SELECT * FROM user_account WHERE email = :email AND email !=:pre_email";
-        return $this->doQuery($sql, $values)->fetchAllAssociative();
+        return $this->doQuery($sql, $values)->fetchAll();
     }
 
     public function getUserAccountByUserName(iterable $values=[]){
         $sql = "SELECT * FROM user_account WHERE username = :username";
-        return $this->doQuery($sql, $values)->fetchAllAssociative();
+        return $this->doQuery($sql, $values)->fetchAll();
     }
 
     public function getUserAccountByUserName2(iterable $values=[]){
         $sql = "SELECT * FROM user_account WHERE username = :username AND username !=:pre_username";
-        return $this->doQuery($sql, $values)->fetchAllAssociative();
+        return $this->doQuery($sql, $values)->fetchAll();
     }
 
     public function updateUserAccountEmail(iterable $values=[]){

@@ -18,7 +18,7 @@ class ServerDao extends BaseDao {
                     LEFT JOIN user_makler_config mc ON m.user_id = mc.user_id
                     LEFT JOIN config_server ON mc.ftp_server_id = config_server.config_server_id 
                     WHERE m.user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function updateServerConfig(iterable $values=[]){

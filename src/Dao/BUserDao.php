@@ -17,7 +17,7 @@ class BUserDao extends BaseDao {
                 LEFT JOIN user_makler ON b.user_id = user_makler.user_id 
                 WHERE b.user_id = :user_id";
 
-        return $this->doQuery($sql, $values)->fetchAssociative();
+        return $this->doQuery($sql, $values)->fetch();
     }
 
     public function updateBUser(iterable $values=[]) {

@@ -18,7 +18,7 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{ asset('dist/css/skins/_all-skins.min.css') }}">
   <!-- Morris chart -->
-  {# <link rel="stylesheet" href="{{ asset('bower_components/morris.js/morris.css') }}"> #}
+  <link rel="stylesheet" href="{{ asset('bower_components/morris.js/morris.css') }}">
   <!-- jvectormap -->
   {# <link rel="stylesheet" href="{{ asset('bower_components/jvectormap/jquery-jvectormap.css') }}"> #}
   <!-- Date Picker -->
@@ -193,7 +193,7 @@
             <ul class="nav nav-tabs pull-right">
               <li class="active"><a href="#revenue-chart" data-toggle="tab">Area</a></li>
               <li><a href="#sales-chart" data-toggle="tab">Donut</a></li>
-              <li class="pull-left header"><i class="fa fa-inbox"></i> Sales</li>
+              <li class="pull-left header"><i class="fa fa-inbox"></i>Objekte</li>
             </ul>
             <div class="tab-content no-padding">
               <!-- Morris chart - Sales -->
@@ -544,5 +544,16 @@
     })
   })
 </script> #}
+
+<script>
+  var donut = new Morris.Donut({
+    element  : 'sales-chart',
+    resize   : true,
+    colors   : ['#3c8dbc', '#f56954', '#00a65a'],
+    data     : {{dataSet|json_encode|raw}},
+    hideHover: 'auto'
+  });
+</script>
+
 </body>
 </html>
