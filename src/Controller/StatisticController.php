@@ -111,7 +111,7 @@ class StatisticController extends AbstractController
         $activ = $oDao->getObjectActiv()['Anzahl_freigegeben_Objekte'];
         $inact = $oDao->getObjectInActiv()['Anzahl_nicht_freigegeben_Objekte'];
 
-        $rows = array(
+        $donutData = array(
             [
                 'label' => 'Gesamtl Objekte',
                 'value' => $total
@@ -125,11 +125,162 @@ class StatisticController extends AbstractController
                 'value' => $inact
             ]
         );
+
+        $areaData = array(
+            [
+                'day' =>'2020-02-01',
+                'gesamt' =>8700,
+                'frei' =>5700,
+                'nfrei' =>3000
+            ],
+            [
+                'day' =>'2020-03-01',
+                'gesamt' =>2700,
+                'frei' =>1700,
+                'nfrei' =>1000
+            ],
+            [
+                'day' =>'2020-04-01',
+                'gesamt' =>3000,
+                'frei' =>2000,
+                'nfrei' =>900
+            ],
+            [
+                'day' =>'2020-05-01',
+                'gesamt' =>2666,
+                'frei' =>1666,
+                'nfrei' =>1000
+            ],
+            [
+                'day' =>'2020-06-01',
+                'gesamt' =>2778,
+                'frei' =>2294,
+                'nfrei' =>500
+            ],
+            [
+                'day' =>'2020-07-01',
+                'gesamt' =>4912,
+                'frei' =>1969,
+                'nfrei' =>2000
+            ],
+            [
+                'day' =>'2020-08-01',
+                'gesamt' =>3767,
+                'frei' =>3597,
+                'nfrei' =>100
+            ],
+            [
+                'day' =>'2020-09-01',
+                'gesamt' =>6810,
+                'frei' =>1914,
+                'nfrei' =>3000
+            ],
+            [
+                'day' =>'2020-10-01',
+                'gesamt' =>5670,
+                'frei' =>4293,
+                'nfrei' =>1000
+            ],
+            [
+                'day' =>'2020-11-01',
+                'gesamt' =>4820,
+                'frei' =>3795,
+                'nfrei' =>1100
+            ],
+            [
+                'day' =>'2020-12-01',
+                'gesamt' =>15073,
+                'frei' =>5967,
+                'nfrei' =>9000
+            ],
+            [
+                'day' =>'2021-01-01',
+                'gesamt' =>10687,
+                'frei' =>4460,
+                'nfrei' =>5000
+            ],
+            [
+                'day' =>'2021-02-01',
+                'gesamt' =>8432,
+                'frei' =>5713,
+                'nfrei' =>3000
+            ]
+        );
+
+        $lineData = array(
+            [
+                'day' =>'2020-02-01',
+                'gesamt' =>8666,
+                'ivdSud' =>6600
+            ],
+            [
+                'day' =>'2020-03-01',
+                'gesamt' =>5666,
+                'ivdSud' =>2800
+            ],
+            [
+                'day' =>'2020-04-01',
+                'gesamt' =>3948,
+                'ivdSud' =>2000
+            ],
+            [
+                'day' =>'2020-05-01',
+                'gesamt' =>2666,
+                'ivdSud' =>1333
+            ],
+            [
+                'day' =>'2020-06-01',
+                'gesamt' =>2778,
+                'ivdSud' =>1433
+            ],
+            [
+                'day' =>'2020-07-01',
+                'gesamt' =>4912,
+                'ivdSud' =>2333
+            ],
+            [
+                'day' =>'2020-08-01',
+                'gesamt' =>3767,
+                'ivdSud' =>2633
+            ],
+            [
+                'day' =>'2020-09-01',
+                'gesamt' =>6810,
+                'ivdSud' =>3333
+            ],
+            [
+                'day' =>'2020-10-01',
+                'gesamt' =>5670,
+                'ivdSud' =>4333
+            ],
+            [
+                'day' =>'2020-11-01',
+                'gesamt' =>4820,
+                'ivdSud' =>2410
+            ],
+            [
+                'day' =>'2020-12-01',
+                'gesamt' =>15073,
+                'ivdSud' =>8000
+            ],
+            [
+                'day' =>'2021-01-01',
+                'gesamt' =>10687,
+                'ivdSud' =>5000
+            ],
+            [
+                'day' =>'2021-02-01',
+                'gesamt' =>8432,
+                'ivdSud' =>4216
+            ]
+        );
         
         return $this->render('statistic/dashboard3.html.twig', [
-            'dataSet' => $rows,
-            'rowsB'   => $rowsB,
-            'CssArray' => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
+            'lineData'  => $lineData,
+            'areaData'  => $areaData,
+            'donutData' => $donutData,
+            'rowsB'     => $rowsB,
+            'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
         ]);
     }
 

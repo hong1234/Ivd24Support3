@@ -10,6 +10,9 @@ use App\Dao\ObjectDao;
 
 class ObjectStatisticCommand extends Command
 {
+    // php bin/console object-statistic
+    protected static $defaultName = 'object-statistic';
+
     private $oDao;
     
     public function __construct(ObjectDao $oDao)
@@ -22,7 +25,6 @@ class ObjectStatisticCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('object-statistic');
         $this->setDescription('Get Object Statistic.');
         //$this->addArgument('password', InputArgument::REQUIRED, 'Password to be hashed.');
     }
@@ -32,9 +34,6 @@ class ObjectStatisticCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //$password = $input->getArgument('password');
-        //$hashedPassword = (new Passwords())->hash($password);
-
         $total = $this->oDao->getObjectTotal()['Anzah_Gesamtl_Objekte'];
         $activ = $this->oDao->getObjectActiv()['Anzahl_freigegeben_Objekte'];
         $inactiv = $this->oDao->getObjectInActiv()['Anzahl_nicht_freigegeben_Objekte'];

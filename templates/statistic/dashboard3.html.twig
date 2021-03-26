@@ -97,18 +97,38 @@
                         {% endif %}
 
                         {% if is_granted("ROLE_SUPPORT") %}
-                        <li class="treeview {% if route_name in ["makler_new", "makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit", "makler_delete_list", "makler_delete", "interessent_list", "interessent_edit", "interessent_pw_edit", "interessent_delete_list", "interessent_delete", "bcuser_list", "bcuser_edit", "bcuser_delete_list", "bcuser_delete"] %}active{% endif %}">
+                        <li class="treeview {% if route_name in ["makler_new", "makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit", "makler_delete_list", "makler_delete"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-edit"></i> 
-                                <span>Usermanagement</span>
+                                <span>MaklerManagement</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if route_name == "makler_new" %} class="active"{% endif %}><a href="{{ path('makler_new') }}"><i class="fa fa-circle-o"></i>Makler hinzufügen</a></li>
-		                            <li {% if route_name in ["makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit"]  %} class="active"{% endif %}><a href="{{ path('makler_list') }}"><i class="fa fa-circle-o"></i>Makler bearbeiten</a></li>
-		                            <li {% if route_name in ["makler_delete_list", "makler_delete"]  %} class="active"{% endif %}><a href="{{ path('makler_delete_list') }}"><i class="fa fa-circle-o"></i>Makler löschen</a></li>
-		                            <li {% if route_name in ["interessent_list", "interessent_edit", "interessent_pw_edit"] %} class="active"{% endif %}><a href="{{ path('interessent_list') }}"><i class="fa fa-circle-o"></i>Interessent bearbeiten</a></li>
+                              <li {% if route_name == "makler_new" %} class="active"{% endif %}><a href="{{ path('makler_new') }}"><i class="fa fa-circle-o"></i>Makler hinzufügen</a></li>
+		                          <li {% if route_name in ["makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit"]  %} class="active"{% endif %}><a href="{{ path('makler_list') }}"><i class="fa fa-circle-o"></i>Makler bearbeiten</a></li>
+		                          <li {% if route_name in ["makler_delete_list", "makler_delete"]  %} class="active"{% endif %}><a href="{{ path('makler_delete_list') }}"><i class="fa fa-circle-o"></i>Makler löschen</a></li> 
+                            </ul>
+                        </li>
+
+                        <li class="treeview {% if route_name in ["interessent_list", "interessent_edit", "interessent_pw_edit", "interessent_delete_list", "interessent_delete"] %}active{% endif %}">
+                            <a href="#">
+                                <i class="fa fa-edit"></i> 
+                                <span>InteressentManagement</span>
+                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if route_name in ["interessent_list", "interessent_edit", "interessent_pw_edit"] %} class="active"{% endif %}><a href="{{ path('interessent_list') }}"><i class="fa fa-circle-o"></i>Interessent bearbeiten</a></li>
 		                            <li {% if route_name in ["interessent_delete_list", "interessent_delete"] %} class="active"{% endif %}><a href="{{ path('interessent_delete_list') }}"><i class="fa fa-circle-o"></i>Interessent löschen</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="treeview {% if route_name in ["bcuser_list", "bcuser_edit", "bcuser_delete_list", "bcuser_delete"] %}active{% endif %}">
+                            <a href="#">
+                                <i class="fa fa-edit"></i> 
+                                <span>BcUserManagement</span>
+                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                            </a>
+                            <ul class="treeview-menu">
                                 <li {% if route_name in ["bcuser_list", "bcuser_edit"] %} class="active"{% endif %}><a href="{{ path('bcuser_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User bearbeiten</a></li>
                                 <li {% if route_name in ["bcuser_delete_list", "bcuser_delete"] %} class="active"{% endif %}><a href="{{ path('bcuser_delete_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User löschen</a></li>
                             </ul>
@@ -116,13 +136,14 @@
 
                         <li class="treeview {% if route_name in ["server_list", "server_edit", "server_pause_list"] %}active{% endif %}">
                             <a href="#">
-                            <i class="fa fa-edit"></i>
-                            <span>FTP Import</span>
-                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                              <i class="fa fa-edit"></i>
+                              <span>FTP Import</span>
+                              <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
+
                             <ul class="treeview-menu">
-                                <li {% if route_name in ["server_list", "server_edit"] %} class="active"{% endif %}><a href="{{ path('server_list') }}"><i class="fa fa-circle-o"></i>FTP-Import pausieren</a></li>
-                                <li {% if route_name in ["server_pause_list"] %} class="active"{% endif %}><a href="{{ path('server_pause_list') }}"><i class="fa fa-circle-o"></i>Pausierte FTP-Importe </a></li>
+                              <li {% if route_name in ["server_list", "server_edit"] %} class="active"{% endif %}><a href="{{ path('server_list') }}"><i class="fa fa-circle-o"></i>FTP-Import pausieren</a></li>
+                              <li {% if route_name in ["server_pause_list"] %} class="active"{% endif %}><a href="{{ path('server_pause_list') }}"><i class="fa fa-circle-o"></i>Pausierte FTP-Importe </a></li>
                             </ul>
                         </li>
                         {% endif %}
@@ -186,76 +207,41 @@
       <!-- Main row -->
       <div class="row">
         <!-- Left col -->
-        <section class="col-lg-7 connectedSortable">
+        <section class="col-lg-6">
           <!-- Custom tabs (Charts with tabs)-->
-          <div class="nav-tabs-custom">
+          <div class="nav-tabs-custom nav-info">
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
               <li class="active"><a href="#revenue-chart" data-toggle="tab">Area</a></li>
               <li><a href="#sales-chart" data-toggle="tab">Donut</a></li>
-              <li class="pull-left header"><i class="fa fa-inbox"></i>Objekte</li>
+              <li class="pull-left header"><i class="fa fa-inbox"></i>Objektbestand</li>
             </ul>
-            <div class="tab-content no-padding">
+            
+            <div class="tab-content">
               <!-- Morris chart - Sales -->
               <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;"></div>
               <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
             </div>
           </div>
           <!-- /.nav-tabs-custom -->
-
         </section>
         <!-- /.Left col -->
         <!-- right col (We are only adding the ID to make the widgets sortable)-->
-        <section class="col-lg-5 connectedSortable">
-
-          <!-- solid sales graph -->
-          <div class="box box-solid bg-teal-gradient">
-            <div class="box-header">
-              <i class="fa fa-th"></i>
-
-              <h3 class="box-title">Sales Graph</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+        <section class="col-lg-6">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <i class="fa fa-inbox"></i><h3 class="box-title">Anzahl der Anfragen</h3>
+              {# <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
-                <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>
-                </button>
-              </div>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div> #}
             </div>
-            <div class="box-body border-radius-none">
-              <div class="chart" id="line-chart" style="height: 250px;"></div>
+
+            <div class="box-body chart-responsive">
+              <div class="chart" id="line-chart" style="height: 300px;"></div>
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer no-border">
-              <div class="row">
-                <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                  <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
-                         data-fgColor="#39CCCC">
-
-                  <div class="knob-label">Mail-Orders</div>
-                </div>
-                <!-- ./col -->
-                <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                  <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
-                         data-fgColor="#39CCCC">
-
-                  <div class="knob-label">Online</div>
-                </div>
-                <!-- ./col -->
-                <div class="col-xs-4 text-center">
-                  <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
-                         data-fgColor="#39CCCC">
-
-                  <div class="knob-label">In-Store</div>
-                </div>
-                <!-- ./col -->
-              </div>
-              <!-- /.row -->
-            </div>
-            <!-- /.box-footer -->
           </div>
-          <!-- /.box -->
-
         </section>
         <!-- right col -->
       </div>
@@ -530,13 +516,17 @@
 <script src="{{ asset('bower_components/fastclick/lib/fastclick.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+{# <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script> #}
+
 <!-- AdminLTE for demo purposes -->
 <!-- <script src="dist/js/demo.js"></script> -->
+
 <!-- DataTables -->
 {# <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+
 <script>
   $(function (){
     $('#example1').DataTable({
@@ -546,13 +536,49 @@
 </script> #}
 
 <script>
+
+  // DONUT CHART
   var donut = new Morris.Donut({
     element  : 'sales-chart',
     resize   : true,
     colors   : ['#3c8dbc', '#f56954', '#00a65a'],
-    data     : {{dataSet|json_encode|raw}},
+    data     : {{donutData|json_encode|raw}},
     hideHover: 'auto'
   });
+
+  // AREA CHART
+  var area = new Morris.Area({
+    element: 'revenue-chart',
+    resize: true,
+    data: {{areaData|json_encode|raw}},
+    xkey: 'day',
+    ykeys: ['nfrei', 'frei', 'gesamt'],
+    labels: ['nicht freigegeben Objekte', 'freigegeben Objekte', 'Objekte gesamt'],
+    //lineColors: ['#9a32a8', '#a86b32', '#3c8dbc'],
+    lineColors: ['#00a65a', '#f56954', '#3c8dbc'],
+    hideHover: 'auto'
+  });
+
+  // LINE CHART
+  var line = new Morris.Line({
+    element          : 'line-chart',
+    resize           : true,
+    data             : {{lineData|json_encode|raw}},
+    xkey             : 'day',
+    ykeys            : ['ivdSud', 'gesamt'],
+    labels           : ['Ivd Süd', 'Gesamt'],
+    lineColors       : ['#f56954', '#3c8dbc'],
+    lineWidth        : 2,
+    hideHover        : 'auto',
+    //gridTextColor    : '#fff',
+    //gridStrokeWidth  : 0.4,
+    //pointSize        : 4,
+    //pointStrokeColors: ['#efefef'],
+    //gridLineColor    : '#efefef',
+    //gridTextFamily   : 'Open Sans',
+    //gridTextSize     : 10
+  });
+
 </script>
 
 </body>
