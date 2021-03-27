@@ -72,11 +72,11 @@
                         <li class="treeview {% if route_name in ["statistic_dashboard"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-laptop"></i>
-                                <span>Statistic Views</span>
+                                <span>Statistic Ansichten</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if route_name == "statistic_dashboard" %} class="active"{% endif %}><a href="{{ path('statistic_dashboard') }}"><i class="fa fa-circle-o"></i>Dashboard</a></li>
+                                <li {% if route_name == "statistic_dashboard" %} class="active"{% endif %}><a href="{{ path('statistic_dashboard') }}"><i class="fa fa-circle-o"></i>Überblick</a></li>
                             </ul>
                         </li>
                         {% endif %}
@@ -86,7 +86,7 @@
                         <li class="treeview {% if route_name in ["makler_new", "makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit", "makler_delete_list", "makler_delete"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-edit"></i> 
-                                <span>MaklerManagement</span>
+                                <span>Maklerverwaltung</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
@@ -99,7 +99,7 @@
                         <li class="treeview {% if route_name in ["interessent_list", "interessent_edit", "interessent_pw_edit", "interessent_delete_list", "interessent_delete"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-edit"></i> 
-                                <span>InteressentManagement</span>
+                                <span>Interessentverwaltung</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
@@ -111,7 +111,7 @@
                         <li class="treeview {% if route_name in ["bcuser_list", "bcuser_edit", "bcuser_delete_list", "bcuser_delete"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-edit"></i> 
-                                <span>BcUserManagement</span>
+                                <span>BcUserverwaltung</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
@@ -175,7 +175,7 @@
             <!-- FastClick -->
             <script src="{{ asset('bower_components/fastclick/lib/fastclick.js') }}"></script>
             <!-- SlimScroll -->
-            <script src="{{ asset('bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
+            {# <script src="{{ asset('bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script> #}
             <!-- AdminLTE App -->
             <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
         {% endblock %}

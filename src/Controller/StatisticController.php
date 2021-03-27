@@ -275,7 +275,7 @@ class StatisticController extends AbstractController
             ]
         );
         
-        return $this->render('statistic/dashboard3.html.twig', [
+        return $this->render('statistic/dashboard.html.twig', [
             'lineData'  => $lineData,
             'areaData'  => $areaData,
             'donutData' => $donutData,
