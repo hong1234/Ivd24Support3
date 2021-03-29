@@ -59,13 +59,11 @@
                                 <span>Public</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
-                            
                             <ul class="treeview-menu">
                                 {# <li {% if route_name == "default_find" %} class="active"{% endif %}><a href="{{ path('default_find') }}"><i class="fa fa-circle-o"></i>findPage</a></li>
                                 <li {% if route_name == "default_test" %} class="active"{% endif %}><a href="{{ path('default_test') }}"><i class="fa fa-circle-o"></i>testPage</a></li> #}
                                 <li {% if route_name == "default_home" %} class="active"{% endif %}><a href="{{ path('default_home') }}"><i class="fa fa-circle-o"></i>Home Page</a></li>
                             </ul>
-                            
                         </li>
 
                         {% if is_granted("ROLE_STATISTIC") %}

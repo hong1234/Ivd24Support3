@@ -16,6 +16,20 @@ use App\Service\SendQueue;
  */
 class DefaultController extends AbstractController
 {
+     /**
+     * @Route("/confirm", name="default_confirm")
+     */
+    public function confirmPage()
+    {
+        // return $this->json([
+        //     'message' => 'Welcome to your new controller!',
+        //     'path' => 'src/Controller/DefaultController.php',
+        // ]);
+
+        return $this->render('default/confirm.html.twig', [
+        ]);
+    }
+
     /**
      * @Route("/home", name="default_home")
      */

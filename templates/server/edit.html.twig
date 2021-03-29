@@ -36,14 +36,14 @@
                         <input type="text" class="form-control" id="ftpuser" name="ftpuser" placeholder="Ftpuser" value="{{server.ftp_benutzer}}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="ftp_pause">Ftp_pause</label>
+                        <label for="ftp_pause">Ftp_pause (FTP-Import pausieren)</label>
                         <select id="ftp_pause" name="ftp_pause" class="form-control" required>
                             <option value="N" {% if server.ftp_pause == 'N' %} selected {% endif %}>Nein</option>
                             <option value="J" {% if server.ftp_pause == 'J' %} selected {% endif %}>Ja</option> 
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="ftp_import_after_break">Ftp_import_after_break</label>
+                        <label for="ftp_import_after_break">Ftp_import_after_break (Dateien zeigen)</label>
                         <select id="after_break" name="after_break" class="form-control" required>
                             <option value="0" {% if server.ftp_import_after_break == '0' %} selected {% endif %}>Nein</option>
                             <option value="1" {% if server.ftp_import_after_break == '1' %} selected {% endif %}>Ja</option> 

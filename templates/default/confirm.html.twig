@@ -1,0 +1,26 @@
+
+{% extends 'baseOri.html.twig' %}
+
+
+{% block body %}
+
+<a class="delete-file" href="/home" class="logo">home</a><br>
+<a class="delete-file" href="/home" class="logo">home2</a>
+
+<script>
+var myElemente = document.getElementsByClassName("delete-file");
+
+for(var i = 0; i < myElemente.length; i++) {
+    myElemente[i].addEventListener("click", function(event){
+    var answer = window.confirm("go home?");
+    if (answer) {
+        //some code
+    }
+    else {
+        //some code
+        event.preventDefault();
+    } 
+});
+}
+</script>
+{% endblock %}
