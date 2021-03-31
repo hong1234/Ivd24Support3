@@ -41,7 +41,7 @@ class FtpServer
                 $row2[] = "";
             }
 
-            $str1   = "<a href=".$this->router->generate('server_starten', array('uid' => $row['user_id']))."><b>FTP-Import starten</b></a><br><br>";
+            $str1   = "<a href=".$this->router->generate('server_starten', array('uid' => $row['user_id']))."><b>FTP-Import starten</b></a><br>";
             if($row['ftp_import_after_break']=='1'){
                 
                 $rs = $this->linksToFilesOnFTP($row['user_id']);
@@ -96,7 +96,7 @@ class FtpServer
             $co = 0;
             foreach($file_list as $item) {
                 $co++;
-                if($co > 40) break;
+                if($co > 30) break;
                 $links = $links."<a style='color:blue;' href=".$this->router->generate('server_download_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">Download- $item</a><br>";
                 $links2 = $links2."<a style='color:red;' class='delete-file' href=".$this->router->generate('server_delete_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">Delete- $item</a><br>";
             }

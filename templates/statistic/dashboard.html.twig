@@ -521,11 +521,12 @@
 <script src="{{ asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 
 <script>
-  $(function (){
-    $('#example1').DataTable({
-        data: {{dataSet|json_encode|raw}}
-    })
-  })
+  $(document).ready(function() {
+            $('#example1').DataTable({
+                data: {{dataSet|json_encode|raw}},
+                stateSave: true
+            })
+        });
 </script> #}
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
