@@ -1,15 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseList.html.twig' %}
 
-{% block title %}Interessent Del Overview{% endblock %}
-{% block head %}
-    {{ parent() }}
-    <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
-{% endblock %}
-
-{# {% block navigation %}
-    
-{% endblock %} #}
+{% block title %}Interessent Delete{% endblock %}
 
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
@@ -46,19 +37,4 @@
         </section>
     </div>
     <!-- /.content-wrapper -->
-{% endblock %}
-
-{% block footer %}
-    {{ parent() }}
-    <!-- DataTables -->
-    <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('#example1').DataTable({
-                data: {{dataSet|json_encode|raw}},
-                stateSave: true
-            })
-        });
-    </script>
 {% endblock %}
