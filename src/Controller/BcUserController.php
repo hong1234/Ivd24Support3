@@ -6,6 +6,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Dao\BUserDao;
+use App\Service\BcUserService;
 
 /**
  *
@@ -16,33 +17,9 @@ class BcUserController extends AbstractController
     /**
      * @Route("/bcuser", name="bcuser_list")
      */
-    public function bcuserList(BUserDao $bcuDao){
+    public function bcuserList(BcUserService $bcUserService){
 
-        $stmt = $bcuDao->getAllBUser();
-
-        $rows = array();
-        while ($row = $stmt->fetch()) {
-            $row2 = array();
-
-            $row2[] = $row['user_id'];
-            $row2[] = $row['returncode'];    // string 'info@kaiser-immobilien.de' (length=25)
-            $row2[] = $row['company_name'];  // string 'Kaiser Immobilien GmbH & Co. KG' (length=31)
-
-            $status   = 'nicht-bz';
-            if($row['paid'] == 1){
-                $status = 'bezahlt';
-            }
-            $row2[] = $status;
-
-            $row2[] = $row['paket_name'];               // string 'ivd24 Business-Club + StoryBox' (length=30)
-            $row2[] = substr($row['start_abo'], 0, 10); // string '2021-02-01 00:00:01' (length=19) ;
-            $row2[] = substr($row['end_abo'], 0, 10);   // string '2022-01-31 23:59:59' (length=19)
-
-            $row2[] = "<a href=".$this->generateUrl('bcuser_edit', array('uid' => $row['user_id'])).">Daten bearbeiten</a><br>";  
-
-            $rows[] = $row2;
-        }
-
+        $rows = $bcUserService->BcUserList();
         return $this->render('bcuser/list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -107,31 +84,9 @@ class BcUserController extends AbstractController
     /**
      * @Route("/bcuser/delete", name="bcuser_delete_list")
      */
-    public function bcuserDelList(BUserDao $bcuDao){
+    public function bcuserDelList(BcUserService $bcUserService){
 
-        $stmt = $bcuDao->getAllBUser();
-
-        $rows = array();
-        while ($row = $stmt->fetch()) { 
-            $row2 = array();
-
-            $row2[] = $row['user_id'];
-            $row2[] = $row['returncode'];    // string 'info@kaiser-immobilien.de' (length=25)
-            $row2[] = $row['company_name'];  // string 'Kaiser Immobilien GmbH & Co. KG' (length=31)
-
-            $status   = 'nicht-bz';
-            if($row['paid'] == 1){
-                $status = 'bezahlt';
-            }
-            $row2[] = $status;
-            $row2[] = $row['paket_name'];                   // string 'ivd24 Business-Club + StoryBox' (length=30)
-            $row2[] = substr($row['start_abo'], 0, 10);     // string '2021-02-01 00:00:01' (length=19) ;
-            $row2[] = substr($row['end_abo'], 0, 10);       // string '2022-01-31 23:59:59' (length=19)
-            $row2[] = "<a href=".$this->generateUrl('bcuser_delete', array('uid' => $row['user_id'])).">BcUser löschen</a><br>";
-            
-            $rows[] = $row2;
-        }
-
+        $rows = $bcUserService->BcUserDelList();
         return $this->render('bcuser/del.list.html.twig', [
             'dataSet' => $rows
         ]);

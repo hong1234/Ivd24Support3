@@ -217,35 +217,9 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler", name="makler_list")
      */
-    public function maklerList(MaklerDao $mDao)
+    public function maklerList(MaklerService $mService)
     {
-        $stmt = $mDao->getAllMakler();
-        
-        $rows = array();
-        while ($row = $stmt->fetch()) {
-            $row2 = array();
-            $row2[] = $row['userId'];
-            $row2[] = $row['vorname'].' '.$row['name'];
-            $row2[] = $row['firma'];
-            $row2[] = $row['maklerEmail'];
-            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
-            $row2[] = date("Y-m-d", (int)$row['lastlogin']);
-        
-            //$str1 = "<a href='/admin/makler/".$row['userId']."/edit'>Daten bearbeiten</a><br>";
-            $str1 = "<a href=".$this->generateUrl('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</><br>";
-            $str2 = "<a href=".$this->generateUrl('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";
-            $str3 = "<a href=".$this->generateUrl('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
-            $str4 = "";
-            if($row['gesperrt']==1){
-                $str4 = "<a href=".$this->generateUrl('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
-            } else {
-                $str4 = "<a href=".$this->generateUrl('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br>";
-            }
-            $row2[] = $str1.$str2.$str3.$str4;
-
-            $rows[] = $row2;
-        }
-        
+        $rows = $mService->MaklerList();
         return $this->render('makler/list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -254,28 +228,9 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/delete", name="makler_delete_list")
      */
-    public function maklerDelList(MaklerDao $mDao)
+    public function maklerDelList(MaklerService $mService)
     {
-        $stmt = $mDao->getDelMakler();
-
-        $rows = array();
-        while ($row = $stmt->fetch()) {
-            $tmp = array();
-  
-            $tmp[] = $row['user_id'];
-            $tmp[] = $row['vorname'].' '.$row['name'];
-            $tmp[] = $row['firma'];
-            $tmp[] = $row['email'];
-            $tmp[] = $row['mitgliedsnummer'];
-            $tmp[] = substr($row['loesch_datum'], 0, 10);
-
-            $str1 = "<a href=".$this->generateUrl('makler_delete', array('uid' => $row['user_id'])).">Löschen</a><br>";
-            $str2 = "<a href=".$this->generateUrl('makler_delete_undo', array('uid' => $row['user_id'])).">Löschung zurücknehmen</a><br>";
-            $tmp[] = $str1.$str2;
-  
-            $rows[] = $tmp;
-        }
-
+        $rows = $mService->MaklerDelList();
         return $this->render('makler/del.list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -293,7 +248,6 @@ class MaklerController extends AbstractController
             if ($request->request->get('savebutton')) {
                 $mService->deleteMakler($user_id);
             }
-
             return $this->redirectToRoute('makler_delete_list', [
                 //'paramName' => 'value'
             ]);  

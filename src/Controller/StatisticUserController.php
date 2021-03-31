@@ -20,24 +20,8 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser", name="statisticuser_list")
      */
-    public function statisticuserList(UserDao $uDao)
-    {
-        $stmt = $uDao->getAllStatisticUser();
-        $rows = array();
-        while ($row = $stmt->fetch()) {
-            $row2 = array();
-            $row2[] = $row['user_id'];
-            $row2[] = $row['username'];
-            $row2[] = $row['email'];
-            $row2[] = $row['geschaeftsstelle'];
-            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
-            $row2[] = date("Y-m-d", (int)$row['lastlogin']);
-            $row2[] = "<a href=".$this->generateUrl('statisticuser_edit', array('uid' => $row['user_id'])).">Daten bearbeiten</a>";
-            $row2[] = "<a href=".$this->generateUrl('statisticuser_delete', array('uid' => $row['user_id'])).">Statistic-User löschen</a>";
-            
-            $rows[] = $row2;
-        }
-
+    public function statisticuserList(StatisticUserService $staSer) {
+        $rows = $staSer->StatisticUserList();
         return $this->render('statisticuser/list.html.twig', [
             'dataSet' => $rows
         ]);

@@ -2,6 +2,7 @@
 namespace App\Service;
 
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Dao\UserDao;
 use App\Entity\User;
@@ -9,11 +10,13 @@ use App\Service\SendQueue;
 
 class StatisticUserService
 {
+    private $router;
     private $uDao;
     private $passwordEncoder;
     private $sqSer;
 
-    function __construct(UserDao $uDao, UserPasswordEncoderInterface $passwordEncoder, SendQueue $sqSer) {
+    function __construct(UrlGeneratorInterface $router, UserDao $uDao, UserPasswordEncoderInterface $passwordEncoder, SendQueue $sqSer) {
+        $this->router = $router;
         $this->uDao = $uDao;  
         $this->sqSer = $sqSer;
         $this->passwordEncoder = $passwordEncoder;
@@ -126,6 +129,27 @@ class StatisticUserService
             $em->getConnection()->rollBack();
             throw $e;
         }
+    }
+
+    public function StatisticUserList() {
+
+        $stmt = $this->uDao->getAllStatisticUser();
+
+        $rows = array();
+        while ($row = $stmt->fetch()) {
+            $row2 = array();
+            $row2[] = $row['user_id'];
+            $row2[] = $row['username'];
+            $row2[] = $row['email'];
+            $row2[] = $row['geschaeftsstelle'];
+            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
+            $row2[] = date("Y-m-d", (int)$row['lastlogin']);
+            $row2[] = "<a href=".$this->router->generate('statisticuser_edit', array('uid' => $row['user_id'])).">Daten bearbeiten</a>";
+            $row2[] = "<a href=".$this->router->generate('statisticuser_delete', array('uid' => $row['user_id'])).">Statistic-User löschen</a>";
+            
+            $rows[] = $row2;
+        }
+        return $rows;
     }
 
 }

@@ -18,34 +18,8 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent", name="interessent_list")
      */
-    public function interessentList(InteressentDao $iDao){
-
-        $stmt = $iDao->getAllInteressent();
-
-        $rows = array();
-        while ($row = $stmt->fetch()) {    
-            $row2 = array();
-
-            $row2[] = $row['userId'];
-            $row2[] = $row['vorname'].' '.$row['name']; 
-            $row2[] = $row['firma']; 
-            $row2[] = $row['userEmail']; 
-            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);    //=> string '1438597868' (length=10)
-            $row2[] = date("Y-m-d", (int)$row['lastlogin']);              // => string '1438954407' (length=10)
-
-            $str1 = "<a href=".$this->generateUrl('interessent_edit', array('uid' => $row['userId'])).">Bearbeiten</a><br>";
-            $str2 = "<a href=".$this->generateUrl('interessent_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
-            $str3 = "";
-            if($row['gesperrt']==1){        
-                $str3 = "<a href=".$this->generateUrl('interessent_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
-            } else {
-                $str3 = "<a href=".$this->generateUrl('interessent_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br><br>";
-            }
-            $row2[] = $str1.$str2.$str3;
-                          
-            $rows[] = $row2;
-        }
-
+    public function interessentList(InteressentService $intSer){
+        $rows = $intSer->InteressentList();
         return $this->render('interessent/list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -86,27 +60,8 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/delete", name="interessent_delete_list")
      */
-    public function interessentDelList(InteressentDao $iDao){
-
-        $stmt = $iDao->getDelInteressent();
-    
-        $rows = array();
-        while ($row = $stmt->fetch()) {        
-            $row2 = array();
-
-            $row2[] = $row['userId']; 
-            $row2[] = $row['vorname'].' '.$row['name'];
-            $row2[] = $row['firma'];
-            $row2[] = $row['userEmail'];
-            $row2[] = substr($row['loesch_datum'], 0, 10);
-        
-            $str1 = "<a href=".$this->generateUrl('interessent_delete', array('uid' => $row['userId'])).">Löschen</a><br>";
-            $str2 = "<a href=".$this->generateUrl('interessent_delete_undo', array('uid' => $row['userId'])).">Löschung zurücknehmen</a><br>";
-            $row2[] = $str1.$str2;
-
-            $rows[] = $row2;
-        }
-
+    public function interessentDelList(InteressentService $intSer){
+        $rows = $intSer->InteressentDelList();
         return $this->render('interessent/del.list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -122,12 +77,11 @@ class InteressentController extends AbstractController
         if ($request->isMethod('POST')) {
 
             if ($request->request->get('savebutton')) {
-
-                $intSer->interessentDelete($user_id);
-                return $this->redirectToRoute('interessent_delete_list', [
-                    //'paramName' => 'value'
-                ]);     
+                $intSer->interessentDelete($user_id);     
             }
+            return $this->redirectToRoute('interessent_delete_list', [
+                //'paramName' => 'value'
+            ]);
         }
 
         $user_int = $iDao->getInteressent([

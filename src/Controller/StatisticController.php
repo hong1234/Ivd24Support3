@@ -6,9 +6,9 @@ use Symfony\Component\Routing\Annotation\Route;
 // use Symfony\Component\HttpFoundation\Request;
 // use App\Repository\ProductRepository;
 
-use App\Dao\MaklerDao;
 use App\Dao\StatisticDao;
 use App\Dao\ObjectDao;
+use App\Service\MaklerService;
 
 /**
  *
@@ -19,7 +19,7 @@ class StatisticController extends AbstractController
     /**
      * @Route("/dashboard", name="statistic_dashboard")
      */
-    public function Dashboard(MaklerDao $mDao, StatisticDao $sDao, ObjectDao $oDao)
+    public function Dashboard(MaklerService $mService, StatisticDao $sDao, ObjectDao $oDao)
     {
         //$this->getUser()->getEmail();
         //$roles = $this->getUser()->getRoles();
@@ -79,33 +79,7 @@ class StatisticController extends AbstractController
         }
 
         //makler table-----------
-
-        // $stmt = $mDao->getAllMakler();
-        
-        // $rows = array();
-        // while ($row = $stmt->fetch()) {
-        //     $row2 = array();
-        //     $row2[] = $row['userId'];
-        //     $row2[] = $row['vorname'].' '.$row['name'];
-        //     $row2[] = $row['firma'];
-        //     $row2[] = $row['maklerEmail'];
-        //     $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
-        //     $row2[] = date("Y-m-d", (int)$row['lastlogin']);
-        
-        //     //$str1 = "<a href='/admin/makler/".$row['userId']."/edit'>Daten bearbeiten</a><br>";
-        //     $str1 = "<a href=".$this->generateUrl('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</><br>";
-        //     $str2 = "<a href=".$this->generateUrl('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";
-        //     $str3 = "<a href=".$this->generateUrl('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
-        //     $str4 = "";
-        //     if($row['gesperrt']==1){
-        //         $str4 = "<a href=".$this->generateUrl('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
-        //     } else {
-        //         $str4 = "<a href=".$this->generateUrl('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br>";
-        //     }
-        //     $row2[] = $str1.$str2.$str3.$str4;
-
-        //     $rows[] = $row2;
-        // }
+        // $rows = $mService->MaklerList();
 
         $total = $oDao->getObjectTotal()['Anzah_Gesamtl_Objekte'];
         $activ = $oDao->getObjectActiv()['Anzahl_freigegeben_Objekte'];

@@ -19,24 +19,8 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter", name="supporter_list")
      */
-    public function supporterList(UserDao $uDao)
-    {
-        $stmt = $uDao->getAllSupportUser();
-
-        $rows = array();
-        while ($row = $stmt->fetch()) {
-            $row2 = array();
-            $row2[] = $row['user_id'];
-            $row2[] = $row['username'];
-            $row2[] = $row['email'];
-            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
-            $row2[] = date("Y-m-d", (int)$row['lastlogin']);
-            $row2[] = "<a href=".$this->generateUrl('supporter_edit', array('uid' => $row['user_id'])).">Daten bearbeiten</a>";
-            $row2[] = "<a href=".$this->generateUrl('supporter_delete', array('uid' => $row['user_id'])).">Supporter löschen</a>";
-            
-            $rows[] = $row2;
-        }
-
+    public function supporterList(SupporterService $supSer) {
+        $rows = $supSer->SupporterList();
         return $this->render('supporter/list.html.twig', [
             'dataSet' => $rows
         ]);

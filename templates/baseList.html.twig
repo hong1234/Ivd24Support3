@@ -17,7 +17,7 @@
                 data: {{dataSet|json_encode|raw}},
                 stateSave: true
             });
-
+            
             $('input[type="search"]').on('focus', function() {
                 $('input[type="search"]').val('');
                 table.search('').draw(); //required after

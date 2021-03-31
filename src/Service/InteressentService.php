@@ -1,13 +1,16 @@
 <?php
 namespace App\Service;  
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Dao\InteressentDao;
 
 class InteressentService
 {
-    public $iDao;
+    private $router;
+    private $iDao;
 
-    function __construct(InteressentDao $iDao) {
+    function __construct(UrlGeneratorInterface $router, InteressentDao $iDao) {
+        $this->router = $router;
         $this->iDao = $iDao;
     }
 
@@ -78,5 +81,60 @@ class InteressentService
             $em->getConnection()->rollBack();
             throw $e;
         }
+    }
+
+    public function InteressentList() {
+
+        $stmt = $this->iDao->getAllInteressent();
+
+        $rows = array();
+        while ($row = $stmt->fetch()) {    
+            $row2 = array();
+
+            $row2[] = $row['userId'];
+            $row2[] = $row['vorname'].' '.$row['name']; 
+            $row2[] = $row['firma']; 
+            $row2[] = $row['userEmail']; 
+            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);    //=> string '1438597868' (length=10)
+            $row2[] = date("Y-m-d", (int)$row['lastlogin']);              // => string '1438954407' (length=10)
+
+            $str1 = "<a href=".$this->router->generate('interessent_edit', array('uid' => $row['userId'])).">Bearbeiten</a><br>";
+            $str2 = "<a href=".$this->router->generate('interessent_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
+            $str3 = "";
+            if($row['gesperrt']==1){        
+                $str3 = "<a href=".$this->router->generate('interessent_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
+            } else {
+                $str3 = "<a href=".$this->router->generate('interessent_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br><br>";
+            }
+            $row2[] = $str1.$str2.$str3;
+                          
+            $rows[] = $row2;
+        }
+
+        return $rows;
+    }
+
+    public function InteressentDelList() {
+
+        $stmt = $this->iDao->getDelInteressent();
+    
+        $rows = array();
+        while ($row = $stmt->fetch()) {        
+            $row2 = array();
+
+            $row2[] = $row['userId']; 
+            $row2[] = $row['vorname'].' '.$row['name'];
+            $row2[] = $row['firma'];
+            $row2[] = $row['userEmail'];
+            $row2[] = substr($row['loesch_datum'], 0, 10);
+        
+            $str1 = "<a href=".$this->router->generate('interessent_delete', array('uid' => $row['userId'])).">Löschen</a><br>";
+            $str2 = "<a href=".$this->router->generate('interessent_delete_undo', array('uid' => $row['userId'])).">Löschung zurücknehmen</a><br>";
+            $row2[] = $str1.$str2;
+
+            $rows[] = $row2;
+        }
+
+        return $rows;
     }
 }

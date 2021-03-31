@@ -41,13 +41,13 @@ class FtpServer
                 $row2[] = "";
             }
 
-            $str1   = "<a href=".$this->router->generate('server_starten', array('uid' => $row['user_id']))."><b>FTP-Import starten</b></a><br>";
+            $str1   = "<a href=".$this->router->generate('server_starten', array('uid' => $row['user_id'])).">FTP-Import starten</a><br>";
             if($row['ftp_import_after_break']=='1'){
                 
                 $rs = $this->linksToFilesOnFTP($row['user_id']);
                 
-                $str2   = $rs[0];
-                $str3   = $rs[1];
+                $str2   = "<br>".$rs[0]."<br>";
+                $str3   = $rs[1]."<br>";
                 $row2[] = $str1.$str2.$str3;
             } else {
                 $row2[] = $str1;

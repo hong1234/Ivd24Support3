@@ -1,14 +1,17 @@
 <?php
 namespace App\Service;  
 
-use App\Dao\UserDao;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+//use App\Dao\UserDao;
 use App\Dao\MaklerDao;
 
 class MaklerService
 {
+    private $router;
     public $mDao;
 
-    function __construct(MaklerDao $mDao) {
+    function __construct(UrlGeneratorInterface $router, MaklerDao $mDao) {
+        $this->router = $router;
         $this->mDao = $mDao;
     }
 
@@ -268,4 +271,61 @@ class MaklerService
             throw $e;
         } 
     }
+
+    public function MaklerList(){
+
+        $stmt = $this->mDao->getAllMakler();
+        
+        $rows = array();
+        while ($row = $stmt->fetch()) {
+            $row2 = array();
+            $row2[] = $row['userId'];
+            $row2[] = $row['vorname'].' '.$row['name'];
+            $row2[] = $row['firma'];
+            $row2[] = $row['maklerEmail'];
+            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
+            $row2[] = date("Y-m-d", (int)$row['lastlogin']);
+    
+            $str1 = "<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</><br>";
+            $str2 = "<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";
+            $str3 = "<a href=".$this->router->generate('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
+            $str4 = "";
+            if($row['gesperrt']==1){
+                $str4 = "<a href=".$this->router->generate('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
+            } else {
+                $str4 = "<a href=".$this->router->generate('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br>";
+            }
+            $row2[] = $str1.$str2.$str3.$str4;
+
+            $rows[] = $row2;
+        }
+
+        return $rows;
+    }
+
+    public function MaklerDelList(){
+
+        $stmt = $this->mDao->getDelMakler();
+
+        $rows = array();
+        while ($row = $stmt->fetch()) {
+            $tmp = array();
+  
+            $tmp[] = $row['user_id'];
+            $tmp[] = $row['vorname'].' '.$row['name'];
+            $tmp[] = $row['firma'];
+            $tmp[] = $row['email'];
+            $tmp[] = $row['mitgliedsnummer'];
+            $tmp[] = substr($row['loesch_datum'], 0, 10);
+
+            $str1 = "<a href=".$this->router->generate('makler_delete', array('uid' => $row['user_id'])).">Löschen</a><br>";
+            $str2 = "<a href=".$this->router->generate('makler_delete_undo', array('uid' => $row['user_id'])).">Löschung zurücknehmen</a><br>";
+            $tmp[] = $str1.$str2;
+  
+            $rows[] = $tmp;
+        }
+
+        return $rows;
+    }
+
 }
