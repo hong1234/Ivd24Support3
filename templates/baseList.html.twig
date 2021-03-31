@@ -13,10 +13,15 @@
     <script src="{{ asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#example1').DataTable({
+            var table = $('#example1').DataTable({
                 data: {{dataSet|json_encode|raw}},
                 stateSave: true
-            })
+            });
+
+            $('input[type="search"]').on('focus', function() {
+                $('input[type="search"]').val('');
+                table.search('').draw(); //required after
+            });
         });
     </script>
 {% endblock %}
