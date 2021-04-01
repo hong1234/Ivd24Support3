@@ -14,5 +14,15 @@ class ObjectDao extends BaseDao {
         $sql    =   "SELECT COUNT(objekt_id) AS Anzahl_nicht_freigegeben_Objekte FROM objekt_master WHERE freigabe = 'N'";
         return $this->doQuery($sql, $values)->fetch();
     }
+
+    public function insertObjectDaylyStatistic(iterable $values=[]) {
+        $sql = "INSERT INTO hong_object_statistic SET 
+                    object_gesamt      = :object_gesamt,
+                    object_frei        = :object_frei,
+                    object_nicht_frei  = :object_nicht_frei,
+                    insertdate         = CURDATE()
+                ";
+        return $this->doSQL($sql, $values);
+    }
     
 }

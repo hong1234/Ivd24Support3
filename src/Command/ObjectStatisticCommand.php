@@ -38,6 +38,12 @@ class ObjectStatisticCommand extends Command
         $activ = $this->oDao->getObjectActiv()['Anzahl_freigegeben_Objekte'];
         $inactiv = $this->oDao->getObjectInActiv()['Anzahl_nicht_freigegeben_Objekte'];
 
+        $this->oDao->insertObjectDaylyStatistic([
+            'object_gesamt'     => $total,
+            'object_frei'       => $activ,
+            'object_nicht_frei' => $inactiv
+        ]);
+
         $output->writeln(sprintf(
             //'Your hashed password is: %s', $hashedPassword
             'Result is: %s %s %s', $total, $activ, $inactiv
