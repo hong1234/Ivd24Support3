@@ -18,7 +18,8 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent", name="interessent_list")
      */
-    public function interessentList(InteressentService $intSer){
+    public function interessentList(InteressentService $intSer)
+    {
         $rows = $intSer->InteressentList();
         return $this->render('interessent/list.html.twig', [
             'dataSet' => $rows
@@ -60,7 +61,8 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/delete", name="interessent_delete_list")
      */
-    public function interessentDelList(InteressentService $intSer){
+    public function interessentDelList(InteressentService $intSer)
+    {
         $rows = $intSer->InteressentDelList();
         return $this->render('interessent/del.list.html.twig', [
             'dataSet' => $rows
@@ -102,7 +104,8 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/{uid}/lock/{gesperrt}", name="interessent_lock_unlock", requirements={"uid"="\d+"})
      */
-    public function interessentLock($uid, $gesperrt, UserDao $uDao){
+    public function interessentLock($uid, $gesperrt, UserDao $uDao)
+    {
         $user_id  = $uid;
         $uDao->updateUserAccountGesperrt([
             'gesperrt' => $gesperrt,
@@ -151,7 +154,8 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/{uid}/delete/undo", name="interessent_delete_undo", requirements={"uid"="\d+"})
      */
-    public function deleteUndo($uid, UserDao $uDao){
+    public function deleteUndo($uid, UserDao $uDao)
+    {
         $user_id = $uid;
         $uDao->updateUserAccountLoeschung([
             'user_id' => $user_id
