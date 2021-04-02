@@ -155,7 +155,7 @@ class MaklerDao extends UserDao {
     }
 
     public function getAllMakler(iterable $values=[]) {
-        $sql    =   "SELECT m.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, m.email AS maklerEmail, username, gesperrt, anrede, vorname, name, firma  
+        $sql    =   "SELECT m.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, m.email AS maklerEmail, username, gesperrt, anrede, vorname, name, firma, seo_url  
                     FROM user_makler AS m 
                     INNER JOIN user_account ON m.user_id = user_account.user_id 
                     WHERE user_account.art_id = 2";

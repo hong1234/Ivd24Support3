@@ -2,31 +2,20 @@
 
 {% block title %}FTP Edit{% endblock %}
 
-{# {% block head %}
-    {{ parent() }}
-{% endblock %} #}
-
-{# {% block navigation %}
-    
-{% endblock %} #}
-
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1>
-          ivd24 FTP-Passwort bearbeiten
-        </h1>
+        <h1>FTP-Passwort bearbeiten </h1>
       </section>
-
       <!-- Main content -->
       <section class="content">
         <div class="row">
           <!-- left column -->
           <div class="col-md-6">
 
-          {# <form action="/admin/makler/{{user_id}}/ftpedit" method="POST"> #}
+          {# <form action="/support/makler/{{user_id}}/ftpedit" method="POST"> #}
           <form action="{{ path('makler_ftp_edit', {'uid': user_id}) }}" method="POST">
             <!-- Horizontal Form -->
             <!-- /.box -->
@@ -51,9 +40,9 @@
                     <input type="text" class="form-control" id="ftppasswort" name="ftppasswort" placeholder="FTP-Passwort" required>
                   </div>
               </div>
-			   <div class="box-footer">
+			        <div class="box-footer">
                   <button type="submit" class="btn btn-primary" name="savebutton" value="true">Ändern</button>
-                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -62,7 +51,3 @@
   </form>
   <!-- /.content-wrapper -->
 {% endblock %}
-
-{# {% block footer %}
-    {{ parent() }}
-{% endblock %} #}

@@ -283,19 +283,19 @@ class MaklerService
             $row2[] = $row['vorname'].' '.$row['name'];
             $row2[] = $row['firma'];
             $row2[] = $row['maklerEmail'];
+            $row2[] = $row['seo_url'];
             $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
             $row2[] = date("Y-m-d", (int)$row['lastlogin']);
     
-            $str1 = "<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</><br>";
-            $str2 = "<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";
-            $str3 = "<a href=".$this->router->generate('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
-            $str4 = "";
-            if($row['gesperrt']==1){
-                $str4 = "<a href=".$this->router->generate('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
+            $links = "<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</><br>";
+            $links = $links."<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";
+            $links = $links."<a href=".$this->router->generate('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
+            if($row['gesperrt'] == 1){
+                $links = $links."<a href=".$this->router->generate('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
             } else {
-                $str4 = "<a href=".$this->router->generate('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br>";
+                $links = $links."<a href=".$this->router->generate('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br>";
             }
-            $row2[] = $str1.$str2.$str3.$str4;
+            $row2[] = $links;
 
             $rows[] = $row2;
         }
@@ -318,9 +318,9 @@ class MaklerService
             $tmp[] = $row['mitgliedsnummer'];
             $tmp[] = substr($row['loesch_datum'], 0, 10);
 
-            $str1 = "<a href=".$this->router->generate('makler_delete', array('uid' => $row['user_id'])).">Löschen</a><br>";
-            $str2 = "<a href=".$this->router->generate('makler_delete_undo', array('uid' => $row['user_id'])).">Löschung zurücknehmen</a><br>";
-            $tmp[] = $str1.$str2;
+            $link1 = "<a href=".$this->router->generate('makler_delete', array('uid' => $row['user_id'])).">Löschen</a><br>";
+            $link2 = "<a href=".$this->router->generate('makler_delete_undo', array('uid' => $row['user_id'])).">Löschung zurücknehmen</a><br>";
+            $tmp[] = $link1.$link2;
   
             $rows[] = $tmp;
         }
