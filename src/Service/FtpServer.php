@@ -34,24 +34,22 @@ class FtpServer
             //$row2[] = $row['ftp_passwort']; 
             
             //$row2[] = $row['ftp_pause'];                //  => string 'N' 
+            
             //$row2[] = $row['ftp_import_after_break'];   //  => string '0'
+            $importAfterBreak = "Nein";
             if($row['ftp_import_after_break']=='1'){
-                $row2[] = "<p style='color:red;'>import after break</p>";
-            } else {
-                $row2[] = "";
+                $importAfterBreak = "- JA -";
             }
+            $row2[] = $importAfterBreak;
 
-            $str1   = "<a href=".$this->router->generate('server_starten', array('uid' => $row['user_id'])).">FTP-Import starten</a><br>";
+            $links = "<a href=".$this->router->generate('server_starten', array('uid' => $row['user_id'])).">FTP-Import starten</a><br>";
             if($row['ftp_import_after_break']=='1'){
-                
                 $rs = $this->linksToFilesOnFTP($row['user_id']);
-                
-                $str2   = "<br>".$rs[0]."<br>";
-                $str3   = $rs[1]."<br>";
-                $row2[] = $str1.$str2.$str3;
-            } else {
-                $row2[] = $str1;
-            }
+                if($rs[0] != ""){
+                    $links = $links."<br>$rs[0]<br>$rs[1]<br>";
+                } 
+            } 
+            $row2[] = $links;
             
             $rows[] = $row2;
         }
