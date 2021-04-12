@@ -27,15 +27,15 @@
                     <div class="box box-primary">
                         <div class="box-body">
 
-                            <form action="{{ path('login') }}" method="post">
+                            <form action="{{ path('app_login') }}" method="post">
                                 <div class="form-group">
                                     <label for="username">Username:</label>
-                                    <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" /></br>
+                                    <input type="email" class="form-control" id="inputEmail" name="email" value="{{ last_username }}" required autofocus></br>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="password">Password:</label>
-                                    <input type="password" class="form-control" id="password" name="_password" /></br>
+                                    <input type="password" class="form-control" id="inputPassword" name="password" required></br>
                                 </div>
 
                                 {#

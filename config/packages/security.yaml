@@ -14,16 +14,16 @@ security:
             security: false
         main:
             anonymous: true
-            form_login:
-                login_path: login
-                check_path: login
-
-                csrf_token_generator: security.csrf.token_manager
-                default_target_path: /home
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+                #csrf_token_generator: security.csrf.token_manager
+                #default_target_path: /home
 
             logout:
-                path: /logout
+                path: app_logout
                 target: /home
+                #target: default_home
 
             # activate different ways to authenticate
 
