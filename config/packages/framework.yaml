@@ -8,16 +8,15 @@ framework:
     # Remove or comment this section to explicitly disable session support.
     session:
         #handler_id: null
-        #handler_id: 'session.handler.native_file'
-        #save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
-        handler_id: ~
+        #handler_id: ~
+        handler_id: 'session.handler.native_file'
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
         cookie_secure: auto
-        #cookie_samesite: lax
-        cookie_samesite: null
+        cookie_samesite: lax
 
     #esi: true
     #fragments: true
     php_errors:
         log: true
 
-    #error_controller: App\Controller\ErrorController::show
+    error_controller: App\Controller\ErrorController::show
