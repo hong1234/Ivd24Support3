@@ -75,8 +75,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
         else {//hong
-            echo "user ist indentifiziert";
-            exit;
+            //echo "user ist indentifiziert";
+            //exit;
         }
 
         return $user;
