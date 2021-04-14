@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 // use App\Repository\ProductRepository;
 //use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-//use App\Dao\ServerDao;
+use App\Dao\MaklerDao;
 //use App\Service\SendQueue;
 
 /**
@@ -47,14 +47,22 @@ class DefaultController extends AbstractController
     /**
      * @Route("/test", name="default_test")
      */
-    public function testPage()
+    public function testPage(MaklerDao $mDao)
     {
         // return $this->json([
         //     'message' => 'Welcome to your new controller!',
         //     'path' => 'src/Controller/DefaultController.php',
         // ]);
+        // $mDao->hongTest([
+        //     'joketext' => "ala user's dollar"
+        // ]);
+
+        $quelle = "Muster Immobilien Invest Firma GmbH & Co. KG in München";
+
+        $result = "";
 
         return $this->render('default/test.html.twig', [
+            'result' => $result
         ]);
     }
 

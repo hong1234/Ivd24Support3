@@ -4,6 +4,11 @@ namespace App\Dao;
 //class MaklerDao extends BaseDao {
 class MaklerDao extends UserDao {
 
+    public function hongTest(iterable $values=[]){
+        $sql =  "INSERT INTO hong_test SET joketext = :joketext, jokedate = CURDATE()";
+        return $this->doSQL($sql, $values);
+    }
+
     //----new Makler--------
     public function insertMakler(iterable $values=[]){
         $sql =  "INSERT INTO user_makler SET

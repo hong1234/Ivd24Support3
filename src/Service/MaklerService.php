@@ -286,8 +286,9 @@ class MaklerService
             $row2[] = $row['seo_url'];
             $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
             $row2[] = date("Y-m-d", (int)$row['lastlogin']);
-    
-            $links = "<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</><br>";
+
+            $links = "<a href='https://ivd24immobilien.de/wp-admin/admin.php?page=ivd24Admin_show&id=".$row['userId']."&art=5' target='_blank'>Login als Makler</a><br>";
+            $links = $links."<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</a><br>";
             $links = $links."<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";
             $links = $links."<a href=".$this->router->generate('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
             if($row['gesperrt'] == 1){
@@ -318,6 +319,7 @@ class MaklerService
             $tmp[] = $row['mitgliedsnummer'];
             $tmp[] = substr($row['loesch_datum'], 0, 10);
 
+            //$link = "<a href='https://ivd24immobilien.de/wp-admin/admin.php?page=ivd24Admin_show&id=".$row['user_id']."&art=5' target='_blank'>Login als Makler</a><br>";
             $link1 = "<a href=".$this->router->generate('makler_delete', array('uid' => $row['user_id'])).">Löschen</a><br>";
             $link2 = "<a href=".$this->router->generate('makler_delete_undo', array('uid' => $row['user_id'])).">Löschung zurücknehmen</a><br>";
             $tmp[] = $link1.$link2;
