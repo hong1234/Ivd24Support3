@@ -77,14 +77,14 @@ class SendQueue
         }
         
         $this->bDao->insertSendQueue([
-            'sendername'        => $sendername, 
-            'absender_mail'     => $absender_mail,
-            'empfaenger_name'   => $empfaenger_name,
-            'empfaenger_mail'   => $empfaenger_mail,
-            'betreff'           => $betreff,
-            'nachricht_html'    => $nachricht_html,
-            'nachricht_plain'   => $nachricht_plain,
-            'insertdate'        => $insertdate
+            'sendername'      => $sendername, 
+            'absender_mail'   => $absender_mail,
+            'empfaenger_name' => $empfaenger_name,
+            'empfaenger_mail' => $empfaenger_mail,
+            'betreff'         => $betreff,
+            'nachricht_html'  => $nachricht_html,
+            'nachricht_plain' => $nachricht_plain,
+            'insertdate'      => $insertdate
         ]);
 
     }
