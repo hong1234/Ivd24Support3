@@ -4,15 +4,18 @@ namespace App\Service;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 //use App\Dao\UserDao;
 use App\Dao\MaklerDao;
+use App\Service\SendQueue;
 
 class MaklerService
 {
     private $router;
-    public $mDao;
+    private $mDao;
+    private $sqSer;
 
-    function __construct(UrlGeneratorInterface $router, MaklerDao $mDao) {
+    function __construct(UrlGeneratorInterface $router, MaklerDao $mDao, SendQueue $sqSer) {
         $this->router = $router;
         $this->mDao = $mDao;
+        $this->sqSer = $sqSer;
     }
 
     public function rand_str($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'){
@@ -24,7 +27,7 @@ class MaklerService
         return $str;
     }
 
-    public function newMakler($safePost){
+    public function newMakler($safePost) {
 
         $anrede              = $safePost->get('anrede');
         $titel               = $safePost->get('titel');
@@ -138,6 +141,11 @@ class MaklerService
                 'user_id' => $user_id
             ]);
 
+            //-------------
+            $this->sqSer->addToSendQueue('makler_new', [
+                'email'    => $email, 
+                'passwort' => $kennwort_plain
+            ]);
             //------------
             $em->getConnection()->commit();     
 

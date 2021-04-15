@@ -57,12 +57,16 @@ class DefaultController extends AbstractController
         //     'joketext' => "ala user's dollar"
         // ]);
 
-        $quelle = "Muster Immobilien Invest Firma GmbH & Co. KG in München";
+        //$quelle = "Muster Immobilien Invest Firma GmbH & Co. KG in München";
 
-        $result = "";
+        //$result = "";
 
-        return $this->render('default/test.html.twig', [
-            'result' => $result
+        $email = "vuanh@yahoo.de";
+        $passwort = "abc123";
+
+        return $this->render('default/test2.html.twig', [
+            'email' => $email,
+            'passwort' => $passwort
         ]);
     }
 
