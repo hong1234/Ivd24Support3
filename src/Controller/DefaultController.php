@@ -3,12 +3,12 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-// use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
 // use App\Repository\ProductRepository;
 //use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 use App\Dao\MaklerDao;
-//use App\Service\SendQueue;
+use App\Service\StringFormat;
 
 /**
  *
@@ -45,28 +45,30 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * @Route("/seourl", name="default_seourl")
+     */
+    public function getSeoUrl(Request $request, StringFormat $fmService)
+    {
+        //$inputString = "Muster Immobilien Invest Firma GmbH & Co. KG in München";
+        $inputString = $request->request->get('text', '');
+
+        if($inputString == ''){
+            $seoUrl = "Bitte geben Sie die Firma-Angaben zuerst";
+        } else {
+            $seoUrl = $fmService->getSeoUrl($inputString);
+        }
+        
+        return $this->json([
+            'seourl' => $seoUrl
+        ]);
+    }
+
+    /**
      * @Route("/test", name="default_test")
      */
-    public function testPage(MaklerDao $mDao)
+    public function testPage()
     {
-        // return $this->json([
-        //     'message' => 'Welcome to your new controller!',
-        //     'path' => 'src/Controller/DefaultController.php',
-        // ]);
-        // $mDao->hongTest([
-        //     'joketext' => "ala user's dollar"
-        // ]);
-
-        //$quelle = "Muster Immobilien Invest Firma GmbH & Co. KG in München";
-
-        //$result = "";
-
-        $email = "vuanh@yahoo.de";
-        $passwort = "abc123";
-
-        return $this->render('default/test2.html.twig', [
-            'email' => $email,
-            'passwort' => $passwort
+        return $this->render('default/test.html.twig', [
         ]);
     }
 

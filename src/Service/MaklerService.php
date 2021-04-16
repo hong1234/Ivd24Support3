@@ -128,6 +128,7 @@ class MaklerService
                 'ftp_benutzer'    => $ftp_benutzer,
                 'ftppasswort'     => $ftppasswort,
                 'move_robot_id'   => $move_robot_id,
+                'returncode_businessclub' => $email
             ]);
 
             $this->mDao->insertRobotQueue([
@@ -294,7 +295,7 @@ class MaklerService
             $row2[] = $row['seo_url'];
             $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
             $row2[] = date("Y-m-d", (int)$row['lastlogin']);
-
+            $links = "";
             $links = "<a href='https://ivd24immobilien.de/wp-admin/admin.php?page=ivd24Admin_show&id=".$row['userId']."&art=5' target='_blank'>Login als Makler</a><br>";
             $links = $links."<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</a><br>";
             $links = $links."<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";

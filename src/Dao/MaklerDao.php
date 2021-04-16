@@ -73,7 +73,8 @@ class MaklerDao extends UserDao {
                     ftp_del            = 'N', 
                     move_robot_id      = :move_robot_id, 
                     anzahl_objekte_pro_seite = '10',
-                    logo_pfad = ''
+                    logo_pfad = '',
+                    returncode_businessclub = :returncode_businessclub
                 ";
         return $this->doSQL($sql, $values);
     }

@@ -52,8 +52,6 @@
                                     <label for="Namenstitel">Namenstitel</label>
                                     <input type="text" class="form-control" id="namenstitel" name="namenstitel" placeholder="Kfm./ Ing(FH)/ B.Sc. (usw.)">
                                 </div>
-
-
                                 <div class="form-group">
                                     <label for="Vorname">Vorname</label>
                                     <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname" value="{{vorname}}" required>
@@ -100,7 +98,11 @@
                                 </div>
 				                <div class="form-group">
                                     <label for="Homepage">SEO-URL</label>
-                                    <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="seo_url" value="{{seo_url}}">
+                                    <div>
+                                        <input type="text" class="form-control" style="width: 70%; float: left;" id="seo_url" name="seo_url" placeholder="seo_url" value="{{seo_url}}">
+                                        <button id="seo_button" type="button" style="float: left;" class="btn btn-primary">SEO-URL erzeugen</button>
+                                        <div style="clear: left;"></div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="Geschaefststelle">Geschäftsstelle</label>
@@ -170,6 +172,20 @@
   <!-- /.content-wrapper -->
 {% endblock %}
 
-{# {% block footer %}
+{% block footer %}
     {{ parent() }}
-{% endblock %} #}
+    <script>
+        $(document).ready(function() {
+          $('#seo_button').on('click', function() {
+            $.ajax({
+              method: "POST",
+              url: "/seourl",
+              data: { text: $("#firma").val() }
+            })
+            .done(function( res ) {
+              $("#seo_url").val(res.seourl);
+            });
+          });
+        });
+    </script>
+{% endblock %}
