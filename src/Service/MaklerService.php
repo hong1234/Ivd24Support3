@@ -53,7 +53,7 @@ class MaklerService
 
         $regdate             = time();
 
-        $benutzername        = $safePost->get('username');
+        $username            = $safePost->get('username');
         $email               = $safePost->get('email');
         $kennwort_plain      = $safePost->get('userpasswort');
         $kennwort            = md5($kennwort_plain);
@@ -78,15 +78,15 @@ class MaklerService
         try {
 
             $this->mDao->insertAccountForMakler([
-                'art_id'            => '2',
-                'recht_id'          => '3',
-                'kennwort'          => $kennwort,
-                'benutzername'      => $benutzername,
-                'email'             => $email,
-                'regdate'           => $regdate,
-                'authentifiziert'   => '1',
-                'gesperrt'          => '0',
-                'kennwort_plain'    => $kennwort_plain
+                'art_id'          => '2',
+                'recht_id'        => '3',
+                'kennwort'        => $kennwort,
+                'benutzername'    => $username,
+                'email'           => $email,
+                'regdate'         => $regdate,
+                'authentifiziert' => '1',
+                'gesperrt'        => '0',
+                'kennwort_plain'  => $kennwort_plain
             ]);
 
             $user_id = $em->getConnection()->lastInsertId();
@@ -144,6 +144,7 @@ class MaklerService
 
             //-------------
             $this->sqSer->addToSendQueue('makler_new', [
+                'username' => $username,
                 'email'    => $email, 
                 'passwort' => $kennwort_plain
             ]);
