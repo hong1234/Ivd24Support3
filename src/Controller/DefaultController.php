@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use App\Dao\MaklerDao;
 use App\Service\StringFormat;
+use App\Service\SendQueue;
 
 /**
  *
@@ -16,50 +17,12 @@ use App\Service\StringFormat;
  */
 class DefaultController extends AbstractController
 {
-     /**
-     * @Route("/confirm", name="default_confirm")
-     */
-    public function confirmPage()
-    {
-        // return $this->json([
-        //     'message' => 'Welcome to your new controller!',
-        //     'path' => 'src/Controller/DefaultController.php',
-        // ]);
-
-        return $this->render('default/confirm.html.twig', [
-        ]);
-    }
-
     /**
      * @Route("/home", name="default_home")
      */
     public function homePage()
     {
-        // return $this->json([
-        //     'message' => 'Welcome to your new controller!',
-        //     'path' => 'src/Controller/DefaultController.php',
-        // ]);
-
         return $this->render('default/home.html.twig', [
-        ]);
-    }
-
-    /**
-     * @Route("/seourl", name="default_seourl")
-     */
-    public function getSeoUrl(Request $request, StringFormat $fmService)
-    {
-        //$inputString = "Muster Immobilien Invest Firma GmbH & Co. KG in München";
-        $inputString = $request->request->get('text', '');
-
-        if($inputString == ''){
-            $seoUrl = "Bitte geben Sie die Firma-Angaben zuerst";
-        } else {
-            $seoUrl = $fmService->getSeoUrl($inputString);
-        }
-        
-        return $this->json([
-            'seourl' => $seoUrl
         ]);
     }
 
@@ -68,8 +31,34 @@ class DefaultController extends AbstractController
      */
     public function testPage()
     {
-        return $this->render('default/test.html.twig', [
+        $email = 'myemail@yahoo.de';
+        $passwort = 'abc123';
+        return $this->render('default/test2.html.twig', [
+            'email' => $email,
+            'passwort' => $passwort
         ]);
+    }
+
+    /**
+     * @Route("/confirm", name="default_confirm")
+     */
+    public function confirmPage(SendQueue $sqSer)
+    {
+        $username = "TestUser";
+        $email = "hong66.lenguyen@gmail.com";
+        $passwort = "ABC123";
+        $sqSer->addToSendQueue('makler_new', [
+            'username' => $username,
+            'email'    => $email, 
+            'passwort' => $passwort
+        ]);
+
+        return $this->render( 
+            'default/test2.html.twig', [
+                'email' => $email,
+                'passwort' => $passwort
+            ]
+        );
     }
 
 }

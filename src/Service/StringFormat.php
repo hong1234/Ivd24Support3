@@ -25,8 +25,12 @@ class StringFormat
         $patterns[15] = '/ö/';
         $patterns[16] = '/ß/';
         $patterns[17] = '/ü/';
-        $patterns[18] = '/ in /';
-        $patterns[19] = '/\./';
+        $patterns[18] = '/Ä/';
+        $patterns[19] = '/Ö/';
+        $patterns[20] = '/Ü/';
+        $patterns[21] = '/\./';
+        $patterns[22] = '/,/';
+        $patterns[23] = '/&/';
 
         $replacements = array();
         $replacements[0] = '';
@@ -47,8 +51,12 @@ class StringFormat
         $replacements[15] = 'oe';
         $replacements[16] = 'ss';
         $replacements[17] = 'ue';
-        $replacements[18] = '';
-        $replacements[19] = ' ';
+        $replacements[18] = 'ae';
+        $replacements[19] = 'oe';
+        $replacements[20] = 'ue';
+        $replacements[21] = ' ';
+        $replacements[22] = ' ';
+        $replacements[23] = ' ';
         
         $result = preg_replace($patterns, $replacements, $inputString);
         $result = trim(preg_replace('/\s+/', ' ', $result));
