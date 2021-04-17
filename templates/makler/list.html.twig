@@ -40,3 +40,25 @@
   </div>
   <!-- /.content-wrapper -->
 {% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function() {
+            var myElemente = document.getElementsByClassName("into_delete-list");
+            for(var i = 0; i < myElemente.length; i++) {
+                myElemente[i].addEventListener("click", function(event){
+                    var answer = window.confirm("Wollen Sie den Makler wirklich in Del-List schieben?");
+                    if (answer) {
+                        //some code
+                    }
+                    else {
+                        //some code
+                        event.preventDefault();
+                    } 
+                });
+            }  
+        });
+    </script>
+{% endblock %}

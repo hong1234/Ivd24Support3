@@ -161,12 +161,12 @@ class MaklerDao extends UserDao {
     }
 
     public function getAllMakler(iterable $values=[]) {
-        $sql    =   "SELECT m.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, m.email AS maklerEmail, username, gesperrt, anrede, vorname, name, firma, seo_url  
+        $sql    =   "SELECT m.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, m.email AS maklerEmail, username, gesperrt, loeschung, anrede, vorname, name, firma, seo_url  
                     FROM user_makler AS m 
                     INNER JOIN user_account ON m.user_id = user_account.user_id 
                     WHERE user_account.art_id = 2";
 
-        // $sql2   =   "SELECT m.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, m.email AS maklerEmail, username, gesperrt, anrede, vorname, name, firma  
+        // $sql2   =   "SELECT m.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, m.email AS maklerEmail, username, gesperrt, loeschung, anrede, vorname, name, firma  
         //             FROM user_makler m 
         //             LEFT JOIN user_account ON m.user_id = user_account.user_id 
         //             WHERE user_account.art_id = 2";
@@ -182,7 +182,21 @@ class MaklerDao extends UserDao {
         $sql =  "SELECT user_makler.user_id, vorname, name, firma, user_makler.email, mitgliedsnummer, loesch_datum
                  FROM (SELECT * FROM user_account WHERE loeschung = 1 AND art_id = 2 AND NOW() >= DATE_ADD(user_account.loesch_datum, INTERVAL 7 DAY)) AS selected_user_account
                  INNER JOIN user_makler ON user_makler.user_id = selected_user_account.user_id";
+
+        // $sql =  "SELECT user_makler.user_id, vorname, name, firma, user_makler.email, mitgliedsnummer, loesch_datum
+        //          FROM (SELECT * FROM user_account WHERE loeschung = 1 AND art_id = 2) AS selected_user_account
+        //          INNER JOIN user_makler ON user_makler.user_id = selected_user_account.user_id";
+
         return $this->doQuery($sql, $values);
+    }
+
+    public function updateUserMaklerForDelete(iterable $values=[]){
+        $sql  = "UPDATE user_account 
+                 SET 
+                 loeschung = 1,
+                 loesch_datum =  NOW()
+                 WHERE user_id = :user_id";
+        return $this->doSQL($sql, $values);
     }
 
     public function updateUserMaklerConfig(iterable $values=[]){

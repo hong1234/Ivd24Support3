@@ -237,6 +237,23 @@ class MaklerController extends AbstractController
     }
 
     /**
+     * @Route("/makler/{uid}/intodelete", name="makler_into_delete", requirements={"uid"="\d+"})
+     */
+    public function maklerIntoDelList($uid, MaklerDao $mDao)
+    {
+        $user_id = $uid;
+
+        $mDao->updateUserMaklerForDelete([
+            'user_id' => $user_id
+        ]);
+
+        return $this->redirectToRoute('makler_list', [
+            //'paramName' => 'value'
+        ]);
+
+    }
+
+    /**
      * @Route("/makler/{uid}/delete", name="makler_delete", requirements={"uid"="\d+"})
      */
     public function maklerDelete($uid, Request $request, MaklerDao $mDao, MaklerService $mService)
