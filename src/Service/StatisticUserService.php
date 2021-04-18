@@ -1,25 +1,24 @@
 <?php
 namespace App\Service;
 
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Dao\UserDao;
-use App\Entity\User;
+use App\Dao\UserLoginDao;
 use App\Service\SendQueue;
 
 class StatisticUserService
 {
     private $router;
     private $uDao;
-    private $passwordEncoder;
+    private $loginDao;
     private $sqSer;
 
-    function __construct(UrlGeneratorInterface $router, UserDao $uDao, UserPasswordEncoderInterface $passwordEncoder, SendQueue $sqSer) {
-        $this->router = $router;
-        $this->uDao = $uDao;  
-        $this->sqSer = $sqSer;
-        $this->passwordEncoder = $passwordEncoder;
+    function __construct(UrlGeneratorInterface $router, UserDao $uDao, UserLoginDao $loginDao, SendQueue $sqSer) {
+        $this->router   = $router;
+        $this->uDao     = $uDao; 
+        $this->loginDao = $loginDao; 
+        $this->sqSer    = $sqSer;
     }
 
     public function geschaeftsstelleName($gs_id) {
@@ -36,6 +35,7 @@ class StatisticUserService
         $passwort  =  $safePost->get('passwort');
         $gs_id     =  $safePost->get('geschaeftsstelle');
         $geschaeftsstelle = $this->geschaeftsstelleName($gs_id);
+        $roles = ['ROLE_STATISTIC'];
 
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
@@ -44,9 +44,9 @@ class StatisticUserService
                 'art_id'                =>  '4',
                 'recht_id'              =>  '8',
                 'geschaeftsstellen_id'  =>  $gs_id,         //Geschaeftsstellen_id 
-                'kennwort'              =>  md5($passwort), // Kennwort = Siehe Beschreibung GUI
-                'username'              =>  $username,      // Username = Siehe Beschreibung GUI
-                'email'                 =>  $email,         // Email = Siehe Beschreibung GUI
+                'kennwort'              =>  md5($passwort), 
+                'username'              =>  $username,      
+                'email'                 =>  $email,         
                 'regdate'               =>  time(),         // Registrierungsdatum = timestamp vom Zeitpunkt des Anlegens
                 'authentifiziert'       =>  '1',            // Authentifiziert = 1
                 'gesperrt'              =>  '0',            // gesperrt = 0
@@ -55,21 +55,9 @@ class StatisticUserService
             ]);  
 
             $user_id = $em->getConnection()->lastInsertId();
-            //-------------
+            
+            $this->loginDao->addLoginUser($email, $passwort, $roles, $user_id);
     
-            $user = new User();
-            $user->setUserid($user_id);
-            $user->setEmail($email);
-            $user->setRoles(['ROLE_STATISTIC']);
-            //$user->setRoles(['ROLE_ADMIN']);
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $passwort
-            ));
-    
-            $em->persist($user);
-            $em->flush();
-            //--------------
             $this->sqSer->addToSendQueue('statisticuser_new', [
                 'username' => $username, 
                 'email' => $email, 
@@ -93,11 +81,12 @@ class StatisticUserService
         $passwort = $safePost->get('passwort');
         $gs_id    = $safePost->get('geschaeftsstelle');
         $geschaeftsstelle = $this->geschaeftsstelleName($gs_id);
+        $roles = ['ROLE_STATISTIC'];
 
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-            //-------------------------------
+            
             $this->uDao->updateStatisticUser([
                 'username'              => $username,
                 'email'                 => $email,
@@ -105,16 +94,9 @@ class StatisticUserService
                 'geschaeftsstellen_id'  => $gs_id,
                 'user_id'               => $user_id
             ]);
-            //----------
-            $user = $em->getRepository(User::class)->findOneBy(['userid' => $user_id]);
-            $user->setEmail($email);
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $passwort
-            ));
+            
+            $this->loginDao->updateLoginUser($email, $passwort, $roles, $user_id);
 
-            $em->flush();
-            //--------------
             $this->sqSer->addToSendQueue('statisticuser_edit', [
                 'username' => $username, 
                 'email' => $email, 
@@ -123,6 +105,26 @@ class StatisticUserService
             ]);
             
             //---------- 
+            $em->getConnection()->commit();   
+
+        } catch (\Exception $e) {
+            $em->getConnection()->rollBack();
+            throw $e;
+        }
+    }
+
+    public function deleteStatisticUser($user_id) {
+
+        $em = $this->uDao->getEm();
+        $em->getConnection()->beginTransaction();
+        try {
+            $this->uDao->deleteStatisticUser([
+                'user_id' => $user_id
+            ]);
+
+            $this->loginDao->deleteLoginUser($user_id);
+             
+            //----------
             $em->getConnection()->commit();   
 
         } catch (\Exception $e) {

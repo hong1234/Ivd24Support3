@@ -30,6 +30,10 @@ class UserDao extends BaseDao {
         return $this->doSQL($sql, $values);
     }
 
+    public function deleteStatisticUser(iterable $values=[]) {
+        $sql    =   "DELETE FROM user_account WHERE user_id = :user_id";
+        return $this->doSQL($sql, $values);
+    }
     //----------
 
     public function getAllStatisticUser(iterable $values=[]) {

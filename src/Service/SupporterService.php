@@ -1,25 +1,24 @@
 <?php
 namespace App\Service;
 
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use App\Dao\UserDao;
-use App\Entity\User;
+use App\Dao\UserLoginDao;
 use App\Service\SendQueue;
 
 class SupporterService
 {
     private $router;
     private $uDao;
-    private $passwordEncoder;
+    private $loginDao;
     private $sqSer;
 
-    function __construct(UrlGeneratorInterface $router, UserDao $uDao, UserPasswordEncoderInterface $passwordEncoder, SendQueue $sqSer) {
-        $this->router = $router;
-        $this->uDao = $uDao; 
-        $this->sqSer = $sqSer; 
-        $this->passwordEncoder = $passwordEncoder;
+    function __construct(UrlGeneratorInterface $router, UserDao $uDao, UserLoginDao $loginDao, SendQueue $sqSer) {
+        $this->router   = $router;
+        $this->uDao     = $uDao; 
+        $this->loginDao = $loginDao;
+        $this->sqSer    = $sqSer; 
     }
 
     public function newSupporter($safePost) {
@@ -27,19 +26,18 @@ class SupporterService
         $username  =  $safePost->get('username');
         $email     =  $safePost->get('email');
         $passwort  =  $safePost->get('passwort');
-
-        //-------------------
+        $roles = ['ROLE_SUPPORT'];
 
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-            //--------------------        
+                   
             $this->uDao->insertAccountForSupporter([
                 'art_id'            => '4',
                 'recht_id'          => '9',
-                'kennwort'          =>  md5($passwort), // Kennwort = Siehe Beschreibung GUI
-                'username'          =>  $username,      // Username = Siehe Beschreibung GUI
-                'email'             =>  $email,         // Email = Siehe Beschreibung GUI
+                'kennwort'          =>  md5($passwort), 
+                'username'          =>  $username,      
+                'email'             =>  $email,         
                 'regdate'           =>  time(),         // Registrierungsdatum = timestamp vom Zeitpunkt des Anlegens
                 'authentifiziert'   => '1',             // Authentifiziert = 1
                 'gesperrt'          => '0',             // gesperrt = 0
@@ -49,19 +47,9 @@ class SupporterService
             ]);
     
             $user_id  =  $em->getConnection()->lastInsertId();
-            //-------------
-            $user = new User();
-            $user->setUserid($user_id);
-            $user->setEmail($email);
-            $user->setRoles(['ROLE_SUPPORT']);
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $passwort
-            ));
-    
-            $em->persist($user);
-            $em->flush();
-            //-------------
+            
+            $this->loginDao->addLoginUser($email, $passwort, $roles, $user_id);
+            
             $this->sqSer->addToSendQueue('supporter_new', [
                 'username'  => $username, 
                 'email'     => $email, 
@@ -83,29 +71,21 @@ class SupporterService
         $username = $safePost->get('username');
         $email    = $safePost->get('email');
         $passwort = $safePost->get('passwort');
-
-        //-------------------
+        $roles = ['ROLE_SUPPORT'];
             
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-            //------------------------
+            
             $this->uDao->updateSupportUser([
                 'username'    => $username,
                 'email'       => $email,
                 'kennwort'    => md5($passwort),
                 'user_id'     => $user_id
             ]);
-            //----------
-            $user = $em->getRepository(User::class)->findOneBy(['userid' => $user_id]);
-            $user->setEmail($email);
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $passwort
-            ));
-
-            $em->flush();
-            //---------- 
+            
+            $this->loginDao->updateLoginUser($email, $passwort, $roles, $user_id);
+             
             $this->sqSer->addToSendQueue('supporter_edit', [
                 'username'  => $username, 
                 'email'     => $email, 
@@ -126,18 +106,14 @@ class SupporterService
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-            //-------------------------
+            
             $this->uDao->deleteSupporter([
                 'user_id' => $user_id
             ]);
 
-            $user = $em->getRepository(User::class)->findOneBy(['userid' => $user_id]);
-            if ($user != null){
-                $em->remove($user);
-                $em->flush();
-            }
-            //---------- 
-
+            $this->loginDao->deleteLoginUser($user_id);
+             
+            //----------
             $em->getConnection()->commit();   
 
         } catch (\Exception $e) {

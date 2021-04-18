@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 use App\Dao\UserDao;
 use App\Service\StatisticUserService;
-use App\Service\SupporterService;
 use App\Service\UserAccount;
 
 /**
@@ -126,14 +125,14 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser/{uid}/delete", name="statisticuser_delete", requirements={"uid"="\d+"})
      */
-    public function statisticuserDelete($uid, Request $request, UserDao $uDao, SupporterService $staSer)
+    public function statisticuserDelete($uid, Request $request, UserDao $uDao, StatisticUserService $staSer)
     {
         $user_id = $uid;
 
         if ($request->isMethod('POST')){
             
             if($request->request->get('savebutton')){
-                $staSer->deleteSupporter($user_id);
+                $staSer->deleteStatisticUser($user_id);
             }
             return $this->redirectToRoute('statisticuser_list', [
                 //'paramName' => 'value'
