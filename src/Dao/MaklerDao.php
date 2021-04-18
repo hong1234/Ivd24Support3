@@ -179,13 +179,13 @@ class MaklerDao extends UserDao {
         //             LEFT JOIN user_account ON user_makler.user_id = user_account.user_id
         //             WHERE loeschung = 1 AND art_id = 2 AND NOW() >= DATE_ADD(user_account.loesch_datum, INTERVAL 7 DAY)";
         
-        $sql =  "SELECT user_makler.user_id, vorname, name, firma, user_makler.email, mitgliedsnummer, loesch_datum
-                 FROM (SELECT * FROM user_account WHERE loeschung = 1 AND art_id = 2 AND NOW() >= DATE_ADD(user_account.loesch_datum, INTERVAL 7 DAY)) AS selected_user_account
-                 INNER JOIN user_makler ON user_makler.user_id = selected_user_account.user_id";
-
         // $sql =  "SELECT user_makler.user_id, vorname, name, firma, user_makler.email, mitgliedsnummer, loesch_datum
-        //          FROM (SELECT * FROM user_account WHERE loeschung = 1 AND art_id = 2) AS selected_user_account
-        //          INNER JOIN user_makler ON user_makler.user_id = selected_user_account.user_id";
+        //          FROM (SELECT * FROM user_account WHERE loeschung = 1 AND art_id = 2 AND NOW() >= DATE_ADD(user_account.loesch_datum, INTERVAL 7 DAY)) AS selected_user_account
+        //          INNER JOIN user_makler ON user_makler.user_id = selected_user_account.user_id";//////////
+
+        $sql =  "SELECT user_makler.user_id, vorname, name, firma, user_makler.email, mitgliedsnummer, loesch_datum
+                 FROM (SELECT * FROM user_account WHERE loeschung = 1 AND art_id = 2) AS selected_user_account
+                 INNER JOIN user_makler ON user_makler.user_id = selected_user_account.user_id";
 
         return $this->doQuery($sql, $values);
     }
