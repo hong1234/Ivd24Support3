@@ -14,12 +14,25 @@ class SendQueue
         $this->twig = $twig;
     }
 
-    public function addToSendQueue($modus, $data=[]){
+    public function addToSendQueue($modus, $data=[]) {
 
-        $username = $data['username'];
-        $email    = $data['email'];
-        $passwort = $data['passwort'];
+        $username = '';
+        $email = '';
+        $passwort = '';
         $geschaeftsstelle = '';
+
+        if(isset($data['username'])){
+            $username = $data['username'];
+        }
+
+        if(isset($data['email'])){
+            $email = $data['email'];
+        }
+
+        if(isset($data['passwort'])){
+            $passwort = $data['passwort'];
+        }
+        
         if(isset($data['geschaeftsstelle'])){
             $geschaeftsstelle = $data['geschaeftsstelle'];
         }
@@ -65,44 +78,60 @@ class SendQueue
             ]);
         }
 
+        if($modus=='makler_edit_pw'){
+            $betreff = 'Ihre Passwort wurde geändert!';
+            $nachricht_plain = "Ihre Passwort wurde geändert! Ihre neue Passwort: $passwort";
+            $nachricht_html = $this->twig->render('email/pw.edit.makler.html.twig', [
+                'passwort' => $passwort
+            ]);
+        }
+
+        if($modus=='makler_edit_ftp_pw'){
+            $betreff  = 'Ihre FTP-Passwort wurde geändert!';
+            $nachricht_plain = "Ihre FTP-Passwort wurde geändert! Ihre neue FTP-Passwort: $passwort";
+            $nachricht_html = $this->twig->render('email/ftppw.edit.makler.html.twig', [
+                'passwort' => $passwort
+            ]);
+        }
+
         if($modus=='supporter_new'){
-            $betreff  = 'You are registered as Supporter !';
-            $nachricht_plain = "You are registered as Supporter! with username=$username ; email=$email ; passwort=$passwort";
-            $nachricht_html = $this->twig->render('email/new.email.html.twig', [
-                'username'  => $username,
-                'email'     => $email,
-                'passwort'  => $passwort
+            $betreff  = 'Sie sind registriert als Supporter!';
+            $nachricht_plain = "Sie sind registriert als Supporter! mit username=$username ; email=$email ; passwort=$passwort";
+            $nachricht_html = $this->twig->render('email/new.supporter.html.twig', [
+                'username' => $username,
+                'email'    => $email,
+                'passwort' => $passwort
             ]);
         }
 
         if($modus=='supporter_edit'){
-            $betreff         = 'Your data are updated!';
-            $nachricht_plain = "Your data are updated! with (new)username=$username ; (new)email=$email ; (new)passwort=$passwort";
-            $nachricht_html = $this->twig->render('email/update.email.html.twig', [
-                'username'  => $username,
-                'email'     => $email,
-                'passwort'  => $passwort
+            $betreff         = 'Ihre Daten ist updated!';
+            $nachricht_plain = "Ihre Daten ist updated! mit (neu)username=$username ; (neu)email=$email ; (neu)passwort=$passwort";
+            $nachricht_html = $this->twig->render('email/edit.supporter.html.twig', [
+                'username' => $username,
+                'email'    => $email,
+                'passwort' => $passwort
             ]); 
         }
 
         if($modus=='statisticuser_new'){
-            $betreff  = 'You are registered as Statistic-User!';
-            $nachricht_plain = "You are registered as Statistic-User! with username=$username ; email=$email ; passwort=$passwort ; geschaeftsstelle=$geschaeftsstelle";
-            $nachricht_html = $this->twig->render('email/sta.new.email.html.twig', [
-                'username'  => $username,
-                'email'     => $email,
-                'passwort'  => $passwort,
+            $betreff  = 'Sie sind registriert als Statistic-User!';
+            $nachricht_plain = "Sie sind registriert als Statistic-User! mit username=$username ; email=$email ; passwort=$passwort ; geschaeftsstelle=$geschaeftsstelle";
+            $nachricht_html = $this->twig->render('email/new.statisticuser.html.twig', [
+                'username' => $username,
+                'email'    => $email,
+                'passwort' => $passwort,
                 'geschaeftsstelle' => $geschaeftsstelle
             ]);
         }
 
         if($modus=='statisticuser_edit'){
-            $betreff         = 'Your data are updated!';
-            $nachricht_plain = "Your data are updated! with (new)username=$username ; (new)email=$email ; (new)passwort=$passwort ; (new)geschaeftsstelle=$geschaeftsstelle";
-            $nachricht_html = $this->twig->render('email/sta.update.email.html.twig', [
-                'username'  => $username,
-                'email'     => $email,
-                'passwort'  => $passwort,
+            $betreff         = 'Ihre Daten ist updated!';
+            $nachricht_plain = "Ihre Daten ist updated! mit (neu)username=$username ; (neu)email=$email ; (neu)passwort=$passwort ; (neu)geschaeftsstelle=$geschaeftsstelle";
+            $nachricht_html = $this->twig->render('email/edit.statisticuser.html.twig', [
+                'username' => $username,
+                'email'    => $email,
+                'passwort' => $passwort,
                 'geschaeftsstelle' => $geschaeftsstelle
             ]);  
         }

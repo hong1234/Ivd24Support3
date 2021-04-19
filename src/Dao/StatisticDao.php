@@ -1,11 +1,7 @@
 <?php
 namespace App\Dao;
 
-
-
-// class StatisticDao extends BaseDao {
 class StatisticDao extends UserDao {
-    //----------------------
 
     public function getActivMaklerProRegion(iterable $values=[]){ // Die Anzahl der aktiven User pro Geschäftsstelle
         $sql    =   "SELECT 

@@ -170,43 +170,34 @@ class MaklerController extends AbstractController
             $mService->maklerFtpPwEdit($user_id, $safePost);
         }
 
-        $user_makler = $mDao->getMaklerConfig([
+        $makler_config = $mDao->getMaklerConfig([
             'user_id' => $user_id
         ]);
 
-        $username = $user_makler['ftp_benutzer'];
+        $username = $makler_config['ftp_benutzer'];
 
         return $this->render('makler/ftpedit.html.twig', [
-            'user_id'    => $user_id,
-            'username'   => $username
+            'user_id'  => $user_id,
+            'username' => $username
         ]);
     }
 
     /**
      * @Route("/makler/{uid}/pwedit", name="makler_pw_edit", requirements={"uid"="\d+"})
      */
-    public function maklerPwEdit($uid, Request $request, UserDao $uDao)
+    public function maklerPwEdit($uid, Request $request, UserDao $uDao, MaklerService $mService)
     {
         $user_id = $uid;
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-            // $safePost = filter_input_array(INPUT_POST);
-            // var_dump($safePost); exit;
             $safePost = $request->request;
-
-            $passwort   = $safePost->get('passwort');
-            $crypt_passwort = md5($passwort);
-
-            $uDao->updateUserAccountPW([
-                'crypt_passwort' => $crypt_passwort,
-                'user_id'        => $user_id
-            ]); 
+            $mService->maklerPwEdit($user_id, $safePost);
         }
-        
+
         $user_makler = $uDao->getUserAccount([
             'user_id' => $user_id
         ]);
-        $username = $user_makler['username']; 
+        $username = $user_makler['username'];
 
         return $this->render('makler/pwedit.html.twig', [
             'user_id'    => $user_id,

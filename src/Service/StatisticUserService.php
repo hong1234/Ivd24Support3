@@ -30,10 +30,10 @@ class StatisticUserService
 
     public function newStatisticUser($safePost) {
 
-        $username  =  $safePost->get('username');
-        $email     =  $safePost->get('email');
-        $passwort  =  $safePost->get('passwort');
-        $gs_id     =  $safePost->get('geschaeftsstelle');
+        $username = $safePost->get('username');
+        $email    = $safePost->get('email');
+        $passwort = $safePost->get('passwort');
+        $gs_id    = $safePost->get('geschaeftsstelle');
         $geschaeftsstelle = $this->geschaeftsstelleName($gs_id);
         $roles = ['ROLE_STATISTIC'];
 
@@ -49,8 +49,8 @@ class StatisticUserService
                 'email'                 =>  $email,         
                 'regdate'               =>  time(),         // Registrierungsdatum = timestamp vom Zeitpunkt des Anlegens
                 'authentifiziert'       =>  '1',            // Authentifiziert = 1
-                'gesperrt'              =>  '0',            // gesperrt = 0
-                'loeschung'             =>  '0',            // loeschung = 0
+                'gesperrt'              =>  '0',            
+                'loeschung'             =>  '0',            
                 'newsletter'            =>  'N'             // newsletter = 'N'
             ]);  
 
@@ -65,9 +65,7 @@ class StatisticUserService
                 'geschaeftsstelle' => $geschaeftsstelle
             ]);
     
-            //------------- 
             $em->getConnection()->commit();   
-
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
                 throw $e;
@@ -86,7 +84,6 @@ class StatisticUserService
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-            
             $this->uDao->updateStatisticUser([
                 'username'              => $username,
                 'email'                 => $email,
@@ -103,10 +100,8 @@ class StatisticUserService
                 'passwort' => $passwort,
                 'geschaeftsstelle' => $geschaeftsstelle
             ]);
-            
-            //---------- 
+             
             $em->getConnection()->commit();   
-
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
@@ -124,9 +119,7 @@ class StatisticUserService
 
             $this->loginDao->deleteLoginUser($user_id);
              
-            //----------
             $em->getConnection()->commit();   
-
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;

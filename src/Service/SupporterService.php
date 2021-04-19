@@ -23,15 +23,14 @@ class SupporterService
 
     public function newSupporter($safePost) {
 
-        $username  =  $safePost->get('username');
-        $email     =  $safePost->get('email');
-        $passwort  =  $safePost->get('passwort');
-        $roles = ['ROLE_SUPPORT'];
+        $username = $safePost->get('username');
+        $email    = $safePost->get('email');
+        $passwort = $safePost->get('passwort');
+        $roles    = ['ROLE_SUPPORT'];
 
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
-        try {
-                   
+        try {    
             $this->uDao->insertAccountForSupporter([
                 'art_id'            => '4',
                 'recht_id'          => '9',
@@ -40,13 +39,12 @@ class SupporterService
                 'email'             =>  $email,         
                 'regdate'           =>  time(),         // Registrierungsdatum = timestamp vom Zeitpunkt des Anlegens
                 'authentifiziert'   => '1',             // Authentifiziert = 1
-                'gesperrt'          => '0',             // gesperrt = 0
-                'loeschung'         => '0',             // loeschung = 0
-                'newsletter'        => 'N'              // newsletter = 'N'
-        
+                'gesperrt'          => '0',             
+                'loeschung'         => '0',             
+                'newsletter'        => 'N'   
             ]);
     
-            $user_id  =  $em->getConnection()->lastInsertId();
+            $user_id = $em->getConnection()->lastInsertId();
             
             $this->loginDao->addLoginUser($email, $passwort, $roles, $user_id);
             
@@ -56,9 +54,7 @@ class SupporterService
                 'passwort'  => $passwort
             ]);
 
-            //-------------
             $em->getConnection()->commit();   
-
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
@@ -76,7 +72,6 @@ class SupporterService
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-            
             $this->uDao->updateSupportUser([
                 'username'    => $username,
                 'email'       => $email,
@@ -92,9 +87,7 @@ class SupporterService
                 'passwort'  => $passwort
             ]);
 
-            //-------------
             $em->getConnection()->commit();   
-
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
@@ -106,16 +99,13 @@ class SupporterService
         $em = $this->uDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-            
             $this->uDao->deleteSupporter([
                 'user_id' => $user_id
             ]);
 
             $this->loginDao->deleteLoginUser($user_id);
              
-            //----------
             $em->getConnection()->commit();   
-
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;

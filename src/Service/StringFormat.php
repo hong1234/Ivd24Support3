@@ -31,6 +31,7 @@ class StringFormat
         $patterns[21] = '/\./';
         $patterns[22] = '/,/';
         $patterns[23] = '/&/';
+        $patterns[24] = '/-/';
 
         $replacements = array();
         $replacements[0] = '';
@@ -57,6 +58,7 @@ class StringFormat
         $replacements[21] = ' ';
         $replacements[22] = ' ';
         $replacements[23] = ' ';
+        $replacements[24] = ' ';
         
         $result = preg_replace($patterns, $replacements, $inputString);
         $result = trim(preg_replace('/\s+/', ' ', $result));

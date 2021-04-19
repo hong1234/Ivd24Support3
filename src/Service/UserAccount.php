@@ -59,7 +59,6 @@ class UserAccount
     }
 
     //------------------------
-
     public function isValidAccountNameByUpdate($user_id, $username, $email, $passwort){
 
         $error = '';

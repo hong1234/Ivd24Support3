@@ -2,7 +2,6 @@
 namespace App\Service;  
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-//use App\Dao\UserDao;
 use App\Dao\MaklerDao;
 use App\Service\SendQueue;
 
@@ -76,7 +75,6 @@ class MaklerService
         $em = $this->mDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-
             $this->mDao->insertAccountForMakler([
                 'art_id'          => '2',
                 'recht_id'        => '3',
@@ -142,15 +140,13 @@ class MaklerService
                 'user_id' => $user_id
             ]);
 
-            //-------------
             $this->sqSer->addToSendQueue('makler_new', [
                 'username' => $username,
                 'email'    => $email, 
                 'passwort' => $kennwort_plain
             ]);
-            //------------
+            
             $em->getConnection()->commit();     
-
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
@@ -204,17 +200,21 @@ class MaklerService
             ]);
          
             $em->getConnection()->commit();     
-
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
         }
     }
 
-    public function maklerFtpPwEdit($user_id, $safePost){
-        //$user_id        = $safePost->get('userid');
-        $ftp_benutzer   = $safePost->get('ftp_user');
-        $ftppasswort    = $safePost->get('ftppasswort');
+    public function maklerFtpPwEdit($user_id, $safePost) {
+        $user_makler = $this->mDao->getMakler([
+            'user_id' => $user_id
+        ]);
+        $email = $user_makler['email'];
+
+        //$user_id = $safePost->get('userid');
+        $ftp_benutzer = $safePost->get('ftp_user');
+        $ftppasswort  = $safePost->get('ftppasswort');
 
         //srand ((double)microtime()*1000000);
         $mySalt = $this->rand_str(rand(100,200));
@@ -223,7 +223,6 @@ class MaklerService
         $em = $this->mDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-
             $this->mDao->updateUserMaklerConfig([
                 'ftppasswort' => $ftppasswort,
                 'user_id'     => $user_id
@@ -234,9 +233,40 @@ class MaklerService
                 'ftp_benutzer'      => $ftp_benutzer
             ]);
 
-            //-------------------
-            $em->getConnection()->commit();
+            $this->sqSer->addToSendQueue('makler_edit_ftp_pw', [
+                'email'    => $email,
+                'passwort' => $ftppasswort
+            ]);
 
+            $em->getConnection()->commit();
+        } catch (\Exception $e) {
+            $em->getConnection()->rollBack();
+            throw $e;
+        }
+    }
+
+    public function maklerPwEdit($user_id, $safePost){
+        $user_makler = $this->mDao->getUserAccount([
+            'user_id' => $user_id
+        ]);
+        $email =  $user_makler['email'];
+
+        $passwort = $safePost->get('passwort');
+
+        $em = $this->mDao->getEm();
+        $em->getConnection()->beginTransaction();
+        try {
+            $this->mDao->updateUserAccountPW([
+                'crypt_passwort' => md5($passwort),
+                'user_id'        => $user_id
+            ]); 
+
+            $this->sqSer->addToSendQueue('makler_edit_pw', [
+                'email'    => $email,
+                'passwort' => $passwort
+            ]);
+
+            $em->getConnection()->commit();
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
@@ -256,7 +286,6 @@ class MaklerService
         $em = $this->mDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-
             $this->mDao->insertUserDelete([
                 'user_id'    => $user_id,
                 'status'     => '1',
@@ -273,9 +302,7 @@ class MaklerService
 
             $this->mDao->deleteAllByUserId(['user_id' => $user_id]);
          
-            //-------
             $em->getConnection()->commit();     
-
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
@@ -308,7 +335,7 @@ class MaklerService
                 $links = $links."<a href=".$this->router->generate('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br>";
             }
             if($row['loeschung'] == 0){
-                $links = $links."<a class='into_delete-list' href=".$this->router->generate('makler_into_delete', array('uid' => $row['userId'])).">In Del-List schieben</a><br>";
+                $links = $links."<a class='into_delete-list' href=".$this->router->generate('makler_into_delete', array('uid' => $row['userId'])).">In Delete-List schieben</a><br>";
             }
             
             $row2[] = $links;
