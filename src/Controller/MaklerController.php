@@ -11,6 +11,7 @@ use App\Dao\MaklerDao;
 
 use App\Service\MaklerService;
 use App\Service\UserAccount;
+use App\Service\StringFormat;
 
 /**
  *
@@ -21,7 +22,7 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/new", name="makler_new")
      */
-    public function newMakler(Request $request, MaklerDao $mDao, UserAccount $accSer, MaklerService $mService)
+    public function newMakler(Request $request, MaklerDao $mDao, UserAccount $accSer, MaklerService $mService, StringFormat $sfService)
     {
         $mitgliedsnummer = '';
         $vorname = '';
@@ -39,7 +40,7 @@ class MaklerController extends AbstractController
         $username = '';
         $email    = '';
         $passwort = '';
-        $ftppasswort = '';
+        $ftppasswort = $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@');
         $error    = '';
 
         $bundeslaender    = $mDao->getBundeslaender();
@@ -47,12 +48,9 @@ class MaklerController extends AbstractController
 
         //if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-            // post parameters
-            //$safePost = filter_input_array(INPUT_POST);
-            //var_dump($safePost); exit;
-
+            //$safePost = filter_input_array(INPUT_POST);// post parameters
             $safePost = $request->request;
-            //-----------------
+
             $mitgliedsnummer = $safePost->get('mnummer');
             $vorname  = $safePost->get('vorname');
             $name     = $safePost->get('name');
@@ -67,9 +65,9 @@ class MaklerController extends AbstractController
 	        
             $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
 
-            $username  = $safePost->get('username');     //"username"
-            $email     = $safePost->get('email');        //"email"
-            $passwort  = $safePost->get('userpasswort'); //"userpasswort"
+            $username  = $safePost->get('username');  
+            $email     = $safePost->get('email');    
+            $passwort  = $safePost->get('userpasswort');
             $seo_url   = $safePost->get('seo_url');
             $ftppasswort = $safePost->get('ftppasswort');
 
@@ -109,6 +107,7 @@ class MaklerController extends AbstractController
             'ftppasswort' => $ftppasswort,
             'error'    => $error  
         ]);
+
     }
 
     /**

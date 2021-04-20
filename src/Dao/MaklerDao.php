@@ -73,20 +73,20 @@ class MaklerDao extends UserDao {
     }
 
     public function insertRobotQueue(iterable $values=[]){
-        $sql  = "INSERT INTO robot_queue 
+        $sql =  "INSERT INTO robot_queue 
                  SET 
-                    config_server_id  = '5',
-                    robot_id          = '1',
-                    status            = 'QUEUED',
-                    robot_name        = 'FTPUserAdd',
-                    parameter1        = :homeftp,
-                    parameter2        = 'makler',
-                    parameter3        = :user_id,
-                    parameter4        = '/bin/false',
-                    parameter5        = '/etc/skel',
-                    parameter6        = :ftppasswortcrypt,
-                    parameter7        = :ftp_benutzer,
-                    parameter8        = '/usr/sbin/useradd'
+                    config_server_id = '5',
+                    robot_id         = '1',
+                    status           = 'QUEUED',
+                    robot_name       = 'FTPUserAdd',
+                    parameter1       = :homeftp,
+                    parameter2       = 'makler',
+                    parameter3       = :user_id,
+                    parameter4       = '/bin/false',
+                    parameter5       = '/etc/skel',
+                    parameter6       = :ftppasswortcrypt,
+                    parameter7       = :ftp_benutzer,
+                    parameter8       = '/usr/sbin/useradd'
                 ";
         return $this->doSQL($sql, $values);
     }

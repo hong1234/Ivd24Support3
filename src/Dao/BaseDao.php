@@ -60,8 +60,16 @@ class BaseDao {
         return $this->doQuery($sql, $values)->fetchAll();
     }
 
-    public function getGeschaeftsstelle(iterable $values=[]) {
-        $sql = "SELECT * FROM user_geschaeftsstelle WHERE geschaeftsstelle_id = :geschaeftsstelle_id";
-        return $this->doQuery($sql, $values)->fetch();
+    // public function getGeschaeftsstelle(iterable $values=[]) {
+    //     $sql = "SELECT * FROM user_geschaeftsstelle WHERE geschaeftsstelle_id = :geschaeftsstelle_id";
+    //     return $this->doQuery($sql, $values)->fetch();
+    // }
+
+    public function getRowInTableByIdentifier(string $tabName, iterable $values=[]) {
+        foreach($values as $key => $value) {
+            $sql = "SELECT * FROM ".$tabName." WHERE $key = $value";
+        }
+        //return $sql;
+        return $this->doQuery($sql, $values)->fetch(); 
     }
 }

@@ -22,7 +22,10 @@ class StatisticUserService
     }
 
     public function geschaeftsstelleName($gs_id) {
-        $gs = $this->uDao->getGeschaeftsstelle([
+        // $gs = $this->uDao->getGeschaeftsstelle([
+        //     'geschaeftsstelle_id' => $gs_id
+        // ]);
+        $gs = $this->uDao->getRowInTableByIdentifier('user_geschaeftsstelle', [
             'geschaeftsstelle_id' => $gs_id
         ]);
         return $gs['name'];

@@ -3,8 +3,7 @@ namespace App\Service;
 
 class StringFormat
 {
-    public function getSeoUrl($inputString)
-    {
+    public function getSeoUrl($inputString) {
         //$inputString = "Muster Immobilien Invest Firma GmbH & Co. KG in München";
         $patterns = array();
         $patterns[0] = '/GmbH & Co. KG/';
@@ -66,6 +65,21 @@ class StringFormat
         $seoUrl = strtolower($result);
 
         return $seoUrl;
+    }
+
+    public function rand_str($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'){
+        $str = '';
+        $count = strlen($charset);
+        while ($length--) {
+            $str .= $charset[mt_rand(0, $count-1)];
+        }
+        return $str;
+    }
+
+    public function getPwCrypt($password) {
+        $mySalt = $this->rand_str(rand(100,200));
+		$passwordcrypt = crypt($password, $mySalt);
+        return $passwordcrypt;
     }
 
 }

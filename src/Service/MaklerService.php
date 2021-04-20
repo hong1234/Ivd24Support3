@@ -4,73 +4,67 @@ namespace App\Service;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Dao\MaklerDao;
 use App\Service\SendQueue;
+use App\Service\StringFormat;
 
 class MaklerService
 {
     private $router;
     private $mDao;
     private $sqSer;
+    private $fmService;
 
-    function __construct(UrlGeneratorInterface $router, MaklerDao $mDao, SendQueue $sqSer) {
+    function __construct(UrlGeneratorInterface $router, MaklerDao $mDao, SendQueue $sqSer, StringFormat $fmService) {
         $this->router = $router;
         $this->mDao = $mDao;
         $this->sqSer = $sqSer;
-    }
-
-    public function rand_str($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'){
-        $str = '';
-        $count = strlen($charset);
-        while ($length--) {
-            $str .= $charset[mt_rand(0, $count-1)];
-        }
-        return $str;
+        $this->fmService = $fmService;
     }
 
     public function newMakler($safePost) {
 
-        $anrede              = $safePost->get('anrede');
-        $titel               = $safePost->get('titel');
-        $namenstitel         = $safePost->get('namenstitel');
+        $anrede          = $safePost->get('anrede');
+        $titel           = $safePost->get('titel');
+        $namenstitel     = $safePost->get('namenstitel');
 
-        $vorname             = $safePost->get('vorname');
-        $name                = $safePost->get('name');
-        $firma               = $safePost->get('firma');
+        $vorname         = $safePost->get('vorname');
+        $name            = $safePost->get('name');
+        $firma           = $safePost->get('firma');
 
-        $strasse             = $safePost->get('strasse');
-        $plz                 = $safePost->get('plz');
-        $ort                 = $safePost->get('ort');
-        $bundesland_id       = $safePost->get('bundesland');
+        $strasse         = $safePost->get('strasse');
+        $plz             = $safePost->get('plz');
+        $ort             = $safePost->get('ort');
+        $bundesland_id   = $safePost->get('bundesland');
 
-        $telefon             = $safePost->get('telefon');
-        $telefax             = $safePost->get('telefax');
+        $telefon         = $safePost->get('telefon');
+        $telefax         = $safePost->get('telefax');
             
-        $mitgliedsnummer     = $safePost->get('mnummer');
-        //$mkategorien       = $safePost->get('mkategorien'];
+        $mitgliedsnummer = $safePost->get('mnummer');
+        //$mkategorien   = $safePost->get('mkategorien'];
 
-        $homepage            = $safePost->get('homepage');
-	    $seo_url             = $safePost->get('seo_url');
+        $homepage        = $safePost->get('homepage');
+	    $seo_url         = $safePost->get('seo_url');
 
-        $regdate             = time();
+        $username        = $safePost->get('username');
+        $email           = $safePost->get('email');
+        $passwort        = $safePost->get('userpasswort');
 
-        $username            = $safePost->get('username');
-        $email               = $safePost->get('email');
-        $kennwort_plain      = $safePost->get('userpasswort');
-        $kennwort            = md5($kennwort_plain);
-
-        $ftppasswort         = $safePost->get('ftppasswort');
-        $mySalt 			 = $this->rand_str(rand(100,200));
-	    $ftppasswortcrypt	 = crypt($ftppasswort, $mySalt);
-
+        $ftppasswort     = $safePost->get('ftppasswort');
+        $ftppasswortcrypt = $this->fmService->getPwCrypt($ftppasswort);
+        
         $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
 
-        $gs_werte = $this->mDao->getGeschaeftsstelle([
+        // $gs_werte = $this->mDao->getGeschaeftsstelle([
+        //     'geschaeftsstelle_id' => $geschaeftsstelle_id
+        // ]);
+
+        $gs_werte = $this->mDao->getRowInTableByIdentifier('user_geschaeftsstelle', [
             'geschaeftsstelle_id' => $geschaeftsstelle_id
         ]);
 
-        $bilderserver_id    = $gs_werte['bilderserver_id'];
-        $ftp_server_id      = $gs_werte['ftp_server_id'];
-        $move_robot_id      = $gs_werte['move_robot_id'];
-        //$import_robot_id    = $gs_werte['import_robot_id'];
+        $bilderserver_id = $gs_werte['bilderserver_id'];
+        $ftp_server_id   = $gs_werte['ftp_server_id'];
+        $move_robot_id   = $gs_werte['move_robot_id'];
+        //$import_robot_id = $gs_werte['import_robot_id'];
 
         $em = $this->mDao->getEm();
         $em->getConnection()->beginTransaction();
@@ -78,44 +72,44 @@ class MaklerService
             $this->mDao->insertAccountForMakler([
                 'art_id'          => '2',
                 'recht_id'        => '3',
-                'kennwort'        => $kennwort,
+                'kennwort'        => md5($passwort),
                 'benutzername'    => $username,
                 'email'           => $email,
-                'regdate'         => $regdate,
+                'regdate'         => time(),
                 'authentifiziert' => '1',
                 'gesperrt'        => '0',
-                'kennwort_plain'  => $kennwort_plain
+                'kennwort_plain'  => $passwort
             ]);
 
             $user_id = $em->getConnection()->lastInsertId();
 
-            $bilderordner  = "b00".$bilderserver_id.$user_id;
-            $ftp_benutzer  = "f00".$ftp_server_id.$user_id;
-            $homeftp       = "/home/ftpuser/".$ftp_benutzer;
+            $bilderordner = "b00".$bilderserver_id.$user_id;
+            $ftp_benutzer = "f00".$ftp_server_id.$user_id;
+            $homeftp      = "/home/ftpuser/".$ftp_benutzer;
     
             $this->mDao->insertMakler([
-                'user_id'               => $user_id,
-                'mitgliedsnummer'       => $mitgliedsnummer,
-                'm_konfig_id'           => '1',
-                'geschaeftsstelle_id'   => $geschaeftsstelle_id,
-                'anrede'                => $anrede,
-                'titel'                 => $titel,
-                'namenstitel'           => $namenstitel,
-                'name'                  => $name,
-                'vorname'               => $vorname,
-                'firma'                 => $firma,
-                'strasse'               => $strasse,
-                'plz'                   => $plz,
-                'ort'                   => $ort,
-                'geodb_laender_id'      => '60',
-                'email'                 => $email,
-                'telefon'               => $telefon,
-                'telefax'               => $telefax,
-                'homepage'              => $homepage,
-                'seo_url'               => $seo_url,
-                'sortierung'            => '1',
-                'bundesland_id'         => $bundesland_id
-                // 'mkategorien'           => $mkategorien
+                'user_id'             => $user_id,
+                'mitgliedsnummer'     => $mitgliedsnummer,
+                'm_konfig_id'         => '1',
+                'geschaeftsstelle_id' => $geschaeftsstelle_id,
+                'anrede'              => $anrede,
+                'titel'               => $titel,
+                'namenstitel'         => $namenstitel,
+                'name'                => $name,
+                'vorname'             => $vorname,
+                'firma'               => $firma,
+                'strasse'             => $strasse,
+                'plz'                 => $plz,
+                'ort'                 => $ort,
+                'geodb_laender_id'    => '60',
+                'email'               => $email,
+                'telefon'             => $telefon,
+                'telefax'             => $telefax,
+                'homepage'            => $homepage,
+                'seo_url'             => $seo_url,
+                'sortierung'          => '1',
+                'bundesland_id'       => $bundesland_id
+                // 'mkategorien'      => $mkategorien
             ]);
    
             $this->mDao->insertUserMaklerConfig([
@@ -130,10 +124,10 @@ class MaklerService
             ]);
 
             $this->mDao->insertRobotQueue([
-                'homeftp'           => $homeftp,
-                'user_id'           => $user_id,
-                'ftppasswortcrypt'  => $ftppasswortcrypt,
-                'ftp_benutzer'      => $ftp_benutzer
+                'homeftp'          => $homeftp,
+                'user_id'          => $user_id,
+                'ftppasswortcrypt' => $ftppasswortcrypt,
+                'ftp_benutzer'     => $ftp_benutzer
             ]);
   
             $this->mDao->updateMaklerAhuGeoPoint([
@@ -143,7 +137,7 @@ class MaklerService
             $this->sqSer->addToSendQueue('makler_new', [
                 'username' => $username,
                 'email'    => $email, 
-                'passwort' => $kennwort_plain
+                'passwort' => $passwort
             ]);
             
             $em->getConnection()->commit();     
@@ -155,29 +149,29 @@ class MaklerService
 
     public function maklerEdit($user_id, $safePost){
 
-        $email          = $safePost->get('email');
-        $anrede         = $safePost->get('anrede');
-        $titel          = $safePost->get('titel');
-        $namenstitel    = $safePost->get('namenstitel');
-        $vorname        = $safePost->get('vorname');
-        $name           = $safePost->get('name');
-        $firma          = $safePost->get('firma');
-        $strasse        = $safePost->get('strasse');
-        $plz            = $safePost->get('plz');
-        $ort            = $safePost->get('ort');
-        $telefon        = $safePost->get('telefon');
-        $telefax        = $safePost->get('telefax');
-        $homepage       = $safePost->get('homepage');
-        $mobil          = $safePost->get('mobil');
-        $seo_url        = $safePost->get('seo_url');
+        $email       = $safePost->get('email');
+        $anrede      = $safePost->get('anrede');
+        $titel       = $safePost->get('titel');
+        $namenstitel = $safePost->get('namenstitel');
+        $vorname     = $safePost->get('vorname');
+        $name        = $safePost->get('name');
+        $firma       = $safePost->get('firma');
+        $strasse     = $safePost->get('strasse');
+        $plz         = $safePost->get('plz');
+        $ort         = $safePost->get('ort');
+        $telefon     = $safePost->get('telefon');
+        $telefax     = $safePost->get('telefax');
+        $homepage    = $safePost->get('homepage');
+        $mobil       = $safePost->get('mobil');
+        $seo_url     = $safePost->get('seo_url');
 
         $em = $this->mDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
 
             $this->mDao->updateUserAccountEmail([
-                'email'     => $email,
-                'user_id'   => $user_id
+                'email'   => $email,
+                'user_id' => $user_id
             ]);
     
             $this->mDao->updateMakler([
@@ -274,12 +268,12 @@ class MaklerService
     }
 
     public function deleteMakler($user_id){
-        $user_makler = $this->mDao->getMaklerConfig(['user_id' => $user_id]);
+        $makler_config = $this->mDao->getMaklerConfig(['user_id' => $user_id]);
     
-        $bildpfad   =   $user_makler['bilderordner'];     // string 'b00111561' (length=9)
-	    $bildserver =   $user_makler['bilderserver_id'];  // string '3' (length=1)
-	    $ftppfad    =   $user_makler['ftp_benutzer'];     // string 'f00111561' (length=9)
-	    $ftpserver  =   $user_makler['ftp_server_id'];    // string '5' (length=1)
+        $bildpfad   = $makler_config['bilderordner'];     // string 'b00111561' (length=9)
+	    $bildserver = $makler_config['bilderserver_id'];  // string '3' (length=1)
+	    $ftppfad    = $makler_config['ftp_benutzer'];     // string 'f00111561' (length=9)
+	    $ftpserver  = $makler_config['ftp_server_id'];    // string '5' (length=1)
 
         $stmt = $this->mDao->getObjectsByUserId(['user_id' => $user_id]);
 

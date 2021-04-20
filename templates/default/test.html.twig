@@ -18,49 +18,10 @@
       </section>
       <!-- Main content -->
       <section class="content">
-        <div class="row">
-                <!-- left column -->
-                <div class="col-md-6">
-                    <!-- general form elements -->
-                    <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Persönliche Daten</h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="form-group">
-                                    <label for="Firma">Firma</label>
-                                    <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" value="" required>
-                                </div>
-				                        <div class="form-group">
-                                    <label for="Homepage">SEO-URL</label>
-                                    <p>
-                                      <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="seo_url" value="" required>
-                                      <button id="seo_button" type="submit" class="btn btn-primary" name="savebutton" value="true">SEO-URL</button>
-                                    </p>
-                                    
-                                </div>
-                            </div>           
-                    </div>
-            </div>
+       {{bilderserver_id}}<br>
+       {{ftp_server_id}}<br>
+       {{move_robot_id}}<br>  
       </section>
     </div>
   <!-- /.content-wrapper -->
-{% endblock %}
-
-{% block footer %}
-    {{ parent() }}
-    <script>
-        $(document).ready(function() {
-          $('#seo_button').on('click', function() {
-            $.ajax({
-              method: "POST",
-              url: "/seourl",
-              data: { text: $("#firma").val() }
-            })
-            .done(function( res ) {
-              $("#seo_url").val(res.seourl);
-            });
-          });
-        });
-    </script>
 {% endblock %}
