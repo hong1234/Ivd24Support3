@@ -21,7 +21,6 @@ class MaklerService
     }
 
     public function getMaklerData($user_id) {
-
         $user_makler  = $this->mDao->getRowInTableByIdentifier('user_makler', ['user_id' => $user_id]);
         $user_account = $this->mDao->getRowInTableByIdentifier('user_account', ['user_id' => $user_id]);
         $username = $user_account['username'];
@@ -30,19 +29,20 @@ class MaklerService
     }
 
     public function userMaklerConfig($geschaeftsstelle_id, $user_id) {
-
         $gs_werte = $this->mDao->getRowInTableByIdentifier('user_geschaeftsstelle', [
             'geschaeftsstelle_id' => $geschaeftsstelle_id
         ]);
         $bilderserver_id = $gs_werte['bilderserver_id'];
-        $ftp_server_id   = $gs_werte['ftp_server_id'];
-        $move_robot_id   = $gs_werte['move_robot_id'];
+        $ftp_server_id = $gs_werte['ftp_server_id'];
+        $move_robot_id = $gs_werte['move_robot_id'];
         $import_robot_id = $gs_werte['import_robot_id'];
 
-        // $bilderordner = "b00".$geschaeftsstelle_id.$user_id;
-        // $ftp_benutzer = "f00".$geschaeftsstelle_id.$user_id;
-        $bilderordner = "b00".$bilderserver_id.$user_id;
-        $ftp_benutzer = "f00".$ftp_server_id.$user_id;
+        $bilderordner = "b00".$geschaeftsstelle_id.$user_id;
+        $ftp_benutzer = "f00".$geschaeftsstelle_id.$user_id;
+
+        // $bilderordner = "b00".$bilderserver_id.$user_id;
+        // $ftp_benutzer = "f00".$ftp_server_id.$user_id;
+
         $homeftp = "/home/ftpuser/".$ftp_benutzer;
 
         return [
@@ -56,7 +56,6 @@ class MaklerService
     }
 
     public function newMakler($safePost) {
-
         $anrede          = $safePost->get('anrede');
         $titel           = $safePost->get('titel');
         $namenstitel     = $safePost->get('namenstitel');
@@ -89,15 +88,15 @@ class MaklerService
         try {
 
             $this->mDao->insertAccountForMakler([
-                'art_id'          => '2',
-                'recht_id'        => '3',
-                'kennwort'        => md5($passwort),
-                'benutzername'    => $username,
-                'email'           => $email,
-                'regdate'         => time(),
-                'authentifiziert' => '1',
-                'gesperrt'        => '0',
-                'kennwort_plain'  => $passwort
+                'art_id'        => '2',
+                'recht_id'      => '3',
+                'md5_pw'        => md5($passwort),
+                'username'      => $username,
+                'email'         => $email,
+                'regdate'       => time(),
+                'authenticated' => '1',
+                'gesperrt'      => '0',
+                'passwort'      => $passwort
             ]);
 
             $user_id = $em->getConnection()->lastInsertId();
@@ -286,32 +285,35 @@ class MaklerService
         }
     }
 
-    public function deleteMakler($user_id){
-        
+    public function insertUserDelete($user_id){
         $makler_config = $this->mDao->getRowInTableByIdentifier('user_makler_config', [
             'user_id' => $user_id
         ]);
     
-        $bildpfad   = $makler_config['bilderordner'];     // string 'b00111561' (length=9)
-	    $bildserver = $makler_config['bilderserver_id'];  // string '3' (length=1)
-	    $ftppfad    = $makler_config['ftp_benutzer'];     // string 'f00111561' (length=9)
-	    $ftpserver  = $makler_config['ftp_server_id'];    // string '5' (length=1)
+        $bilderordner = $makler_config['bilderordner'];     // string 'b00111561' (length=9)
+	    $bildserver   = $makler_config['bilderserver_id'];  // string '3' (length=1)
+	    $ftp_benutzer = $makler_config['ftp_benutzer'];     // string 'f00111561' (length=9)
+	    $ftpserver    = $makler_config['ftp_server_id'];    // string '5' (length=1)
+
+        $this->mDao->insertUserDelete([
+            'user_id'    => $user_id,
+            'status'     => '1',
+            'bildpfad'   => $bilderordner,
+            'bildserver' => $bildserver,
+            'ftppfad'    => $ftp_benutzer,
+            'ftpserver'  => $ftpserver
+        ]);
+    }
+
+    public function deleteMakler($user_id) {
 
         $stmt = $this->mDao->getObjectsByUserId(['user_id' => $user_id]);
-
         $em = $this->mDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
 
-            $this->mDao->insertUserDelete([
-                'user_id'    => $user_id,
-                'status'     => '1',
-                'bildpfad'   => $bildpfad,
-                'bildserver' => $bildserver,
-                'ftppfad'    => $ftppfad,
-                'ftpserver'  => $ftpserver
-            ]);
-        
+            $this->insertUserDelete($user_id);
+
             while ($row = $stmt->fetch()) {
                 $objekt_id = $row['objekt_id'];
                 $this->mDao->deleteAttachmentsByObjectId(['objekt_id' => $objekt_id]);

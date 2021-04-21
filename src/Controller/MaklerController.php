@@ -91,10 +91,10 @@ class MaklerController extends AbstractController
             'plz'     => $plz,
             'ort'     => $ort,
             'bundesland_id' => $bundesland_id,
-            'telefon' => $telefon,
-            'telefax' => $telefax,
+            'telefon'  => $telefon,
+            'telefax'  => $telefax,
             'homepage' => $homepage,
-            'seo_url' => $seo_url,
+            'seo_url'  => $seo_url,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
 
             'bundeslaender' => $bundeslaender,
@@ -158,9 +158,8 @@ class MaklerController extends AbstractController
         ]);
 
     }
-
     //-----------
-
+    
     /**
      * @Route("/makler/{uid}/lock/{gesperrt}", name="makler_lock_unlock")
      */

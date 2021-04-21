@@ -4,89 +4,91 @@ namespace App\Dao;
 class MaklerDao extends UserDao {
     //----new Makler--------
     public function insertMakler(iterable $values=[]){
-        $sql =  "INSERT INTO user_makler SET
-                    user_id             = :user_id, 
-                    mitgliedsnummer     = :mitgliedsnummer, 
-                    m_konfig_id         = :m_konfig_id, 
-                    geschaeftsstelle_id = :geschaeftsstelle_id, 
-                    anrede              = :anrede, 
-                    titel               = :titel, 
-                    namenstitel         = :namenstitel, 
-                    name                = :name, 
-                    vorname             = :vorname, 
-                    firma               = :firma, 
-                    strasse             = :strasse, 
-                    plz                 = :plz, 
-                    ort                 = :ort, 
-                    geodb_laender_id    = :geodb_laender_id, 
-                    email               = :email, 
-                    telefon             = :telefon, 
-                    fax                 = :telefax, 
-                    homepage            = :homepage, 
-                    seo_url             = :seo_url, 
-                    sortierung          = :sortierung,
-				    ahu_geo_point	    = GeomFromText('POINT(1 1)'),  
-                    bundesland_id       = :bundesland_id
-                    ";
-                    //mitgliedskategorien = :mkategorien 
+        $sql =  "INSERT INTO user_makler 
+                SET
+                user_id             = :user_id, 
+                mitgliedsnummer     = :mitgliedsnummer, 
+                m_konfig_id         = :m_konfig_id, 
+                geschaeftsstelle_id = :geschaeftsstelle_id, 
+                anrede              = :anrede, 
+                titel               = :titel, 
+                namenstitel         = :namenstitel, 
+                name                = :name, 
+                vorname             = :vorname, 
+                firma               = :firma, 
+                strasse             = :strasse, 
+                plz                 = :plz, 
+                ort                 = :ort, 
+                geodb_laender_id    = :geodb_laender_id, 
+                email               = :email, 
+                telefon             = :telefon, 
+                fax                 = :telefax, 
+                homepage            = :homepage, 
+                seo_url             = :seo_url, 
+                sortierung          = :sortierung,
+				ahu_geo_point	    = GeomFromText('POINT(1 1)'),  
+                bundesland_id       = :bundesland_id
+                ";
+                //mitgliedskategorien = :mkategorien 
         return $this->doSQL($sql, $values);
     }
 
     public function insertUserMaklerConfig(iterable $values=[]){
-        $sql  = "INSERT INTO user_makler_config SET 
-                    user_id            = :user_id, 
-                    anrede_anzeigen    = '1', 
-                    anrede_pflicht     = '0', 
-                    vorname_anzeigen   = '1', 
-                    vorname_pflicht    = '0', 
-                    nachname_anzeigen  = '1', 
-                    nachname_pflicht   = '1', 
-                    strasse_anzeigen   = '0', 
-                    strasse_pflicht    = '0',  
-                    plz_anzeigen       = '0',
-                    plz_pflicht        = '0', 
-                    ort_anzeigen       = '0', 
-                    ort_pflicht        = '0', 
-                    email_anzeigen     = '1', 
-                    email_pflicht      = '1', 
-                    telefon_anzeigen   = '1', 
-                    telefon_pflicht    = '0', 
-                    nachricht_anzeigen = '1', 
-                    nachricht_pflicht  = '0', 
-                    nachricht_text     = '', 
-                    widerruf_jn        = '0', 
-                    bilderserver_id    = :bilderserver_id, 
-                    bilderordner       = :bilderordner, 
-                    ftp_server_id      = :ftp_server_id, 
-                    ftp_benutzer       = :ftp_benutzer, 
-                    ftp_passwort       = :ftppasswort, 
-                    ftp_aktiv          = 'J', 
-                    ftp_pause          = 'N', 
-                    ftp_mod            = 'N', 
-                    ftp_del            = 'N', 
-                    move_robot_id      = :move_robot_id, 
-                    anzahl_objekte_pro_seite = '10',
-                    logo_pfad = '',
-                    returncode_businessclub = :returncode_businessclub
+        $sql  = "INSERT INTO user_makler_config 
+                SET 
+                user_id            = :user_id, 
+                anrede_anzeigen    = '1', 
+                anrede_pflicht     = '0', 
+                vorname_anzeigen   = '1', 
+                vorname_pflicht    = '0', 
+                nachname_anzeigen  = '1', 
+                nachname_pflicht   = '1', 
+                strasse_anzeigen   = '0', 
+                strasse_pflicht    = '0',  
+                plz_anzeigen       = '0',
+                plz_pflicht        = '0', 
+                ort_anzeigen       = '0', 
+                ort_pflicht        = '0', 
+                email_anzeigen     = '1', 
+                email_pflicht      = '1', 
+                telefon_anzeigen   = '1', 
+                telefon_pflicht    = '0', 
+                nachricht_anzeigen = '1', 
+                nachricht_pflicht  = '0', 
+                nachricht_text     = '', 
+                widerruf_jn        = '0', 
+                bilderserver_id    = :bilderserver_id, 
+                bilderordner       = :bilderordner, 
+                ftp_server_id      = :ftp_server_id, 
+                ftp_benutzer       = :ftp_benutzer, 
+                ftp_passwort       = :ftppasswort, 
+                ftp_aktiv          = 'J', 
+                ftp_pause          = 'N', 
+                ftp_mod            = 'N', 
+                ftp_del            = 'N', 
+                move_robot_id      = :move_robot_id, 
+                anzahl_objekte_pro_seite = '10',
+                logo_pfad = '',
+                returncode_businessclub = :returncode_businessclub
                 ";
         return $this->doSQL($sql, $values);
     }
 
     public function insertRobotQueue(iterable $values=[]){
-        $sql =  "INSERT INTO robot_queue 
-                 SET 
-                    config_server_id = '5',
-                    robot_id         = '1',
-                    status           = 'QUEUED',
-                    robot_name       = 'FTPUserAdd',
-                    parameter1       = :homeftp,
-                    parameter2       = 'makler',
-                    parameter3       = :user_id,
-                    parameter4       = '/bin/false',
-                    parameter5       = '/etc/skel',
-                    parameter6       = :ftppasswortcrypt,
-                    parameter7       = :ftp_benutzer,
-                    parameter8       = '/usr/sbin/useradd'
+        $sql = "INSERT INTO robot_queue 
+                SET 
+                config_server_id = '5',
+                robot_id         = '1',
+                status           = 'QUEUED',
+                robot_name       = 'FTPUserAdd',
+                parameter1       = :homeftp,
+                parameter2       = 'makler',
+                parameter3       = :user_id,
+                parameter4       = '/bin/false',
+                parameter5       = '/etc/skel',
+                parameter6       = :ftppasswortcrypt,
+                parameter7       = :ftp_benutzer,
+                parameter8       = '/usr/sbin/useradd'
                 ";
         return $this->doSQL($sql, $values);
     }
@@ -94,13 +96,13 @@ class MaklerDao extends UserDao {
     public function insertRobotQueue2(iterable $values=[]){
         $sql = "INSERT INTO robot_queue 
                 SET 
-                    config_server_id = '5',
-                    robot_id         = '2',
-                    status           = 'QUEUED',
-                    robot_name       = 'FTPUserMod',        
-                    parameter6       = :crypt_ftppasswort,
-                    parameter7       = :ftp_benutzer,
-                    parameter8       = '/usr/sbin/usermod'
+                config_server_id = '5',
+                robot_id         = '2',
+                status           = 'QUEUED',
+                robot_name       = 'FTPUserMod',        
+                parameter6       = :crypt_ftppasswort,
+                parameter7       = :ftp_benutzer,
+                parameter8       = '/usr/sbin/usermod'
                 ";
 
         return $this->doSQL($sql, $values);
@@ -203,12 +205,12 @@ class MaklerDao extends UserDao {
     public function insertUserDelete(iterable $values=[]){
         $sql = "INSERT INTO user_delete
                 SET 
-                    user_id    = :user_id, 
-                    status     = :status,
-                    bildpfad   = :bildpfad,
-                    bildserver = :bildserver,
-                    ftppfad    = :ftppfad,
-                    ftpserver  = :ftpserver
+                user_id    = :user_id, 
+                status     = :status,
+                bildpfad   = :bildpfad,
+                bildserver = :bildserver,
+                ftppfad    = :ftppfad,
+                ftpserver  = :ftpserver
                 ";
         
         return $this->doSQL($sql, $values);  

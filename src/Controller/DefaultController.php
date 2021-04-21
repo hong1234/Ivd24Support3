@@ -11,6 +11,7 @@ use App\Dao\MaklerDao;
 use App\Dao\BaseDao;
 use App\Service\StringFormat;
 use App\Service\SendQueue;
+use App\Service\MaklerService;
 
 /**
  *
@@ -38,24 +39,28 @@ class DefaultController extends AbstractController
     /**
      * @Route("/test", name="default_test")
      */
-    public function testPage(MaklerDao $mDao)
+    public function testPage(MaklerService $mService)
     {
-        $makler_config = $mDao->getRowInTableByIdentifier('user_makler_config', [
-            'user_id' => 10346
-        ]);
-    
-        $bildpfad   = $makler_config['bilderordner'];     // string 'b00111561' (length=9)
-	    $ftppfad    = $makler_config['ftp_benutzer'];     // string 'f00111561' (length=9)
-        //$username   = $makler_config['ftp_benutzer'];
-        $bildserver = $makler_config['bilderserver_id'];  // string '3' (length=1)
-	    $ftpserver  = $makler_config['ftp_server_id'];    // string '5' (length=1)
+        $rs = $mService->userMaklerConfig(1, 10137);
+        var_dump($rs); exit;
 
-        return $this->render('default/test.html.twig', [
-            'bildpfad' => $bildpfad,
-            'ftppfad' => $ftppfad,
-            'bildserver' => $bildserver,
-            'ftpserver' => $ftpserver
-        ]);
+
+        // $makler_config = $mDao->getRowInTableByIdentifier('user_makler_config', [
+        //     'user_id' => 10346
+        // ]);
+    
+        // $bildpfad   = $makler_config['bilderordner'];     // string 'b00111561' (length=9)
+	    // $ftppfad    = $makler_config['ftp_benutzer'];     // string 'f00111561' (length=9)
+        // //$username   = $makler_config['ftp_benutzer'];
+        // $bildserver = $makler_config['bilderserver_id'];  // string '3' (length=1)
+	    // $ftpserver  = $makler_config['ftp_server_id'];    // string '5' (length=1)
+
+        // return $this->render('default/test.html.twig', [
+        //     'bildpfad' => $bildpfad,
+        //     'ftppfad' => $ftppfad,
+        //     'bildserver' => $bildserver,
+        //     'ftpserver' => $ftpserver
+        // ]);
     }
 
     /**
@@ -63,7 +68,6 @@ class DefaultController extends AbstractController
      */
     public function randomPage(StringFormat $sfService)
     {
-        
         $rs = $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@');
         return $this->render('default/test2.html.twig', [
             'random' => $rs,
