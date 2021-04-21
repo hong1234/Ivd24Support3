@@ -50,26 +50,33 @@ class BaseDao {
         return $this->doSQL($sql, $values);
     }
 
-    public function getBundeslaender(iterable $values=[]) {
-        $sql = "SELECT * FROM geo_bundesland";
-        return $this->doQuery($sql, $values)->fetchAll();
+    public function getAllRowsInTable(string $tabName) {
+        $sql = "SELECT * FROM ".$tabName;
+        return $this->doQuery($sql, [])->fetchAll();
     }
 
-    public function getAllGeschaeftsstelle(iterable $values=[]) {
-        $sql = "SELECT * FROM user_geschaeftsstelle";
-        return $this->doQuery($sql, $values)->fetchAll();
+    public function getRowsInTableByPropeties(string $tabName, iterable $values=[]) {
+        $index = 0;
+        $sql = "SELECT * FROM $tabName WHERE ";
+        foreach($values as $key => $value) {
+            if($index == 0){
+                $sql = $sql."$key = '$value'";
+            } else {
+                $sql = $sql." AND $key = '$value'";
+            }
+            $index++;
+        }
+        //return $sql;
+        return $this->doQuery($sql, $values)->fetchAll(); 
     }
-
-    // public function getGeschaeftsstelle(iterable $values=[]) {
-    //     $sql = "SELECT * FROM user_geschaeftsstelle WHERE geschaeftsstelle_id = :geschaeftsstelle_id";
-    //     return $this->doQuery($sql, $values)->fetch();
-    // }
 
     public function getRowInTableByIdentifier(string $tabName, iterable $values=[]) {
+        $sql = "SELECT * FROM $tabName WHERE ";
         foreach($values as $key => $value) {
-            $sql = "SELECT * FROM ".$tabName." WHERE $key = $value";
+            $sql = $sql."$key = '$value'";
         }
         //return $sql;
         return $this->doQuery($sql, $values)->fetch(); 
     }
+
 }

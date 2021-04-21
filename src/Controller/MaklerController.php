@@ -38,13 +38,13 @@ class MaklerController extends AbstractController
         $seo_url = '';
         $geschaeftsstelle_id = '';
         $username = '';
-        $email    = '';
-        $passwort = '';
+        $email = '';
+        $passwort = $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@');
         $ftppasswort = $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@');
-        $error    = '';
+        $error = '';
 
-        $bundeslaender    = $mDao->getBundeslaender();
-        $geschaeftsstelle = $mDao->getAllGeschaeftsstelle();
+        $bundeslaender    = $mDao->getAllRowsInTable('geo_bundesland');
+        $geschaeftsstelle = $mDao->getAllRowsInTable('user_geschaeftsstelle');
 
         //if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
@@ -80,7 +80,6 @@ class MaklerController extends AbstractController
                     //'paramName' => 'value'
                 ]);
             }
-
         }
         
         return $this->render('makler/new.html.twig', [
@@ -113,34 +112,54 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/{uid}/edit", name="makler_edit", requirements={"uid"="\d+"})
      */
-    public function maklerEdit($uid, Request $request, MaklerDao $mDao, MaklerService $mService)
+    public function maklerEdit($uid, Request $request, MaklerService $mService)
     {
         $user_id = $uid;
         // if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-            //$safePost = filter_input_array(INPUT_POST);
-            //var_dump($safePost); exit;
             $safePost = $request->request;
             $mService->maklerEdit($user_id, $safePost);
             return $this->redirectToRoute('makler_list', [
                 //'paramName' => 'value'
             ]);
         }
-        
-        $user_makler  = $mDao->getMakler([
-            'user_id' => $user_id
-        ]);
-    
-        $user_makler2  = $mDao->getUserAccount([
-            'user_id' => $user_id
-        ]);
+
+        $user_makler = $mService->getMaklerData($user_id);
         
         return $this->render('makler/edit.html.twig', [
-            'user_id'  => $user_id,
-            'makler'   => array_merge($user_makler, $user_makler2)
+            'user_id' => $user_id,
+            'makler' => $user_makler
         ]);
 
     }
+
+    /**
+     * @Route("/makler/{uid}/delete", name="makler_delete", requirements={"uid"="\d+"})
+     */
+    public function maklerDelete($uid, Request $request, MaklerService $mService)
+    {
+        $user_id = $uid;
+
+        if ($request->isMethod('POST')) {
+
+            if ($request->request->get('savebutton')) {
+                $mService->deleteMakler($user_id);
+            }
+            return $this->redirectToRoute('makler_delete_list', [
+                //'paramName' => 'value'
+            ]);  
+        }
+
+        $user_makler = $mService->getMaklerData($user_id);
+        
+        return $this->render('makler/del.html.twig', [
+            'user_id' => $user_id,
+            'makler' => $user_makler
+        ]);
+
+    }
+
+    //-----------
 
     /**
      * @Route("/makler/{uid}/lock/{gesperrt}", name="makler_lock_unlock")
@@ -169,10 +188,9 @@ class MaklerController extends AbstractController
             $mService->maklerFtpPwEdit($user_id, $safePost);
         }
 
-        $makler_config = $mDao->getMaklerConfig([
+        $makler_config = $mDao->getRowInTableByIdentifier('user_makler_config', [
             'user_id' => $user_id
         ]);
-
         $username = $makler_config['ftp_benutzer'];
 
         return $this->render('makler/ftpedit.html.twig', [
@@ -193,14 +211,14 @@ class MaklerController extends AbstractController
             $mService->maklerPwEdit($user_id, $safePost);
         }
 
-        $user_makler = $uDao->getUserAccount([
+        $user_makler = $uDao->getRowInTableByIdentifier('user_account', [
             'user_id' => $user_id
         ]);
         $username = $user_makler['username'];
 
         return $this->render('makler/pwedit.html.twig', [
-            'user_id'    => $user_id,
-            'username'   => $username
+            'user_id'  => $user_id,
+            'username' => $username
         ]);
     }
 
@@ -239,38 +257,6 @@ class MaklerController extends AbstractController
 
         return $this->redirectToRoute('makler_list', [
             //'paramName' => 'value'
-        ]);
-
-    }
-
-    /**
-     * @Route("/makler/{uid}/delete", name="makler_delete", requirements={"uid"="\d+"})
-     */
-    public function maklerDelete($uid, Request $request, MaklerDao $mDao, MaklerService $mService)
-    {
-        $user_id = $uid;
-
-        if ($request->isMethod('POST')) {
-
-            if ($request->request->get('savebutton')) {
-                $mService->deleteMakler($user_id);
-            }
-            return $this->redirectToRoute('makler_delete_list', [
-                //'paramName' => 'value'
-            ]);  
-        }
-
-        $user_makler  = $mDao->getMakler([
-            'user_id' => $user_id
-        ]);
-    
-        $user_makler2  = $mDao->getUserAccount([
-            'user_id' => $user_id
-        ]); 
-        
-        return $this->render('makler/del.html.twig', [
-            'user_id'     => $user_id,
-            'makler' => array_merge($user_makler, $user_makler2)
         ]);
 
     }

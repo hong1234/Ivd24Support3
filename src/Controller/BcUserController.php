@@ -34,8 +34,6 @@ class BcUserController extends AbstractController
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')){
             //$safePost = filter_input_array(INPUT_POST);
-            //var_dump($safePost); exit;
-
             $safePost = $request->request;
             $userid             = $safePost->get('userid');                 
             $buchungsdatum      = $safePost->get('buchungsdatum');          //: 2021-01-15           
@@ -46,7 +44,7 @@ class BcUserController extends AbstractController
             $total_amount       = $safePost->get('total_amount');            //: 360
             $paket_id           = $safePost->get('paket_id');                //: 2
             $paid               = $safePost->get('paid');
-            $email              = $safePost->get('email');                   //: info@eurich-immobilien.de
+            $email              = $safePost->get('email');                   
             $end_grundriss      = $safePost->get('end_grundriss');           //: 2022-01-31
             $grundriss_voucher  = $safePost->get('grundriss_voucher');
             $geraete            = $safePost->get('geraete');                 //: 1

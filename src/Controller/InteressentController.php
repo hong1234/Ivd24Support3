@@ -29,32 +29,22 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/{uid}/edit", name="interessent_edit", requirements={"uid"="\d+"})
      */
-    public function interessentEdit($uid, Request $request, InteressentDao $iDao, InteressentService $intSer)
+    public function interessentEdit($uid, Request $request, InteressentDao $iDao, InteressentService $intService)
     {
         $user_id = $uid; 
-
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-            // post parameters
-            // $safePost = filter_input_array(INPUT_POST); 
-            // var_dump($safePost); exit;
+            // $safePost = filter_input_array(INPUT_POST); // post parameters
             $safePost = $request->request;
-            $intSer->interessentUpdate($user_id, $safePost);
+            $intService->interessentUpdate($user_id, $safePost);
             return $this->redirectToRoute('interessent_list', [
                 //'paramName' => 'value'
             ]);
         }
-    
-        $user_int = $iDao->getInteressent([
-            'user_id' => $user_id
-        ]);
 
-        $user_int2 = $iDao->getUserAccount([
-            'user_id' => $user_id
-        ]);
-
+        $interessent = $intService->getInteressentData($user_id);
         return $this->render('interessent/edit.html.twig', [
-            'user_id'       => $user_id,
-            'interessent'   => array_merge($user_int, $user_int2)  
+            'user_id'     => $user_id,
+            'interessent' => $interessent 
         ]);
     }
 
@@ -72,31 +62,22 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/{uid}/delete", name="interessent_delete", requirements={"uid"="\d+"})
      */
-    public function interessentDelete($uid, Request $request, InteressentDao $iDao, InteressentService $intSer)
+    public function interessentDelete($uid, Request $request, InteressentDao $iDao, InteressentService $intService)
     {
         $user_id = $uid;
-
         if ($request->isMethod('POST')) {
-
             if ($request->request->get('savebutton')) {
-                $intSer->interessentDelete($user_id);     
+                $intService->interessentDelete($user_id);     
             }
             return $this->redirectToRoute('interessent_delete_list', [
                 //'paramName' => 'value'
             ]);
         }
 
-        $user_int = $iDao->getInteressent([
-            'user_id' => $user_id
-        ]);
-
-        $user_int2 = $iDao->getUserAccount([
-            'user_id' => $user_id
-        ]);
-
+        $interessent = $intService->getInteressentData($user_id);
         return $this->render('interessent/del.html.twig', [
-            'user_id'      => $user_id,
-            'interessent'  => array_merge($user_int, $user_int2)
+            'user_id'     => $user_id,
+            'interessent' => $interessent
         ]);
 
     }

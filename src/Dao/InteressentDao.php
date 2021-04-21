@@ -19,13 +19,6 @@ class InteressentDao extends UserDao {
                     WHERE user_account.loeschung = 1 AND user_account.art_id = 1 AND NOW() >= DATE_ADD(user_account.loesch_datum, INTERVAL 7 DAY)";
         return $this->doQuery($sql, $values);
     }
-    
-    public function getInteressent(iterable $values=[]) {
-        $sql = "SELECT anrede, titel, namenstitel, name, vorname, firma, strasse, plz, ort, land, email, telefon, fax, mobil, homepage 
-                FROM user_interessent 
-                WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetch();
-    }
 
     public function updateUserInteressent(iterable $values=[]){
         $sql   =   "UPDATE user_interessent 

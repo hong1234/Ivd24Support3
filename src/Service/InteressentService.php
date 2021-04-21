@@ -14,6 +14,14 @@ class InteressentService
         $this->iDao = $iDao;
     }
 
+    public function getInteressentData($user_id) {
+        $user_interessent  = $this->iDao->getRowInTableByIdentifier('user_interessent', ['user_id' => $user_id]);
+        $user_account = $this->iDao->getRowInTableByIdentifier('user_account', ['user_id' => $user_id]);
+        $username = $user_account['username'];
+        $user_interessent['username'] = $username;
+        return $user_interessent;
+    }
+
     public function interessentUpdate($user_id, $safePost){
 
         $email        = $safePost->get('email');

@@ -38,23 +38,23 @@ class DefaultController extends AbstractController
     /**
      * @Route("/test", name="default_test")
      */
-    public function testPage(BaseDao $bDao)
+    public function testPage(MaklerDao $mDao)
     {
-        $geschaeftsstelle_id = 3;
-
-        $row = $bDao->getRowInTableByIdentifier('user_geschaeftsstelle', [
-            'geschaeftsstelle_id' => $geschaeftsstelle_id
+        $makler_config = $mDao->getRowInTableByIdentifier('user_makler_config', [
+            'user_id' => 10346
         ]);
-
-        $bilderserver_id = $row['bilderserver_id'];
-        $ftp_server_id   = $row['ftp_server_id'];
-        $move_robot_id   = $row['move_robot_id'];
+    
+        $bildpfad   = $makler_config['bilderordner'];     // string 'b00111561' (length=9)
+	    $ftppfad    = $makler_config['ftp_benutzer'];     // string 'f00111561' (length=9)
+        //$username   = $makler_config['ftp_benutzer'];
+        $bildserver = $makler_config['bilderserver_id'];  // string '3' (length=1)
+	    $ftpserver  = $makler_config['ftp_server_id'];    // string '5' (length=1)
 
         return $this->render('default/test.html.twig', [
-            //'sql' => $sql,
-            'bilderserver_id' => $bilderserver_id,
-            'ftp_server_id' => $ftp_server_id,
-            'move_robot_id' => $move_robot_id
+            'bildpfad' => $bildpfad,
+            'ftppfad' => $ftppfad,
+            'bildserver' => $bildserver,
+            'ftpserver' => $ftpserver
         ]);
     }
 

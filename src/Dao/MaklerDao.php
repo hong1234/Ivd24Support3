@@ -94,13 +94,13 @@ class MaklerDao extends UserDao {
     public function insertRobotQueue2(iterable $values=[]){
         $sql = "INSERT INTO robot_queue 
                 SET 
-                    config_server_id  = '5',
-                    robot_id          = '2',
-                    status            = 'QUEUED',
-                    robot_name        = 'FTPUserMod',        
-                    parameter6        = :crypt_ftppasswort,
-                    parameter7        = :ftp_benutzer,
-                    parameter8        = '/usr/sbin/usermod'
+                    config_server_id = '5',
+                    robot_id         = '2',
+                    status           = 'QUEUED',
+                    robot_name       = 'FTPUserMod',        
+                    parameter6       = :crypt_ftppasswort,
+                    parameter7       = :ftp_benutzer,
+                    parameter8       = '/usr/sbin/usermod'
                 ";
 
         return $this->doSQL($sql, $values);
@@ -112,12 +112,6 @@ class MaklerDao extends UserDao {
     }
 
     //----------------------
-    public function getMakler(iterable $values=[]){
-        $sql = "SELECT anrede, titel, namenstitel, name, vorname, firma, strasse, plz, ort, email, telefon, fax, mobil, homepage, seo_url 
-                FROM user_makler WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetch();
-    }
-
     public function getMaklerUserByUserid(iterable $values) {
         $sql = "SELECT user_id, username, email, gesperrt, loeschung, authentifiziert, registrierungsdatum, lastlogin 
                 FROM user_account WHERE art_id = 2 and recht_id = 3 and user_id = :user_id";
@@ -132,22 +126,22 @@ class MaklerDao extends UserDao {
     public function updateMakler(iterable $values=[]){
         $sql   =   "UPDATE user_makler 
                     SET
-                    anrede              = :anrede, 
-                    titel               = :titel, 
-                    namenstitel         = :namenstitel, 
-                    name                = :name, 
-                    vorname             = :vorname, 
-                    firma               = :firma, 
-                    strasse             = :strasse, 
-                    plz                 = :plz, 
-                    ort                 = :ort,  
-                    email               = :email, 
-                    telefon             = :telefon, 
-                    fax                 = :telefax, 
-                    homepage            = :homepage, 
-                    seo_url             = :seo_url,
-                    mobil               = :mobil
-                    WHERE       user_id = :user_id
+                    anrede       = :anrede, 
+                    titel        = :titel, 
+                    namenstitel  = :namenstitel, 
+                    name         = :name, 
+                    vorname      = :vorname, 
+                    firma        = :firma, 
+                    strasse      = :strasse, 
+                    plz          = :plz, 
+                    ort          = :ort,  
+                    email        = :email, 
+                    telefon      = :telefon, 
+                    fax          = :telefax, 
+                    homepage     = :homepage, 
+                    seo_url      = :seo_url,
+                    mobil        = :mobil
+                    WHERE user_id = :user_id
                     ";
         return $this->doSQL($sql, $values);
     }
@@ -200,12 +194,6 @@ class MaklerDao extends UserDao {
     }
 
     //--------------makler-delete related methode--------------------------------------------------------------
-    public function getMaklerConfig(iterable $values=[]) {
-        $sql = "SELECT bilderserver_id, bilderordner, ftp_server_id, ftp_benutzer 
-                FROM user_makler_config 
-                WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetch();
-    }
 
     public function getObjectsByUserId(iterable $values=[]) {
         $sql    =   "SELECT objekt_id  FROM objekt_master where user_id = :user_id";
@@ -215,12 +203,12 @@ class MaklerDao extends UserDao {
     public function insertUserDelete(iterable $values=[]){
         $sql = "INSERT INTO user_delete
                 SET 
-                    user_id     = :user_id, 
-                    status      = :status,
-                    bildpfad    = :bildpfad,
-                    bildserver  = :bildserver,
-                    ftppfad     = :ftppfad,
-                    ftpserver   = :ftpserver
+                    user_id    = :user_id, 
+                    status     = :status,
+                    bildpfad   = :bildpfad,
+                    bildserver = :bildserver,
+                    ftppfad    = :ftppfad,
+                    ftpserver  = :ftpserver
                 ";
         
         return $this->doSQL($sql, $values);  

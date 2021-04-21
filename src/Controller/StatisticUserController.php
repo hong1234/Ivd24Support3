@@ -36,7 +36,8 @@ class StatisticUserController extends AbstractController
         $passwort = '';
         $gs_id    = '1';
         $error    = '';
-        $geschaeftsstelle = $uDao->getAllGeschaeftsstelle();
+        
+        $geschaeftsstelle = $uDao->getAllRowsInTable('user_geschaeftsstelle');
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             //post parameters
@@ -81,7 +82,8 @@ class StatisticUserController extends AbstractController
         $passwort = '';
         $gs_id    = '1';
         $error    = '';
-        $geschaeftsstellen = $uDao->getAllGeschaeftsstelle();
+        
+        $geschaeftsstellen = $uDao->getAllRowsInTable('user_geschaeftsstelle');
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // post parameters

@@ -5,33 +5,33 @@ class UserDao extends BaseDao {
 
     public function getAllSupportUser(iterable $values=[]) {
         $sql = "SELECT user_id, username, email, gesperrt, loeschung, authentifiziert, registrierungsdatum, lastlogin 
-                FROM user_account WHERE art_id = 4 and recht_id = 9";
+                FROM user_account WHERE art_id = 4 AND recht_id = 9";
         return $this->doQuery($sql, $values);
     }
 
     public function getSupportUser(iterable $values=[]) {
         $sql = "SELECT user_id, username, email, gesperrt, loeschung, authentifiziert, registrierungsdatum, lastlogin 
-                FROM user_account WHERE art_id = 4 and recht_id = 9 AND user_id = :user_id";
+                FROM user_account WHERE art_id = 4 AND recht_id = 9 AND user_id = :user_id";
         return $this->doQuery($sql, $values)->fetch();
     }
 
     public function updateSupportUser(iterable $values=[]){
-        $sql   =   "UPDATE user_account 
-                    SET
-                    username             = :username, 
-                    email                = :email,
-                    kennwort             = :kennwort
-                    WHERE       user_id  = :user_id";
+        $sql = "UPDATE user_account 
+                SET
+                username  = :username, 
+                email     = :email,
+                kennwort  = :kennwort
+                WHERE user_id = :user_id";
         return $this->doSQL($sql, $values);
     }
 
     public function deleteSupporter(iterable $values=[]) {
-        $sql    =   "DELETE FROM user_account WHERE user_id = :user_id";
+        $sql = "DELETE FROM user_account WHERE user_id = :user_id";
         return $this->doSQL($sql, $values);
     }
 
     public function deleteStatisticUser(iterable $values=[]) {
-        $sql    =   "DELETE FROM user_account WHERE user_id = :user_id";
+        $sql = "DELETE FROM user_account WHERE user_id = :user_id";
         return $this->doSQL($sql, $values);
     }
     //----------
