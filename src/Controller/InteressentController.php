@@ -6,7 +6,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Dao\UserDao;
-use App\Dao\InteressentDao;
 use App\Service\InteressentService;
 
 /**
@@ -16,20 +15,9 @@ use App\Service\InteressentService;
 class InteressentController extends AbstractController
 {
     /**
-     * @Route("/interessent", name="interessent_list")
-     */
-    public function interessentList(InteressentService $intSer)
-    {
-        $rows = $intSer->InteressentList();
-        return $this->render('interessent/list.html.twig', [
-            'dataSet' => $rows
-        ]);
-    }
-
-    /**
      * @Route("/interessent/{uid}/edit", name="interessent_edit", requirements={"uid"="\d+"})
      */
-    public function interessentEdit($uid, Request $request, InteressentDao $iDao, InteressentService $intService)
+    public function interessentEdit($uid, Request $request, InteressentService $intService)
     {
         $user_id = $uid; 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
@@ -49,20 +37,9 @@ class InteressentController extends AbstractController
     }
 
     /**
-     * @Route("/interessent/delete", name="interessent_delete_list")
-     */
-    public function interessentDelList(InteressentService $intSer)
-    {
-        $rows = $intSer->InteressentDelList();
-        return $this->render('interessent/del.list.html.twig', [
-            'dataSet' => $rows
-        ]);
-    }
-
-    /**
      * @Route("/interessent/{uid}/delete", name="interessent_delete", requirements={"uid"="\d+"})
      */
-    public function interessentDelete($uid, Request $request, InteressentDao $iDao, InteressentService $intService)
+    public function interessentDelete($uid, Request $request, InteressentService $intService)
     {
         $user_id = $uid;
         if ($request->isMethod('POST')) {
@@ -80,6 +57,28 @@ class InteressentController extends AbstractController
             'interessent' => $interessent
         ]);
 
+    }
+
+    /**
+     * @Route("/interessent", name="interessent_list")
+     */
+    public function interessentList(InteressentService $intService)
+    {
+        $rows = $intService->InteressentList();
+        return $this->render('interessent/list.html.twig', [
+            'dataSet' => $rows
+        ]);
+    }
+
+    /**
+     * @Route("/interessent/delete", name="interessent_delete_list")
+     */
+    public function interessentDelList(InteressentService $intService)
+    {
+        $rows = $intService->InteressentDelList();
+        return $this->render('interessent/del.list.html.twig', [
+            'dataSet' => $rows
+        ]);
     }
 
     /**
@@ -120,11 +119,11 @@ class InteressentController extends AbstractController
                 //'paramName' => 'value'
             ]);
         }
-
-        $user_makler = $uDao->getUserAccount([
+        
+        $user_account = $uDao->getRowInTableByIdentifier('user_account', [
             'user_id' => $user_id
         ]);
-        $username = $user_makler['username']; 
+        $username = $user_account['username'];
 
         return $this->render('interessent/pwedit.html.twig', [
             'user_id'    => $user_id,

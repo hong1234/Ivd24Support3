@@ -258,19 +258,4 @@ class StatisticController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/bayern", name="statistic_bayern")
-     */
-    public function bayernPage()
-    {
-        // return $this->json([
-        //     'message' => 'Welcome to your new controller!',
-        //     'path' => 'src/Controller/DefaultController.php',
-        // ]);
-
-        return $this->render('statistic/bayern.html.twig', [
-            
-        ]);
-    }
-
 }

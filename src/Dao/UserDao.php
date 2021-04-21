@@ -125,11 +125,6 @@ class UserDao extends BaseDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
-    public function getUserAccount(iterable $values=[]){
-        $sql = "SELECT username, email, geschaeftsstellen_id FROM user_account WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetch();
-    }
-
     public function getUserAccountByEmail(iterable $values=[]){
         $sql = "SELECT * FROM user_account WHERE email = :email";
         return $this->doQuery($sql, $values)->fetchAll();

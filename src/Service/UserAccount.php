@@ -74,12 +74,12 @@ class UserAccount
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-            $ac = $this->uDao->getUserAccount([
+            $user_account = $this->uDao->getRowInTableByIdentifier('user_account', [
                 'user_id' => $user_id
             ]);
-
-            $pre_email = $ac['email'];
-            $pre_username = $ac['username'];
+            
+            $pre_email = $user_account['email'];
+            $pre_username = $user_account['username'];
 
             if($this->occupiedEmailNameByUpdate($pre_email, $email)){
                 $error = $error."--email schon belegt--";
