@@ -39,10 +39,11 @@ class DefaultController extends AbstractController
     /**
      * @Route("/test", name="default_test")
      */
-    public function testPage(MaklerService $mService)
+    public function testPage(BaseDao $bDao)
     {
-        $rs = $mService->userMaklerConfig(1, 10137);
-        var_dump($rs); exit;
+        //$rs = $mService->userMaklerConfig(1, 10137);
+        $bundeslaender    = $bDao->getAllRowsInTable('geo_bundesland');
+        var_dump($bundeslaender); exit;
 
 
         // $makler_config = $mDao->getRowInTableByIdentifier('user_makler_config', [

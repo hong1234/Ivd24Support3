@@ -6,13 +6,13 @@ class MaklerDao extends UserDao {
     public function insertMakler(iterable $values=[]){
         $sql =  "INSERT INTO user_makler 
                 SET
-                user_id             = :user_id, 
-                mitgliedsnummer     = :mitgliedsnummer, 
-                m_konfig_id         = :m_konfig_id, 
+                user_id             = :user_id,
                 geschaeftsstelle_id = :geschaeftsstelle_id, 
+                mitgliedsnummer     = :mitgliedsnummer,
+                mitgliedskategorien = :mkategorie_id 
+                m_konfig_id         = :m_konfig_id, 
                 anrede              = :anrede, 
                 titel               = :titel, 
-                namenstitel         = :namenstitel, 
                 name                = :name, 
                 vorname             = :vorname, 
                 firma               = :firma, 
@@ -29,7 +29,8 @@ class MaklerDao extends UserDao {
 				ahu_geo_point	    = GeomFromText('POINT(1 1)'),  
                 bundesland_id       = :bundesland_id
                 ";
-                //mitgliedskategorien = :mkategorien 
+                
+                
         return $this->doSQL($sql, $values);
     }
 
@@ -129,8 +130,7 @@ class MaklerDao extends UserDao {
         $sql   =   "UPDATE user_makler 
                     SET
                     anrede       = :anrede, 
-                    titel        = :titel, 
-                    namenstitel  = :namenstitel, 
+                    titel        = :titel,
                     name         = :name, 
                     vorname      = :vorname, 
                     firma        = :firma, 

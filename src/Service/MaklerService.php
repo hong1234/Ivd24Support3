@@ -56,17 +56,17 @@ class MaklerService
     }
 
     public function newMakler($safePost) {
-        $anrede          = $safePost->get('anrede');
-        $titel           = $safePost->get('titel');
-        $namenstitel     = $safePost->get('namenstitel');
-        $vorname         = $safePost->get('vorname');
-        $name            = $safePost->get('name');
-        $strasse         = $safePost->get('strasse');
-        $plz             = $safePost->get('plz');
-        $ort             = $safePost->get('ort');
-        $bundesland_id   = $safePost->get('bundesland');
+
+        $anrede        = $safePost->get('anrede');
+        $titel         = $safePost->get('titel');
+        $vorname       = $safePost->get('vorname');
+        $name          = $safePost->get('name');
+        $strasse       = $safePost->get('strasse');
+        $plz           = $safePost->get('plz');
+        $ort           = $safePost->get('ort');
+        $bundesland_id = $safePost->get('bundesland');
         $mitgliedsnummer = $safePost->get('mnummer');
-        //$mkategorien   = $safePost->get('mkategorien'];
+        $mkategorie_id = $safePost->get('mkategorien');
 
         $firma       = $safePost->get('firma');
         $telefon     = $safePost->get('telefon');
@@ -105,12 +105,12 @@ class MaklerService
     
             $this->mDao->insertMakler([
                 'user_id'             => $user_id,
-                'mitgliedsnummer'     => $mitgliedsnummer,
-                'm_konfig_id'         => '1',
                 'geschaeftsstelle_id' => $geschaeftsstelle_id,
+                'mitgliedsnummer'     => $mitgliedsnummer,
+                'mkategorie_id'       => $mkategorie_id,
+                'm_konfig_id'         => '1',
                 'anrede'              => $anrede,
                 'titel'               => $titel,
-                'namenstitel'         => $namenstitel,
                 'name'                => $name,
                 'vorname'             => $vorname,
                 'firma'               => $firma,
@@ -125,7 +125,6 @@ class MaklerService
                 'seo_url'             => $seo_url,
                 'sortierung'          => '1',
                 'bundesland_id'       => $bundesland_id
-                // 'mkategorien'      => $mkategorien
             ]);
    
             $this->mDao->insertUserMaklerConfig([
@@ -169,7 +168,6 @@ class MaklerService
         $email       = $safePost->get('email');
         $anrede      = $safePost->get('anrede');
         $titel       = $safePost->get('titel');
-        $namenstitel = $safePost->get('namenstitel');
         $vorname     = $safePost->get('vorname');
         $name        = $safePost->get('name');
         $firma       = $safePost->get('firma');
@@ -192,22 +190,21 @@ class MaklerService
             ]);
     
             $this->mDao->updateMakler([
-                'anrede'      => $anrede,
-                'titel'       => $titel,
-                'namenstitel' => $namenstitel,
-                'name'        => $name,
-                'vorname'     => $vorname,
-                'firma'       => $firma,
-                'strasse'     => $strasse,
-                'plz'         => $plz,
-                'ort'         => $ort,
-                'email'       => $email,
-                'telefon'     => $telefon,
-                'telefax'     => $telefax,
-                'homepage'    => $homepage,
-                'seo_url'     => $seo_url,
-                'mobil'       => $mobil,
-                'user_id'     => $user_id
+                'anrede'   => $anrede,
+                'titel'    => $titel,
+                'name'     => $name,
+                'vorname'  => $vorname,
+                'firma'    => $firma,
+                'strasse'  => $strasse,
+                'plz'      => $plz,
+                'ort'      => $ort,
+                'email'    => $email,
+                'telefon'  => $telefon,
+                'telefax'  => $telefax,
+                'homepage' => $homepage,
+                'seo_url'  => $seo_url,
+                'mobil'    => $mobil,
+                'user_id'  => $user_id
             ]);
          
             $em->getConnection()->commit();     

@@ -22,57 +22,82 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/new", name="makler_new")
      */
-    public function newMakler(Request $request, MaklerDao $mDao, UserAccount $accSer, MaklerService $mService, StringFormat $sfService)
+    public function newMakler(Request $request, MaklerDao $mDao, UserAccount $accService, MaklerService $mService, StringFormat $sfService)
     {
+        $geschaeftsstelle_id = '';
         $mitgliedsnummer = '';
+        $mkategorie_id = '';
+
+        $firma = '';
+
+        $anrede = '';
+        $titel = '';
         $vorname = '';
         $name    = '';
-        $firma   = '';
         $strasse = '';
         $plz     = '';
         $ort     = '';
         $bundesland_id = '';
+
         $telefon = '';
         $telefax = '';
         $homepage = '';
         $seo_url = '';
-        $geschaeftsstelle_id = '';
+        
         $username = '';
         $email = '';
         $passwort = $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@');
         $ftppasswort = $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@');
+        
         $error = '';
 
         $bundeslaender    = $mDao->getAllRowsInTable('geo_bundesland');
         $geschaeftsstelle = $mDao->getAllRowsInTable('user_geschaeftsstelle');
+        $mkategorien = array(
+            ['mkategorie_id' => 'OM', 'mkname' => 'Ordentliches Mitglied'],
+            ['mkategorie_id' => 'ZM', 'mkname' => 'Zweitmitglied'],
+            ['mkategorie_id' => 'Ex1', 'mkname' => 'Existenzgründer im 1. Jahr'],
+            ['mkategorie_id' => 'Ex2', 'mkname' => 'Existenzgründer im 2. Jahr'],
+            ['mkategorie_id' => 'EM', 'mkname' => 'Ehrenmitglieder']
+        );
 
         //if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+
             //$safePost = filter_input_array(INPUT_POST);// post parameters
+            //var_dump($safePost); exit;
+
             $safePost = $request->request;
 
+            $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
             $mitgliedsnummer = $safePost->get('mnummer');
+
+            $mkategorie_id = $safePost->get('mkategorien'); 
+
+            $firma    = $safePost->get('firma');
+
+            $anrede = $safePost->get('anrede');
+            $titel  = $safePost->get('titel');
+
             $vorname  = $safePost->get('vorname');
             $name     = $safePost->get('name');
-            $firma    = $safePost->get('firma');
             $strasse  = $safePost->get('strasse');
             $plz      = $safePost->get('plz');
             $ort      = $safePost->get('ort');
             $bundesland_id = $safePost->get('bundesland');
+
             $telefon  = $safePost->get('telefon');
             $telefax  = $safePost->get('telefax');
             $homepage = $safePost->get('homepage');
-	        
-            $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
-
+            $seo_url  = $safePost->get('seo_url');
+              
+            $email     = $safePost->get('email');  
             $username  = $safePost->get('username');  
-            $email     = $safePost->get('email');    
             $passwort  = $safePost->get('userpasswort');
-            $seo_url   = $safePost->get('seo_url');
             $ftppasswort = $safePost->get('ftppasswort');
 
             //validation
-            $error = $accSer->isValidMaklerData($username, $email, $passwort, $seo_url);
+            $error = $accService->isValidMaklerData($username, $email, $passwort, $seo_url);
 
             if ($error == '') {
                 $mService->newMakler($safePost);
@@ -83,25 +108,36 @@ class MaklerController extends AbstractController
         }
         
         return $this->render('makler/new.html.twig', [
+
+            'geschaeftsstelle' => $geschaeftsstelle,
+            'geschaeftsstelle_id' => $geschaeftsstelle_id,
+
             'mitgliedsnummer' => $mitgliedsnummer,
+
+            'mkategorien' => $mkategorien,
+            'mkategorie_id' => $mkategorie_id,
+
+            'firma'   => $firma,
+
+            'anrede' => $anrede,
+
+            'titel' => $titel,
             'vorname' => $vorname,
             'name'    => $name,
-            'firma'   => $firma,
             'strasse' => $strasse,
             'plz'     => $plz,
             'ort'     => $ort,
+
+            'bundeslaender' => $bundeslaender,
             'bundesland_id' => $bundesland_id,
+            
             'telefon'  => $telefon,
             'telefax'  => $telefax,
             'homepage' => $homepage,
             'seo_url'  => $seo_url,
-            'geschaeftsstelle_id' => $geschaeftsstelle_id,
 
-            'bundeslaender' => $bundeslaender,
-            'geschaeftsstelle' => $geschaeftsstelle,
-
-            'username' => $username,
             'email'    => $email,
+            'username' => $username,
             'passwort' => $passwort,
             'ftppasswort' => $ftppasswort,
             'error'    => $error  
