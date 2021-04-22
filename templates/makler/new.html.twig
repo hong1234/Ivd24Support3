@@ -34,7 +34,7 @@
                             </div>
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label for="Geschaefststelle">Geschäftsstelle:</label>
+                                    <label for="Geschaefststelle">Geschäftsstelle</label>
                                     <select id="geschaeftsstelle" name="geschaeftsstelle" class="form-control" required>
                                         {% for stelle in geschaeftsstelle %}
                                             <option value={{ stelle.geschaeftsstelle_id|e }} {% if stelle.geschaeftsstelle_id == geschaeftsstelle_id %} selected {% endif %}>{{ stelle.name|e }}</option>
@@ -46,7 +46,7 @@
                                     <input type="text" class="form-control" id="mnummer" name="mnummer" placeholder="mnummer" value="{{mitgliedsnummer}}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="mkategorien">Art der Mitgliedschaft:</label>
+                                    <label for="mkategorien">Art der Mitgliedschaft</label>
                                     <select id="mkategorien" name="mkategorien" class="form-control" required>
                                         {% for mkategorie in mkategorien %}
                                             <option value={{ mkategorie.mkategorie_id|e }} {% if mkategorie.mkategorie_id == mkategorie_id %} selected {% endif %}>{{ mkategorie.mkname|e }}</option>
@@ -55,43 +55,43 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="Firma">Firmenname:</label>
+                                    <label for="Firma">Firmenname</label>
                                     <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" value="{{firma}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="Anrede">Anrede:</label>
+                                    <label for="Anrede">Anrede</label>
                                     <select id="anrede" name="anrede" class="form-control" required>
                                         <option value="Herr" {% if anrede == 'Herr' %} selected {% endif %}>Herr</option>
                                         <option value="Frau" {% if anrede == 'Frau' %} selected {% endif %}>Frau</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="Titel">Titel:</label>
+                                    <label for="Titel">Titel</label>
                                     <input type="text" class="form-control" id="titel" name="titel" placeholder="Prof. Dr." value="{{titel}}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="Vorname">Vorname:</label>
+                                    <label for="Vorname">Vorname</label>
                                     <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname" value="{{vorname}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">Nachname:</label>
+                                    <label for="name">Nachname</label>
                                     <input type="text" class="form-control" id="name" name="name" placeholder="Nachname" value="{{name}}" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="Strasse">Straße Nr.:</label>
+                                    <label for="Strasse">Straße Nr.</label>
                                     <input type="text" class="form-control" id="strasse" name="strasse" placeholder="Straße & Hausnummer" value="{{strasse}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="plz">PLZ:</label>
+                                    <label for="plz">PLZ</label>
                                     <input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ" value="{{plz}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ort">Ort:</label>
+                                    <label for="ort">Ort</label>
                                     <input type="text" class="form-control" id="ort" name="ort" placeholder="Ort" value="{{ort}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="Bundesland">Bundesland:</label>
+                                    <label for="Bundesland">Bundesland</label>
                                     <select id="bundesland" name="bundesland" class="form-control" required>
                                         {% for land in bundeslaender %}
                                             <option value={{ land.geo_bundesland_id|e }} {% if land.geo_bundesland_id == bundesland_id %} selected {% endif %}>{{ land.bundesland|e }}</option>
@@ -99,19 +99,19 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="Telefon">Telefonnummer:</label>
+                                    <label for="Telefon">Telefonnummer</label>
                                     <input type="text" class="form-control" id="telefon" name="telefon" placeholder="Telefon" value="{{telefon}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="Telefax">Fax:</label>
+                                    <label for="Telefax">Fax</label>
                                     <input type="text" class="form-control" id="telefax" name="telefax" placeholder="Telefax" value="{{telefax}}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="Homepage">Homepage:</label>
+                                    <label for="Homepage">Homepage</label>
                                     <input type="text" class="form-control" id="homepage" name="homepage" placeholder="Homepage" value="{{homepage}}">
                                 </div>
 				                <div class="form-group">
-                                    <label for="Homepage">SEO-URL:</label>
+                                    <label for="Homepage">SEO-URL</label>
                                     <div>
                                         <input type="text" class="form-control" style="width: 70%; float: left;" id="seo_url" name="seo_url" placeholder="seo_url" value="{{seo_url}}" required>
                                         <button id="seo_button" type="button" style="float: left;" class="btn btn-primary">SEO-URL erzeugen</button>
@@ -140,15 +140,15 @@
                         <div class="box-body">
                             <!-- text input -->
                             <div class="form-group">
-                                <label for="Email">Emailadresse:</label>
+                                <label for="Email">Emailadresse</label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" value="{{email}}" required>
                             </div>
                             <div class="form-group">
-                                <label for="username">Benutzername:</label>
+                                <label for="username">Benutzername</label>
                                 <input type="username" class="form-control" id="username" name="username" placeholder="Benutzername" value="{{username}}" required>
                             </div>
                             <div class="form-group">
-                                <label for="UserPasswort">Passwort: <small>Klartext</small></label>
+                                <label for="UserPasswort">Passwort <small>Klartext</small></label>
                                 <input type="text" class="form-control" id="userpasswort" name="userpasswort" placeholder="Passwort" value="{{passwort}}" required>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div class="form-group">
-                                <label for="FTP-Passwort">FTP Passwort: <small>Klartext</small></label>
+                                <label for="FTP-Passwort">FTP Passwort <small>Klartext</small></label>
                                 <input type="text" class="form-control" id="ftppasswort" name="ftppasswort" placeholder="FTP-Passwort" value="{{ftppasswort}}" required>
                             </div>
                         </div>

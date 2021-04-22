@@ -84,17 +84,18 @@ class UserDao extends BaseDao {
     }
 
     public function insertAccountForSupporter(iterable $values=[]){
-        $sql = "INSERT INTO user_account SET 
-                    art_id                = :art_id, 
-                    recht_id              = :recht_id,
-                    kennwort              = :kennwort,
-                    username              = :username,
-                    email                 = :email,
-                    registrierungsdatum   = :regdate,
-                    authentifiziert       = :authentifiziert, 
-                    gesperrt              = :gesperrt,
-                    loeschung             = :loeschung,
-                    newsletter            = :newsletter
+        $sql = "INSERT INTO user_account 
+                SET 
+                art_id               = :art_id, 
+                recht_id             = :recht_id,
+                kennwort             = :kennwort,
+                username             = :username,
+                email                = :email,
+                registrierungsdatum  = :regdate,
+                authentifiziert      = :authentifiziert, 
+                gesperrt             = :gesperrt,
+                loeschung            = :loeschung,
+                newsletter           = :newsletter
                 ";
 
         return $this->doSQL($sql, $values);

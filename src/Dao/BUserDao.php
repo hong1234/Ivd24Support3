@@ -4,9 +4,9 @@ namespace App\Dao;
 class BUserDao extends BaseDao {
 
     public function getAllBUser(iterable $values=[]) {
-        $sql    =  "SELECT user_id, returncode, company_name, paid, paket_name, start_abo, end_abo 
-                    FROM businessClubUser 
-                    LEFT JOIN businessClubPakete ON businessClubUser.paketid = businessClubPakete.paket_id";
+        $sql = "SELECT user_id, returncode, company_name, paid, paket_name, start_abo, end_abo 
+                FROM businessClubUser 
+                LEFT JOIN businessClubPakete ON businessClubUser.paketid = businessClubPakete.paket_id";
         return $this->doQuery($sql, $values);
     }
 
@@ -16,27 +16,26 @@ class BUserDao extends BaseDao {
                 LEFT JOIN businessClubPakete ON b.paketid = businessClubPakete.paket_id 
                 LEFT JOIN user_makler ON b.user_id = user_makler.user_id 
                 WHERE b.user_id = :user_id";
-
         return $this->doQuery($sql, $values)->fetch();
     }
 
     public function updateBUser(iterable $values=[]) {
-        $sql     = "UPDATE businessClubUser 
-                    SET
-                    user_id                 = :userid, 
-                    date_of_registration    = :buchungsdatum,
-                    company_name            = :firma,
-                    seo_url                 = :seo_url,
-                    start_abo               = :start_abo,
-                    end_abo                 = :end_abo,
-                    total_amount            = :total_amount, 
-                    paketid                 = :paket_id,
-                    paid                    = :paid,
-                    returncode              = :email,
-                    end_grundriss           = :end_grundriss,
-                    grundriss_voucher       = :grundriss_voucher,
-                    mobile_devices_storybox = :geraete
-                    WHERE           user_id = :user_id";
+        $sql = "UPDATE businessClubUser 
+                SET
+                user_id                 = :userid, 
+                date_of_registration    = :buchungsdatum,
+                company_name            = :firma,
+                seo_url                 = :seo_url,
+                start_abo               = :start_abo,
+                end_abo                 = :end_abo,
+                total_amount            = :total_amount, 
+                paketid                 = :paket_id,
+                paid                    = :paid,
+                returncode              = :email,
+                end_grundriss           = :end_grundriss,
+                grundriss_voucher       = :grundriss_voucher,
+                mobile_devices_storybox = :geraete
+                WHERE           user_id = :user_id";
 
         return $this->doSQL($sql, $values);
     }
