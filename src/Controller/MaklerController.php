@@ -194,12 +194,12 @@ class MaklerController extends AbstractController
         ]);
 
     }
-    //-----------
     
     /**
      * @Route("/makler/{uid}/lock/{gesperrt}", name="makler_lock_unlock")
      */
-    public function maklerLock($uid, $gesperrt, UserDao $uDao){
+    public function maklerLock($uid, $gesperrt, UserDao $uDao)
+    {
         $user_id  = $uid;
         $uDao->updateUserAccountGesperrt([
             'gesperrt' => $gesperrt,
@@ -221,6 +221,7 @@ class MaklerController extends AbstractController
             // $safePost = filter_input_array(INPUT_POST);
             $safePost = $request->request;
             $mService->maklerFtpPwEdit($user_id, $safePost);
+            return $this->redirectToRoute('makler_list', []);
         }
 
         $makler_config = $mDao->getRowInTableByIdentifier('user_makler_config', [
@@ -244,6 +245,7 @@ class MaklerController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             $safePost = $request->request;
             $mService->maklerPwEdit($user_id, $safePost);
+            return $this->redirectToRoute('makler_list', []);
         }
 
         $user_makler = $uDao->getRowInTableByIdentifier('user_account', [
@@ -285,7 +287,6 @@ class MaklerController extends AbstractController
     public function maklerIntoDelList($uid, MaklerDao $mDao)
     {
         $user_id = $uid;
-
         $mDao->updateUserMaklerForDelete([
             'user_id' => $user_id
         ]);
@@ -299,7 +300,8 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/{uid}/delete/undo", name="makler_delete_undo", requirements={"uid"="\d+"})
      */
-    public function deleteUndo($uid, UserDao $uDao){
+    public function deleteUndo($uid, UserDao $uDao) 
+    {
         $user_id = $uid;
         $uDao->updateUserAccountLoeschung([
             'user_id' => $user_id
