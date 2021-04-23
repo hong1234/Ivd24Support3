@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 // use App\Repository\ProductRepository;
 //use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
+use App\Dao\GeoDao;
 use App\Dao\MaklerDao;
 use App\Dao\BaseDao;
 use App\Service\StringFormat;
@@ -28,6 +29,8 @@ class DefaultController extends AbstractController
         ]);
     }
 
+    //----------
+
     public function getRowInTableById(string $tabName, iterable $values=[]) {
         foreach($values as $key => $value) {
             $sql = "SELECT * FROM ".$tabName." WHERE $key = $value";
@@ -39,11 +42,14 @@ class DefaultController extends AbstractController
     /**
      * @Route("/test", name="default_test")
      */
-    public function testPage(BaseDao $bDao)
+    public function testPage(GeoDao $geoDao)
     {
         //$rs = $mService->userMaklerConfig(1, 10137);
-        $bundeslaender    = $bDao->getAllRowsInTable('geo_bundesland');
-        var_dump($bundeslaender); exit;
+        //$bundeslaender    = $bDao->getAllRowsInTable('geo_bundesland');
+
+        $plz = '01468';
+        $gs = $geoDao->getGeschaeftsstelleByPLZ($plz);
+        var_dump($gs); exit;
 
 
         // $makler_config = $mDao->getRowInTableByIdentifier('user_makler_config', [

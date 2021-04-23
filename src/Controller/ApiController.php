@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 //use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 //use App\Dao\MaklerDao;
+use App\Dao\GeoDao;
 use App\Service\StringFormat;
 
 /**
@@ -22,17 +23,36 @@ class ApiController extends AbstractController
     public function getSeoUrl(Request $request, StringFormat $fmService)
     {
         //$inputString = "Muster Immobilien Invest Firma GmbH & Co. KG in München";
-        $inputString = $request->request->get('text', '');
+        $firmaInputString = $request->request->get('firma', '');
 
-        if($inputString == ''){
-            $seoUrl = "Bitte geben Sie die Firma-Angaben zuerst";
+        $rs = ['status'=> 'ok'];
+        if($firmaInputString == ''){
+            $rs['status'] = 'empty';
         } else {
-            $seoUrl = $fmService->getSeoUrl($inputString);
+            $rs['seo_url'] = $fmService->getSeoUrl($firmaInputString); 
         }
-        
-        return $this->json([
-            'seourl' => $seoUrl
-        ]);
+        return $this->json($rs);
+    }
+
+    /**
+     * @Route("/geschaeftsstelle", name="api_geschaeftsstelle")
+     */
+    public function getGeschaeftsstelle(Request $request, GeoDao $geoDao)
+    {
+        //$plz = $inputString = '01468';
+        $plzInputString = $request->request->get('plz', '');
+        $plzInputString = trim(preg_replace('/\s+/', ' ', $plzInputString));
+        $plzInputString = preg_replace('/ /', '', $plzInputString);
+
+        $rs = ['status'=> 'ok'];
+        if($plzInputString == ''){
+            $rs['status'] = 'empty';
+        } else {
+            $geo_bundesland = $geoDao->getGeschaeftsstelleByPLZ($plzInputString);
+            $rs['bundesland_id'] = $geo_bundesland['geo_bundesland_id'];
+            $rs['geschaeftsstelle_id'] = $geo_bundesland['geschaeftsstelle_id']; 
+        }
+        return $this->json($rs);
     }
 
 }
