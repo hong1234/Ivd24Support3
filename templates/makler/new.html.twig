@@ -91,6 +91,7 @@
                                         <label for="Geschaefststelle">Geschäftsstelle</label>
                                         <div>
                                         <select id="geschaeftsstelle" name="geschaeftsstelle" class="form-control" required>
+                                            <option value="">--Bitte wählen Sie eine Geschäftsstelle--</option>
                                             {% for stelle in geschaeftsstelle %}
                                                 <option value={{ stelle.geschaeftsstelle_id|e }} {% if stelle.geschaeftsstelle_id == geschaeftsstelle_id %} selected {% endif %}>{{ stelle.name|e }}</option>
                                             {% endfor %}
@@ -102,6 +103,7 @@
                                         <label for="Bundesland">Bundesland</label>
                                         <div>
                                         <select id="bundesland" name="bundesland" class="form-control" required>
+                                            <option value="">--Bitte wählen Sie ein Bundesland--</option>
                                             {% for land in bundeslaender %}
                                                 <option value={{ land.geo_bundesland_id|e }} {% if land.geo_bundesland_id == bundesland_id %} selected {% endif %}>{{ land.bundesland|e }}</option>
                                             {% endfor %}
@@ -214,7 +216,7 @@
             })
             .done(function( res ) {
                 if(res.status=='empty'){
-                    alert("Bitte geben Firma-Angaben zuerst");
+                    alert("Bitte geben Sie Firmenname zuerst");
                 } else {
                     $("#seo_url").val(res.seo_url);
                 }
@@ -229,7 +231,7 @@
             })
             .done(function( res ) {
                 if(res.status=='empty'){
-                    alert("Bitte geben PLZ zuerst");
+                    alert("Bitte geben Sie PLZ-Angabe zuerst");
                 } else {
                     $('#geschaeftsstelle').val(res.geschaeftsstelle_id);
                     $('#bundesland').val(res.bundesland_id);
