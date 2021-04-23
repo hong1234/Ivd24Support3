@@ -304,7 +304,7 @@ class MaklerService
         $em->getConnection()->beginTransaction();
         try {
 
-            $this->insertUserDelete($user_id);
+            //$this->insertUserDelete($user_id);
 
             while ($row = $stmt->fetch()) {
                 $objekt_id = $row['objekt_id'];
