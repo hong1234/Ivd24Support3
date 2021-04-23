@@ -74,7 +74,7 @@ class MaklerController extends AbstractController
 
             $mkategorie_id = $safePost->get('mkategorien'); 
 
-            $firma    = $safePost->get('firma');
+            $firma  = $safePost->get('firma');
 
             $anrede = $safePost->get('anrede');
             $titel  = $safePost->get('titel');

@@ -9,28 +9,27 @@ class MaklerDao extends UserDao {
                 user_id             = :user_id,
                 geschaeftsstelle_id = :geschaeftsstelle_id, 
                 mitgliedsnummer     = :mitgliedsnummer,
-                mitgliedskategorien = :mkategorie_id 
-                m_konfig_id         = :m_konfig_id, 
+                mitgliedskategorien = :mkategorie_id, 
+                m_konfig_id         = '1', 
                 anrede              = :anrede, 
-                titel               = :titel, 
+                titel               = :titel,
+                namenstitel         = '', 
                 name                = :name, 
                 vorname             = :vorname, 
                 firma               = :firma, 
                 strasse             = :strasse, 
                 plz                 = :plz, 
                 ort                 = :ort, 
-                geodb_laender_id    = :geodb_laender_id, 
+                geodb_laender_id    = '60', 
                 email               = :email, 
                 telefon             = :telefon, 
                 fax                 = :telefax, 
                 homepage            = :homepage, 
                 seo_url             = :seo_url, 
-                sortierung          = :sortierung,
+                sortierung          = '1',
 				ahu_geo_point	    = GeomFromText('POINT(1 1)'),  
                 bundesland_id       = :bundesland_id
                 ";
-                
-                
         return $this->doSQL($sql, $values);
     }
 
@@ -129,30 +128,30 @@ class MaklerDao extends UserDao {
     public function updateMakler(iterable $values=[]){
         $sql   =   "UPDATE user_makler 
                     SET
-                    anrede       = :anrede, 
-                    titel        = :titel,
-                    name         = :name, 
-                    vorname      = :vorname, 
-                    firma        = :firma, 
-                    strasse      = :strasse, 
-                    plz          = :plz, 
-                    ort          = :ort,  
-                    email        = :email, 
-                    telefon      = :telefon, 
-                    fax          = :telefax, 
-                    homepage     = :homepage, 
-                    seo_url      = :seo_url,
-                    mobil        = :mobil
+                    anrede    = :anrede, 
+                    titel     = :titel,
+                    name      = :name, 
+                    vorname   = :vorname, 
+                    firma     = :firma, 
+                    strasse   = :strasse, 
+                    plz       = :plz, 
+                    ort       = :ort,  
+                    email     = :email, 
+                    telefon   = :telefon, 
+                    fax       = :telefax, 
+                    homepage  = :homepage, 
+                    seo_url   = :seo_url,
+                    mobil     = :mobil
                     WHERE user_id = :user_id
                     ";
         return $this->doSQL($sql, $values);
     }
 
     public function getAllMakler(iterable $values=[]) {
-        $sql    =   "SELECT m.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, m.email AS maklerEmail, username, gesperrt, loeschung, anrede, vorname, name, firma, seo_url  
-                    FROM user_makler AS m 
-                    INNER JOIN user_account ON m.user_id = user_account.user_id 
-                    WHERE user_account.art_id = 2";
+        $sql = "SELECT m.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, m.email AS maklerEmail, username, gesperrt, loeschung, anrede, vorname, name, firma, seo_url  
+                FROM user_makler AS m 
+                INNER JOIN user_account ON m.user_id = user_account.user_id 
+                WHERE user_account.art_id = 2";
 
         // $sql2   =   "SELECT m.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, m.email AS maklerEmail, username, gesperrt, loeschung, anrede, vorname, name, firma  
         //             FROM user_makler m 

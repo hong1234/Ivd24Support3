@@ -33,8 +33,8 @@ class MaklerService
             'geschaeftsstelle_id' => $geschaeftsstelle_id
         ]);
         $bilderserver_id = $gs_werte['bilderserver_id'];
-        $ftp_server_id = $gs_werte['ftp_server_id'];
-        $move_robot_id = $gs_werte['move_robot_id'];
+        $ftp_server_id   = $gs_werte['ftp_server_id'];
+        $move_robot_id   = $gs_werte['move_robot_id'];
         $import_robot_id = $gs_werte['import_robot_id'];
 
         $bilderordner = "b00".$geschaeftsstelle_id.$user_id;
@@ -51,7 +51,8 @@ class MaklerService
             'homeftp'         => $homeftp,
             'bilderserver_id' => $bilderserver_id,
             'ftp_server_id'   => $ftp_server_id,
-            'move_robot_id'   => $move_robot_id
+            'move_robot_id'   => $move_robot_id,
+            'import_robot_id' => $import_robot_id
         ];
     }
 
@@ -68,11 +69,11 @@ class MaklerService
         $mitgliedsnummer = $safePost->get('mnummer');
         $mkategorie_id = $safePost->get('mkategorien');
 
-        $firma       = $safePost->get('firma');
-        $telefon     = $safePost->get('telefon');
-        $telefax     = $safePost->get('telefax');
-        $homepage    = $safePost->get('homepage');
-	    $seo_url     = $safePost->get('seo_url');
+        $firma    = $safePost->get('firma');
+        $telefon  = $safePost->get('telefon');
+        $telefax  = $safePost->get('telefax');
+        $homepage = $safePost->get('homepage');
+	    $seo_url  = $safePost->get('seo_url');
 
         $username    = $safePost->get('username');
         $email       = $safePost->get('email');
@@ -80,6 +81,7 @@ class MaklerService
         $ftppasswort = $safePost->get('ftppasswort');
         
         $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
+        
         //---------
         $ftppasswortcrypt = $this->fmService->getPwCrypt($ftppasswort);
 
@@ -88,15 +90,11 @@ class MaklerService
         try {
 
             $this->mDao->insertAccountForMakler([
-                'art_id'        => '2',
-                'recht_id'      => '3',
-                'md5_pw'        => md5($passwort),
-                'username'      => $username,
-                'email'         => $email,
-                'regdate'       => time(),
-                'authenticated' => '1',
-                'gesperrt'      => '0',
-                'passwort'      => $passwort
+                'md5_pw'   => md5($passwort),
+                'username' => $username,
+                'email'    => $email,
+                'regdate'  => time(),
+                'passwort' => $passwort
             ]);
 
             $user_id = $em->getConnection()->lastInsertId();
@@ -108,7 +106,6 @@ class MaklerService
                 'geschaeftsstelle_id' => $geschaeftsstelle_id,
                 'mitgliedsnummer'     => $mitgliedsnummer,
                 'mkategorie_id'       => $mkategorie_id,
-                'm_konfig_id'         => '1',
                 'anrede'              => $anrede,
                 'titel'               => $titel,
                 'name'                => $name,
@@ -117,24 +114,22 @@ class MaklerService
                 'strasse'             => $strasse,
                 'plz'                 => $plz,
                 'ort'                 => $ort,
-                'geodb_laender_id'    => '60',
                 'email'               => $email,
                 'telefon'             => $telefon,
                 'telefax'             => $telefax,
                 'homepage'            => $homepage,
                 'seo_url'             => $seo_url,
-                'sortierung'          => '1',
                 'bundesland_id'       => $bundesland_id
             ]);
    
             $this->mDao->insertUserMaklerConfig([
                 'user_id'         => $user_id,
+                'move_robot_id'   => $userMaklerConfig['move_robot_id'],
                 'bilderserver_id' => $userMaklerConfig['bilderserver_id'],
                 'bilderordner'    => $userMaklerConfig['bilderordner'],
                 'ftp_server_id'   => $userMaklerConfig['ftp_server_id'],
                 'ftp_benutzer'    => $userMaklerConfig['ftp_benutzer'],
                 'ftppasswort'     => $ftppasswort,
-                'move_robot_id'   => $userMaklerConfig['move_robot_id'],
                 'returncode_businessclub' => $email
             ]);
 
