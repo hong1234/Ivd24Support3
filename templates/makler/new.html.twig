@@ -135,14 +135,23 @@
                                     <label for="Homepage">Homepage</label>
                                     <input type="text" class="form-control" id="homepage" name="homepage" placeholder="Homepage" value="{{homepage}}">
                                 </div>
-				                <div class="form-group">
-                                    <label for="Homepage">SEO-URL</label>
-                                    <div>
-                                        <input type="text" class="form-control" style="width: 70%; float: left;" id="seo_url" name="seo_url" placeholder="seo_url" value="{{seo_url}}" required>
-                                        <button id="seo_button" type="button" style="width: 27%; float: left;" class="btn btn-primary">SEO-URL erzeugen</button>
-                                        <div style="clear: left;"></div>
+
+                                <div id="hong_element2">
+                                    <div style="width: 70%; float: left;">
+                                        <div class="form-group">
+                                    	    <label for="Homepage">SEO-URL</label>
+                                    	    <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="seo_url" value="{{seo_url}}" required>
+                                	    </div>  
                                     </div>
-                                </div>    
+
+                                    <div style="width: 20%; float: left;">
+                                        <div class="form-group">
+                                            <label for="dummy">-</label>
+                                            <button id="seo_button" type="button" class="btn btn-primary">SEO-URL erzeugen</button>
+                                        </div> 
+                                    </div>
+                                    <div style="clear: left;"></div>
+                                </div>
                     </div>            
                 </div>
                 <!-- /.box -->
