@@ -17,16 +17,12 @@ class GeoDao extends BaseDao {
     }
 
     public function getGeschaeftsstelleByPLZ(string $plz) {
-        $state = $this->getBundeslandByPLZ([
-            'plz' => $plz
-        ]);
-        $bundesland = $state['bundesland'];
 
-        // $gs = $this->getGeschaeftsstelleByBundesland([
-        //     'bundesland' => $bundesland
-        // ]);
+        $state = $this->getBundeslandByPLZ(['plz' => $plz]);
+        if ($state !== false){
+            return $this->getRowInTableByIdentifier('geo_bundesland', ['bundesland' => $state['bundesland']]);
+        }
 
-        $geo_bundesland  = $this->getRowInTableByIdentifier('geo_bundesland', ['bundesland' => $bundesland]);
-        return $geo_bundesland;
+        return false;
     }
 }

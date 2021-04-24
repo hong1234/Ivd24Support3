@@ -47,9 +47,14 @@ class DefaultController extends AbstractController
         //$rs = $mService->userMaklerConfig(1, 10137);
         //$bundeslaender    = $bDao->getAllRowsInTable('geo_bundesland');
 
-        $plz = '01468';
-        $gs = $geoDao->getGeschaeftsstelleByPLZ($plz);
-        var_dump($gs); exit;
+        $plz = '01467';
+        //$gs = $geoDao->getGeschaeftsstelleByPLZ($plz);
+
+        $state = $geoDao->getBundeslandByPLZ([
+            'plz' => $plz
+        ]);
+        //$bundesland = $state['bundesland'];
+        var_dump($state); exit;
 
 
         // $makler_config = $mDao->getRowInTableByIdentifier('user_makler_config', [

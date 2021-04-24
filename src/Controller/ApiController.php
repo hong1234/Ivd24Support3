@@ -49,8 +49,12 @@ class ApiController extends AbstractController
             $rs['status'] = 'empty';
         } else {
             $geo_bundesland = $geoDao->getGeschaeftsstelleByPLZ($plzInputString);
-            $rs['bundesland_id'] = $geo_bundesland['geo_bundesland_id'];
-            $rs['geschaeftsstelle_id'] = $geo_bundesland['geschaeftsstelle_id']; 
+            if ($geo_bundesland !== false){
+                $rs['bundesland_id'] = $geo_bundesland['geo_bundesland_id'];
+                $rs['geschaeftsstelle_id'] = $geo_bundesland['geschaeftsstelle_id']; 
+            } else {
+                $rs['status'] = 'notfound';
+            }
         }
         return $this->json($rs);
     }

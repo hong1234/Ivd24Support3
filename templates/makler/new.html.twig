@@ -14,9 +14,11 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>Makler anlegen</h1>
-            <div>
-                <p style="color:red;">{{error}}</p>
-            </div>
+            {% if error|length %}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+            {% endif %}
         </section>
         <!-- Main content -->
         <section class="content">
@@ -113,14 +115,15 @@
 
                                     </div>
 
-                                    <div style="width: 20%; float: left;">
+                                    <div style="width: 30%; float: left;">
                                         <div class="form-group">
                                             <label for="dummy">-</label>
-                                            <button id="geschaeftsstelle_button" type="button" class="btn btn-primary">Geschäftsstelle <br> und Bundesland <br>automatisch ermitteln</button>
+                                            <button id="geschaeftsstelle_button" type="button" class="btn btn-primary btn-block">Geschäftsstelle <br> und Bundesland <br>automatisch ermitteln</button>
                                         </div>
-                                        
                                     </div>
+
                                     <div style="clear: left;"></div>
+
                                 </div>
                                 
                                 <div class="form-group">
@@ -144,10 +147,10 @@
                                 	    </div>  
                                     </div>
 
-                                    <div style="width: 20%; float: left;">
+                                    <div style="width: 30%; float: left;">
                                         <div class="form-group">
                                             <label for="dummy">-</label>
-                                            <button id="seo_button" type="button" class="btn btn-primary">SEO-URL erzeugen</button>
+                                            <button id="seo_button" type="button" class="btn btn-primary btn-block">SEO-URL erzeugen</button>
                                         </div> 
                                     </div>
                                     <div style="clear: left;"></div>
@@ -241,7 +244,11 @@
             .done(function( res ) {
                 if(res.status=='empty'){
                     alert("Bitte geben Sie PLZ-Angabe zuerst");
-                } else {
+                } 
+                else if (res.status=='notfound') {
+                    alert("PLZ wurde nicht gefunden");
+                }
+                else {
                     $('#geschaeftsstelle').val(res.geschaeftsstelle_id);
                     $('#bundesland').val(res.bundesland_id);
                 }
