@@ -34,7 +34,7 @@ class MaklerDao extends UserDao {
     }
 
     public function insertUserMaklerConfig(iterable $values=[]){
-        $sql  = "INSERT INTO user_makler_config 
+        $sql = "INSERT INTO user_makler_config 
                 SET 
                 user_id            = :user_id, 
                 anrede_anzeigen    = '1', 
@@ -187,7 +187,7 @@ class MaklerDao extends UserDao {
     }
 
     public function updateUserMaklerConfig(iterable $values=[]){
-        $sql  = "UPDATE user_makler_config 
+        $sql = "UPDATE user_makler_config 
                 SET 
                     ftp_passwort = :ftppasswort 
                 WHERE user_id = :user_id";

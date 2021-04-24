@@ -64,8 +64,8 @@ class MaklerController extends AbstractController
         //if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
-            //$safePost = filter_input_array(INPUT_POST);// post parameters
-            //var_dump($safePost); exit;
+            $safePost = filter_input_array(INPUT_POST);// post parameters
+            var_dump($safePost); exit;
 
             $safePost = $request->request;
 

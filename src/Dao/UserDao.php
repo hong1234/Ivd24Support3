@@ -112,7 +112,7 @@ class UserDao extends BaseDao {
                 registrierungsdatum = :regdate,
                 authentifiziert     = '1', 
                 gesperrt            = '0', 
-                kennwort_plain      = :passwort
+                kennwort_plain      = ''
                 ";
         return $this->doSQL($sql, $values);
     }

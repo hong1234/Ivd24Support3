@@ -93,8 +93,8 @@ class MaklerService
                 'md5_pw'   => md5($passwort),
                 'username' => $username,
                 'email'    => $email,
-                'regdate'  => time(),
-                'passwort' => $passwort
+                'regdate'  => time()
+                //'passwort' => $passwort
             ]);
 
             $user_id = $em->getConnection()->lastInsertId();
@@ -160,20 +160,20 @@ class MaklerService
 
     public function maklerEdit($user_id, $safePost) {
 
-        $email       = $safePost->get('email');
-        $anrede      = $safePost->get('anrede');
-        $titel       = $safePost->get('titel');
-        $vorname     = $safePost->get('vorname');
-        $name        = $safePost->get('name');
-        $firma       = $safePost->get('firma');
-        $strasse     = $safePost->get('strasse');
-        $plz         = $safePost->get('plz');
-        $ort         = $safePost->get('ort');
-        $telefon     = $safePost->get('telefon');
-        $telefax     = $safePost->get('telefax');
-        $homepage    = $safePost->get('homepage');
-        $mobil       = $safePost->get('mobil');
-        $seo_url     = $safePost->get('seo_url');
+        $email    = $safePost->get('email');
+        $anrede   = $safePost->get('anrede');
+        $titel    = $safePost->get('titel');
+        $vorname  = $safePost->get('vorname');
+        $name     = $safePost->get('name');
+        $firma    = $safePost->get('firma');
+        $strasse  = $safePost->get('strasse');
+        $plz      = $safePost->get('plz');
+        $ort      = $safePost->get('ort');
+        $telefon  = $safePost->get('telefon');
+        $telefax  = $safePost->get('telefax');
+        $homepage = $safePost->get('homepage');
+        $mobil    = $safePost->get('mobil');
+        $seo_url  = $safePost->get('seo_url');
 
         $em = $this->mDao->getEm();
         $em->getConnection()->beginTransaction();
