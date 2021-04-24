@@ -64,8 +64,8 @@ class MaklerController extends AbstractController
         //if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
-            $safePost = filter_input_array(INPUT_POST);// post parameters
-            var_dump($safePost); exit;
+            //$safePost = filter_input_array(INPUT_POST);// post parameters
+            //var_dump($safePost); exit;
 
             $safePost = $request->request;
 
@@ -153,6 +153,7 @@ class MaklerController extends AbstractController
         $user_id = $uid;
         // if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+
             $safePost = $request->request;
             $mService->maklerEdit($user_id, $safePost);
             return $this->redirectToRoute('makler_list', [
@@ -175,7 +176,6 @@ class MaklerController extends AbstractController
     public function maklerDelete($uid, Request $request, MaklerService $mService)
     {
         $user_id = $uid;
-
         if ($request->isMethod('POST')) {
 
             if ($request->request->get('savebutton')) {
@@ -241,8 +241,8 @@ class MaklerController extends AbstractController
     public function maklerPwEdit($uid, Request $request, UserDao $uDao, MaklerService $mService)
     {
         $user_id = $uid;
-
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+
             $safePost = $request->request;
             $mService->maklerPwEdit($user_id, $safePost);
             return $this->redirectToRoute('makler_list', []);
