@@ -104,12 +104,13 @@ class MaklerDao extends UserDao {
                 parameter7       = :ftp_benutzer,
                 parameter8       = '/usr/sbin/usermod'
                 ";
-
         return $this->doSQL($sql, $values);
     }
 
     public function updateMaklerAhuGeoPoint(iterable $values=[]){
-        $sql = "UPDATE user_makler SET ahu_geo_point = ST_GeomFromText('Point(0 0)') WHERE user_id = :user_id";
+        $sql = "UPDATE user_makler 
+                SET ahu_geo_point = ST_GeomFromText('Point(0 0)') 
+                WHERE user_id = :user_id";
         return $this->doSQL($sql, $values);
     }
 
@@ -125,25 +126,30 @@ class MaklerDao extends UserDao {
         return $this->doQuery($sql, $values)->fetchAll();
     }
 
+    public function getMaklerBySeoUrl2(iterable $values=[]){
+        $sql = "SELECT * FROM user_makler WHERE seo_url = :seo_url AND seo_url !=:pre_seo_url";
+        return $this->doQuery($sql, $values)->fetchAll();
+    }
+
     public function updateMakler(iterable $values=[]){
-        $sql   =   "UPDATE user_makler 
-                    SET
-                    anrede    = :anrede, 
-                    titel     = :titel,
-                    name      = :name, 
-                    vorname   = :vorname, 
-                    firma     = :firma, 
-                    strasse   = :strasse, 
-                    plz       = :plz, 
-                    ort       = :ort,  
-                    email     = :email, 
-                    telefon   = :telefon, 
-                    fax       = :telefax, 
-                    homepage  = :homepage, 
-                    seo_url   = :seo_url,
-                    mobil     = :mobil
-                    WHERE user_id = :user_id
-                    ";
+        $sql = "UPDATE user_makler 
+                SET
+                anrede   = :anrede, 
+                titel    = :titel,
+                name     = :name, 
+                vorname  = :vorname, 
+                firma    = :firma, 
+                strasse  = :strasse, 
+                plz      = :plz, 
+                ort      = :ort,  
+                email    = :email, 
+                telefon  = :telefon, 
+                fax      = :telefax, 
+                homepage = :homepage, 
+                seo_url  = :seo_url,
+                mobil    = :mobil
+                WHERE user_id = :user_id
+                ";
         return $this->doSQL($sql, $values);
     }
 
@@ -189,7 +195,7 @@ class MaklerDao extends UserDao {
     public function updateUserMaklerConfig(iterable $values=[]){
         $sql = "UPDATE user_makler_config 
                 SET 
-                    ftp_passwort = :ftppasswort 
+                ftp_passwort = :ftppasswort 
                 WHERE user_id = :user_id";
         return $this->doSQL($sql, $values);
     }

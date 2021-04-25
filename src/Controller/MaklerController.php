@@ -22,7 +22,7 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/new", name="makler_new")
      */
-    public function newMakler(Request $request, MaklerDao $mDao, UserAccount $accService, MaklerService $mService, StringFormat $sfService)
+    public function maklerNew(Request $request, MaklerDao $mDao, UserAccount $accService, MaklerService $mService, StringFormat $sfService)
     {
         $geschaeftsstelle_id = '';
         $mitgliedsnummer = '';
@@ -98,7 +98,7 @@ class MaklerController extends AbstractController
 
             //validation
             $error = $accService->isValidMaklerData($username, $email, $passwort, $seo_url);
-
+           
             if ($error == '') {
                 $mService->newMakler($safePost);
                 return $this->redirectToRoute('makler_list', [
@@ -148,24 +148,43 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/{uid}/edit", name="makler_edit", requirements={"uid"="\d+"})
      */
-    public function maklerEdit($uid, Request $request, MaklerService $mService)
+    public function maklerEdit($uid, Request $request, UserAccount $accService, MaklerService $mService)
     {
         $user_id = $uid;
+        $error = '';
+
         // if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
+            //$safePost = filter_input_array(INPUT_POST);// post parameters
+            //var_dump($safePost); exit;
+
             $safePost = $request->request;
-            $mService->maklerEdit($user_id, $safePost);
-            return $this->redirectToRoute('makler_list', [
-                //'paramName' => 'value'
-            ]);
+
+            $email   = $safePost->get('email');
+            $seo_url = $safePost->get('seo_url');
+
+            //validation
+            $error = $accService->isValidMaklerDataByUpdate($user_id, $email, $seo_url);
+
+            if ($error == '') {
+                $mService->maklerEdit($user_id, $safePost);
+                return $this->redirectToRoute('makler_list', [
+                    //'paramName' => 'value'
+                ]);
+            }
+
+            $user_makler = filter_input_array(INPUT_POST);// post parameters
         }
 
-        $user_makler = $mService->getMaklerData($user_id);
-        
+        if ($request->isMethod('GET')) {
+            $user_makler = $mService->getMaklerData($user_id);
+        }
+
         return $this->render('makler/edit.html.twig', [
             'user_id' => $user_id,
-            'makler' => $user_makler
+            'makler'  => $user_makler,
+            'error'   => $error
         ]);
 
     }

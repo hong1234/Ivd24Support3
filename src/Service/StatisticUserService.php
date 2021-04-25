@@ -85,11 +85,11 @@ class StatisticUserService
         $em->getConnection()->beginTransaction();
         try {
             $this->uDao->updateStatisticUser([
-                'username'              => $username,
-                'email'                 => $email,
-                'kennwort'              => md5($passwort),
-                'geschaeftsstellen_id'  => $gs_id,
-                'user_id'               => $user_id
+                'username'             => $username,
+                'email'                => $email,
+                'kennwort'             => md5($passwort),
+                'geschaeftsstellen_id' => $gs_id,
+                'user_id'              => $user_id
             ]);
             
             $this->loginDao->updateLoginUser($email, $passwort, $roles, $user_id);

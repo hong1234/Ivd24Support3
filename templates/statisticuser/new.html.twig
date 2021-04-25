@@ -15,17 +15,17 @@
     <div class="content-wrapper">
       <section class="content-header">
         <h1>StatisticUser anlegen</h1>
+        {% if error|length %}
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        {% endif %}
       </section>
       <!-- Main content -->
       <section class="content">
         <div class="row">
           <!-- left column -->
           <div class="col-md-6">
-
-          <div>
-            <p style="color:red;">{{error}}</p>
-          </div>
-
           {# <form action="/statisticuser/new" method="POST"> #}
           <form action="{{ path('statisticuser_new') }}" method="POST">
             <div class="box box-warning">

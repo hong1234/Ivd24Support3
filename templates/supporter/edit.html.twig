@@ -15,17 +15,17 @@
     <div class="content-wrapper">
       <section class="content-header">
         <h1>Supporter editieren</h1>
+        {% if error|length %}
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        {% endif %}
       </section>
       <!-- Main content -->
       <section class="content">
         <div class="row">
           <!-- left column -->
           <div class="col-md-6">
-
-          <div>
-            <p style="color:red;">{{error}}</p>
-          </div>
-
           {# <form action="/supporter/{{user_id}}/edit" method="POST"> #}
           <form action="{{ path('supporter_edit', {'uid': user_id}) }}" method="POST">
             <div class="box box-warning">

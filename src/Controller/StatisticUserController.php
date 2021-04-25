@@ -114,11 +114,11 @@ class StatisticUserController extends AbstractController
         }
 
         return $this->render('statisticuser/edit.html.twig', [
-            'user_id'             => $user_id,
-            'username'            => $username,
-            'email'               => $email,
-            'geschaeftsstelleId'  => $gs_id,
-            'geschaeftsstellen'   => $geschaeftsstellen,
+            'user_id'            => $user_id,
+            'username'           => $username,
+            'email'              => $email,
+            'geschaeftsstelleId' => $gs_id,
+            'geschaeftsstellen'  => $geschaeftsstellen,
             'error'              => $error
         ]);
 

@@ -106,11 +106,11 @@ class SupporterController extends AbstractController
         }
 
         return $this->render('supporter/edit.html.twig', [
-            'user_id'    => $user_id,
-            'username'   => $username,
-            'email'      => $email,
-            'passwort'   => $passwort,
-            'error'      => $error
+            'user_id'  => $user_id,
+            'username' => $username,
+            'email'    => $email,
+            'passwort' => $passwort,
+            'error'    => $error
         ]);
     }
 

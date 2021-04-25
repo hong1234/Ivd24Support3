@@ -42,8 +42,11 @@ class DefaultController extends AbstractController
     /**
      * @Route("/test", name="default_test")
      */
-    public function testPage(GeoDao $geoDao)
+    public function testPage(MaklerService $mS)
     {
+        $state = $mS->getMaklerData(112742);
+
+        var_dump($state); exit;
         //$rs = $mService->userMaklerConfig(1, 10137);
         //$bundeslaender    = $bDao->getAllRowsInTable('geo_bundesland');
 
