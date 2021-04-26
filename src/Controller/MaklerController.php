@@ -25,12 +25,22 @@ class MaklerController extends AbstractController
      */
     public function maklerNew(Request $request, MaklerDao $mDao, UserAccount $validator, MaklerService $mService, StringFormat $sfService)
     {
+        $bundeslaender    = $mDao->getAllRowsInTable('geo_bundesland');
+        $geschaeftsstelle = $mDao->getAllRowsInTable('user_geschaeftsstelle');
+        $mkategorien = array(
+            ['mkategorie_id' => 'OM', 'mkname' => 'Ordentliches Mitglied'],
+            ['mkategorie_id' => 'ZM', 'mkname' => 'Zweitmitglied'],
+            ['mkategorie_id' => 'Ex1', 'mkname' => 'Existenzgründer im 1. Jahr'],
+            ['mkategorie_id' => 'Ex2', 'mkname' => 'Existenzgründer im 2. Jahr'],
+            ['mkategorie_id' => 'EM', 'mkname' => 'Ehrenmitglieder']
+        );
+
         $geschaeftsstelle_id = '';
-        $mitgliedsnummer = '';
+        $bundesland_id = '';
         $mkategorie_id = '';
 
+        $mitgliedsnummer = '';
         $firma = '';
-
         $anrede = '';
         $titel = '';
         $vorname = '';
@@ -38,8 +48,7 @@ class MaklerController extends AbstractController
         $strasse = '';
         $plz     = '';
         $ort     = '';
-        $bundesland_id = '';
-
+        
         $telefon = '';
         $telefax = '';
         $homepage = '';
@@ -52,16 +61,6 @@ class MaklerController extends AbstractController
         
         $error = '';
 
-        $bundeslaender    = $mDao->getAllRowsInTable('geo_bundesland');
-        $geschaeftsstelle = $mDao->getAllRowsInTable('user_geschaeftsstelle');
-        $mkategorien = array(
-            ['mkategorie_id' => 'OM', 'mkname' => 'Ordentliches Mitglied'],
-            ['mkategorie_id' => 'ZM', 'mkname' => 'Zweitmitglied'],
-            ['mkategorie_id' => 'Ex1', 'mkname' => 'Existenzgründer im 1. Jahr'],
-            ['mkategorie_id' => 'Ex2', 'mkname' => 'Existenzgründer im 2. Jahr'],
-            ['mkategorie_id' => 'EM', 'mkname' => 'Ehrenmitglieder']
-        );
-
         //if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
@@ -71,34 +70,35 @@ class MaklerController extends AbstractController
             $safePost = $request->request;
 
             $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
+            $bundesland_id = $safePost->get('bundesland');
+            $mkategorie_id = $safePost->get('mkategorien');
+
             $mitgliedsnummer = $safePost->get('mnummer');
-
-            $mkategorie_id = $safePost->get('mkategorien'); 
-
             $firma  = $safePost->get('firma');
-
             $anrede = $safePost->get('anrede');
             $titel  = $safePost->get('titel');
-
             $vorname  = $safePost->get('vorname');
             $name     = $safePost->get('name');
             $strasse  = $safePost->get('strasse');
             $plz      = $safePost->get('plz');
             $ort      = $safePost->get('ort');
-            $bundesland_id = $safePost->get('bundesland');
-
+            
             $telefon  = $safePost->get('telefon');
             $telefax  = $safePost->get('telefax');
             $homepage = $safePost->get('homepage');
-            $seo_url  = $safePost->get('seo_url');
-              
-            $email     = $safePost->get('email');  
-            $username  = $safePost->get('username');  
-            $passwort  = $safePost->get('userpasswort');
+            
+            $username = $safePost->get('username');
+            $email    = $safePost->get('email'); 
+            $passwort = $safePost->get('userpasswort');
             $ftppasswort = $safePost->get('ftppasswort');
+            $seo_url  = $safePost->get('seo_url');
 
             //validation
-            $error = $validator->isValidMaklerData($username, $email, $passwort, $seo_url);
+            //$error = $validator->isValidMaklerData($email, $seo_url);
+            $error1 = $validator->isEmpty($username, $email, $passwort, $seo_url);
+            $error2 = $validator->isValidEmail($email);
+            $error3 = $validator->isValidSeoUrl($seo_url);
+            $error  = $error1.$error2.$error3;
            
             if ($error == '') {
                 $mService->newMakler($safePost);
@@ -106,32 +106,29 @@ class MaklerController extends AbstractController
                     //'paramName' => 'value'
                 ]);
             }
+
         }
         
         return $this->render('makler/new.html.twig', [
 
             'geschaeftsstelle' => $geschaeftsstelle,
-            'geschaeftsstelle_id' => $geschaeftsstelle_id,
-
-            'mitgliedsnummer' => $mitgliedsnummer,
-
+            'bundeslaender' => $bundeslaender,
             'mkategorien' => $mkategorien,
+
+            'geschaeftsstelle_id' => $geschaeftsstelle_id,
+            'bundesland_id' => $bundesland_id,
             'mkategorie_id' => $mkategorie_id,
 
+            'mitgliedsnummer' => $mitgliedsnummer,
             'firma'   => $firma,
-
-            'anrede' => $anrede,
-
-            'titel' => $titel,
+            'anrede'  => $anrede,
+            'titel'   => $titel,
             'vorname' => $vorname,
             'name'    => $name,
             'strasse' => $strasse,
             'plz'     => $plz,
             'ort'     => $ort,
 
-            'bundeslaender' => $bundeslaender,
-            'bundesland_id' => $bundesland_id,
-            
             'telefon'  => $telefon,
             'telefax'  => $telefax,
             'homepage' => $homepage,
@@ -141,6 +138,7 @@ class MaklerController extends AbstractController
             'username' => $username,
             'passwort' => $passwort,
             'ftppasswort' => $ftppasswort,
+
             'error'    => $error  
         ]);
 
@@ -161,12 +159,16 @@ class MaklerController extends AbstractController
             //var_dump($safePost); exit;
 
             $safePost = $request->request;
-
+            
             $email   = $safePost->get('email');
             $seo_url = $safePost->get('seo_url');
 
             //validation
-            $error = $validator->isValidMaklerDataByUpdate($user_id, $email, $seo_url);
+            //$error = $validator->isValidMaklerDataByUpdate($user_id, $email, $seo_url);
+            $error1 = $validator->isEmptyByUpdate($email, $seo_url);
+            $error2 = $validator->isValidEmailByUpdate($user_id, $email);
+            $error3 = $validator->isValidSeoUrlByUpdate($user_id, $seo_url);
+            $error  = $error1.$error2.$error3;
 
             if ($error == '') {
                 $mService->maklerEdit($user_id, $safePost);
@@ -175,7 +177,7 @@ class MaklerController extends AbstractController
                 ]);
             }
 
-            $user_makler = filter_input_array(INPUT_POST);// post parameters
+            $user_makler = $safePost->all();// post parameters as array
         }
 
         if ($request->isMethod('GET')) {

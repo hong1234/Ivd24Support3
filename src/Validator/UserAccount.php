@@ -95,10 +95,8 @@ class UserAccount
         return $this->getCheckResult2($rs);
     }
 
-    //-----------Account----------------------------------------
-
-    public function isValidAccountInput($username, $email, $passwort){
-
+    //---------------------------------------------------
+    public function isEmptyA($username, $email, $passwort){
         $error = '';
 
         if($username == ''){
@@ -110,6 +108,45 @@ class UserAccount
         if($passwort == ''){
             $error = $error."|--passwort leer--";
         }
+
+        return $error;
+    }
+
+    public function isEmpty($username, $email, $passwort, $seo_url){
+        $error = '';
+
+        if($username == ''){
+            $error = $error."|--username leer--";
+        }
+        if($email == ''){
+            $error = $error."|--email leer--";
+        }
+        if($passwort == ''){
+            $error = $error."|--passwort leer--";
+        }
+        if($seo_url == ''){
+            $error = $error."|--seo_url leer--";
+        }
+
+        return $error;
+    }
+
+    public function isEmptyByUpdate($email, $seo_url){
+        $error = '';
+
+        if($email == ''){
+            $error = $error."|--email leer--";
+        }
+
+        if($seo_url == ''){
+            $error = $error."|--seo_url leer--";
+        }
+
+        return $error;
+    }
+
+    public function isValidEmail($email){
+        $error = '';
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
@@ -119,10 +156,6 @@ class UserAccount
                 $user_id = $rs['user_id'];
                 $error = $error."|--email schon belegt von $person (user_id: $user_id)--";
             } 
-
-            // if($this->occupiedUserName($username)){
-            //     $error = $error."|--username schon belegt--";
-            // } 
             
         } else {
             $error = $error."|--invalid email format--";
@@ -131,19 +164,8 @@ class UserAccount
         return $error;
     }
 
-    public function isValidAccountInputByUpdate($user_id, $username, $email, $passwort){
-
+    public function isValidEmailByUpdate($user_id, $email){
         $error = '';
-
-        if($username == ''){
-            $error = $error."|--username leer--";
-        }
-        if($email == ''){
-            $error = $error."|--email leer--";
-        }
-        if($passwort == ''){
-            $error = $error."|--passwort leer--";
-        }
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
@@ -151,107 +173,47 @@ class UserAccount
                 'user_id' => $user_id
             ]);
             $pre_email = $user_account['email'];
-
-            $rs = $this->occupiedEmailNameByUpdate($pre_email, $email);
-            if($rs['status']){
-                $person = $rs['person'];
-                $user_id = $rs['user_id'];
-                $error = $error."|--email schon belegt von $person (user_id: $user_id)--";
-            }
-
-            // $pre_username = $user_account['username'];
-            // if($this->occupiedUserNameByUpdate($pre_username, $username)){
-            //     $error = $error."|--username schon belegt--";
-            // } 
             
-        } else {
-            $error = $error."|--invalid email format--";
-        }
-
-        return $error;
-    }
-
-    //-----------Makler------------------------------------------------
-    public function isValidMaklerData($username, $email, $passwort, $seo_url){
-
-        $error = '';
-
-        if($username == ''){
-            $error = $error."|--username leer--";
-        }
-        if($email == ''){
-            $error = $error."|--email leer--";
-        }
-        if($passwort == ''){
-            $error = $error."|--passwort leer--";
-        }
-        if($seo_url == ''){
-            $error = $error."|--seo_url leer--";
-        }
-
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-            $rs = $this->occupiedEmailName($email);
-            if($rs['status']){
-                $person = $rs['person'];
-                $user_id = $rs['user_id'];
-                $error = $error."|--email schon belegt von $person (user_id: $user_id)--";
-            } 
-
-            // if($this->occupiedUserName($username)){
-            //     $error = $error."--username schon belegt--";
-            // } 
-
-            $rs = $this->occupiedSeoUrl($seo_url);
-            if($rs['status']){
-                $person = $rs['person'];
-                $user_id = $rs['user_id'];
-                $error = $error."|--seo_url schon belegt von $person (user_id: $user_id)--";
-            } 
-            
-        } else {
-            $error = $error."|--invalid email format--";
-        }
-
-        return $error;
-    }
-
-    public function isValidMaklerDataByUpdate($user_id, $email, $seo_url){
-
-        $error = '';
-
-        if($email == ''){
-            $error = $error."|--email leer--";
-        }
-
-        if($seo_url == ''){
-            $error = $error."|--seo_url leer--";
-        }
-
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-            $user_makler = $this->mDao->getRowInTableByIdentifier('user_makler', [
-                'user_id' => $user_id
-            ]);
-            $pre_email = $user_makler['email'];
-            $pre_seo_url = $user_makler['seo_url'];
-
             $rs = $this->occupiedEmailNameByUpdate($pre_email, $email);
             if($rs['status']){
                 $user_id = $rs['user_id'];
                 $person = $rs['person'];
                 $error = $error."|--email schon belegt von $person (user_id: $user_id)--";
             }
-
-            $rs = $this->occupiedSeoUrlByUpdate($pre_seo_url, $seo_url);
-            if($rs['status']){
-                $user_id = $rs['user_id'];
-                $person = $rs['person'];
-                $error = $error."|--seo_url schon belegt von $person (user_id: $user_id)--";
-            } 
             
         } else {
             $error = $error."|--invalid email format--";
+        }
+
+        return $error; 
+    }
+
+    public function isValidSeoUrl($seo_url){
+        $error = '';
+
+        $rs = $this->occupiedSeoUrl($seo_url);
+        if($rs['status']){
+            $user_id = $rs['user_id'];
+            $person = $rs['person'];
+            $error = $error."|--seo_url schon belegt von $person (user_id: $user_id)--";
+        } 
+
+        return $error;
+    }
+
+    public function isValidSeoUrlByUpdate($user_id, $seo_url){
+        $error = '';
+
+        $user_makler = $this->mDao->getRowInTableByIdentifier('user_makler', [
+            'user_id' => $user_id
+        ]);
+        $pre_seo_url = $user_makler['seo_url'];
+
+        $rs = $this->occupiedSeoUrlByUpdate($pre_seo_url, $seo_url);
+        if($rs['status']){
+            $user_id = $rs['user_id'];
+            $person = $rs['person'];
+            $error = $error."|--seo_url schon belegt von $person (user_id: $user_id)--";
         }
 
         return $error;

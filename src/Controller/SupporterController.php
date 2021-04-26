@@ -46,7 +46,11 @@ class SupporterController extends AbstractController
             $email     =  $safePost->get('email');     //validation
             $passwort  =  $safePost->get('passwort');
 
-            $error = $validator->isValidAccountInput($username, $email, $passwort);
+            //validation
+            //$error = $validator->isValidAccountInput($username, $email, $passwort);
+            $error1 = $validator->isEmptyA($username, $email, $passwort);
+            $error2 = $validator->isValidEmail($email);
+            $error  = $error1.$error2;
             
             if ($error == '') {
                 $supSer->newSupporter($safePost);
@@ -86,7 +90,11 @@ class SupporterController extends AbstractController
             $email    = $safePost->get('email');
             $passwort = $safePost->get('passwort');
 
-            $error = $validator->isValidAccountInputByUpdate($user_id, $username, $email, $passwort);
+            //validation
+            // $error = $validator->isValidAccountInputByUpdate($user_id, $username, $email, $passwort);
+            $error1 = $validator->isEmptyA($username, $email, $passwort);
+            $error2 = $validator->isValidEmailByUpdate($user_id, $email);
+            $error  = $error1.$error2;
             
             if ($error == '') {
                 $supSer->updateSupporter($user_id, $safePost);

@@ -47,12 +47,16 @@ class StatisticUserController extends AbstractController
             //var_dump($safePost); exit;
             $safePost = $request->request;
 
-            $username =  $safePost->get('username');
-            $email    =  $safePost->get('email');
-            $passwort =  $safePost->get('passwort');
-            $gs_id    =  $safePost->get('geschaeftsstelle');
+            $username = $safePost->get('username');
+            $email    = $safePost->get('email');
+            $passwort = $safePost->get('passwort');
+            $gs_id    = $safePost->get('geschaeftsstelle');
 
-            $error = $validator->isValidAccountInput($username, $email, $passwort);
+            //validation
+            //$error = $validator->isValidAccountInput($username, $email, $passwort);
+            $error1 = $validator->isEmptyA($username, $email, $passwort);
+            $error2 = $validator->isValidEmail($email);
+            $error  = $error1.$error2;
             
             if ($error == '') {
                 $staSer->newStatisticUser($safePost);
@@ -90,12 +94,17 @@ class StatisticUserController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // post parameters
             $safePost = $request->request;
+
             $username = $safePost->get('username');
             $email    = $safePost->get('email');
             $passwort =  $safePost->get('passwort');
             $gs_id    = $safePost->get('geschaeftsstelle');
 
-            $error = $validator->isValidAccountInputByUpdate($user_id, $username, $email, $passwort);
+            //validation
+            // $error = $validator->isValidAccountInputByUpdate($user_id, $username, $email, $passwort);
+            $error1 = $validator->isEmptyA($username, $email, $passwort);
+            $error2 = $validator->isValidEmailByUpdate($user_id, $email);
+            $error  = $error1.$error2;
             
             if ($error == '') {
                 $staSer->updateStatisticUser($user_id, $safePost);
