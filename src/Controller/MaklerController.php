@@ -6,11 +6,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 // use App\Repository\ProductRepository;
 
+use App\Validator\UserAccount;
+
 use App\Dao\UserDao;
 use App\Dao\MaklerDao;
 
 use App\Service\MaklerService;
-use App\Service\UserAccount;
 use App\Service\StringFormat;
 
 /**
@@ -22,7 +23,7 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/new", name="makler_new")
      */
-    public function maklerNew(Request $request, MaklerDao $mDao, UserAccount $accService, MaklerService $mService, StringFormat $sfService)
+    public function maklerNew(Request $request, MaklerDao $mDao, UserAccount $validator, MaklerService $mService, StringFormat $sfService)
     {
         $geschaeftsstelle_id = '';
         $mitgliedsnummer = '';
@@ -97,7 +98,7 @@ class MaklerController extends AbstractController
             $ftppasswort = $safePost->get('ftppasswort');
 
             //validation
-            $error = $accService->isValidMaklerData($username, $email, $passwort, $seo_url);
+            $error = $validator->isValidMaklerData($username, $email, $passwort, $seo_url);
            
             if ($error == '') {
                 $mService->newMakler($safePost);
@@ -148,7 +149,7 @@ class MaklerController extends AbstractController
     /**
      * @Route("/makler/{uid}/edit", name="makler_edit", requirements={"uid"="\d+"})
      */
-    public function maklerEdit($uid, Request $request, UserAccount $accService, MaklerService $mService)
+    public function maklerEdit($uid, Request $request, UserAccount $validator, MaklerService $mService)
     {
         $user_id = $uid;
         $error = '';
@@ -165,7 +166,7 @@ class MaklerController extends AbstractController
             $seo_url = $safePost->get('seo_url');
 
             //validation
-            $error = $accService->isValidMaklerDataByUpdate($user_id, $email, $seo_url);
+            $error = $validator->isValidMaklerDataByUpdate($user_id, $email, $seo_url);
 
             if ($error == '') {
                 $mService->maklerEdit($user_id, $safePost);

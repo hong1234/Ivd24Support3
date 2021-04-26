@@ -1,5 +1,5 @@
 <?php
-namespace App\Service;
+namespace App\Validator;
 
 use App\Dao\UserDao;
 use App\Dao\MaklerDao;
@@ -14,18 +14,15 @@ class UserAccount
         $this->mDao = $mDao;
     }
 
-    public function occupiedEmailName($email){
+    public function getCheckResult($rs) {
 
         $status = false;
-        $person = '';
         $user_id = 0;
-
-        $rs = $this->uDao->getUserAccountByEmail(['email' => $email]);
-
+        $person = '';
+        
         if(count($rs)>0){
-            $status = true;
-
             $account = $rs[0];
+            $status  = true;
             $user_id = $account['user_id'];
 
             $user_art = $account['art_id'];
@@ -46,36 +43,14 @@ class UserAccount
         return ['status' => $status, 'user_id' => $user_id, 'person' => $person];
     }
 
+    public function occupiedEmailName($email){
+        $rs = $this->uDao->getUserAccountByEmail(['email' => $email]);
+        return $this->getCheckResult($rs);
+    }
+
     public function occupiedEmailNameByUpdate($pre_email, $email) {
-
-        $status = false;
-        $person = '';
-        $user_id = 0;
-
         $rs = $this->uDao->getUserAccountByEmail2(['email' => $email, 'pre_email' => $pre_email]);
-
-        if(count($rs)>0){
-            $status = true;
-
-            $account = $rs[0];
-            $user_id  = $account['user_id'];
-
-            $user_art = $account['art_id'];
-            if($user_art==1){
-                $person = 'Interessent';
-            }
-            if($user_art==2){
-                $person = 'Makler';
-            }
-            if($user_art==3){
-                $person = 'Eigentuemer';
-            }
-            if($user_art==4){
-                $person = 'Supporter';
-            }
-        }
-        
-        return ['status' => $status, 'person' => $person, 'user_id' => $user_id];
+        return $this->getCheckResult($rs);
     }
 
     // public function occupiedUserName($username){
@@ -94,18 +69,15 @@ class UserAccount
     //     return $status; 
     // }
 
-    public function occupiedSeoUrl($seo_url){
-
+    public function getCheckResult2($rs) {
+        
         $status = false;
-        $person = '';
         $user_id = 0;
-
-        $rs = $this->mDao->getMaklerBySeoUrl(['seo_url' => $seo_url]);
-
+        $person = '';
+        
         if(count($rs)>0){
-            $status = true;
-
             $makler = $rs[0];
+            $status = true;
             $user_id = $makler['user_id'];
             $person = 'Makler';
         }
@@ -113,27 +85,19 @@ class UserAccount
         return ['status' => $status, 'user_id' => $user_id, 'person' => $person];
     }
 
+    public function occupiedSeoUrl($seo_url){
+        $rs = $this->mDao->getMaklerBySeoUrl(['seo_url' => $seo_url]);
+        return $this->getCheckResult2($rs);
+    }
+
     public function occupiedSeoUrlByUpdate($pre_seo_url, $seo_url){
-        $status = false;
-        $person = '';
-        $user_id = 0;
-
         $rs = $this->mDao->getMaklerBySeoUrl2(['pre_seo_url' => $pre_seo_url, 'seo_url' => $seo_url]);
-
-        if(count($rs)>0){
-            $status = true;
-
-            $makler = $rs[0];
-            $user_id = $makler['user_id'];
-            $person = 'Makler';
-        }
-        //return $status;
-        return ['status' => $status, 'user_id' => $user_id, 'person' => $person];
+        return $this->getCheckResult2($rs);
     }
 
     //-----------Account----------------------------------------
 
-    public function isValidAccountName($username, $email, $passwort){
+    public function isValidAccountInput($username, $email, $passwort){
 
         $error = '';
 
@@ -167,7 +131,7 @@ class UserAccount
         return $error;
     }
 
-    public function isValidAccountNameByUpdate($user_id, $username, $email, $passwort){
+    public function isValidAccountInputByUpdate($user_id, $username, $email, $passwort){
 
         $error = '';
 
@@ -186,8 +150,8 @@ class UserAccount
             $user_account = $this->uDao->getRowInTableByIdentifier('user_account', [
                 'user_id' => $user_id
             ]);
-            
             $pre_email = $user_account['email'];
+
             $rs = $this->occupiedEmailNameByUpdate($pre_email, $email);
             if($rs['status']){
                 $person = $rs['person'];
@@ -253,6 +217,7 @@ class UserAccount
     }
 
     public function isValidMaklerDataByUpdate($user_id, $email, $seo_url){
+
         $error = '';
 
         if($email == ''){
@@ -268,8 +233,9 @@ class UserAccount
             $user_makler = $this->mDao->getRowInTableByIdentifier('user_makler', [
                 'user_id' => $user_id
             ]);
-            
-            $pre_email   = $user_makler['email'];
+            $pre_email = $user_makler['email'];
+            $pre_seo_url = $user_makler['seo_url'];
+
             $rs = $this->occupiedEmailNameByUpdate($pre_email, $email);
             if($rs['status']){
                 $user_id = $rs['user_id'];
@@ -277,7 +243,6 @@ class UserAccount
                 $error = $error."|--email schon belegt von $person (user_id: $user_id)--";
             }
 
-            $pre_seo_url = $user_makler['seo_url'];
             $rs = $this->occupiedSeoUrlByUpdate($pre_seo_url, $seo_url);
             if($rs['status']){
                 $user_id = $rs['user_id'];

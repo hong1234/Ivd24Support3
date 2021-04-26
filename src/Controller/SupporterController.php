@@ -6,9 +6,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 // use App\Repository\ProductRepository;
 
+use App\Validator\UserAccount;
+
 use App\Dao\UserDao;
 use App\Service\SupporterService;
-use App\Service\UserAccount;
 
 /**
  *
@@ -29,7 +30,7 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter/new", name="supporter_new")
      */
-    public function newSupporter(Request $request, UserAccount $accSer, SupporterService $supSer)
+    public function newSupporter(Request $request, UserAccount $validator, SupporterService $supSer)
     {
         // $manager = $this->getDoctrine()->getManager();
         $username = '';
@@ -45,7 +46,7 @@ class SupporterController extends AbstractController
             $email     =  $safePost->get('email');     //validation
             $passwort  =  $safePost->get('passwort');
 
-            $error = $accSer-> isValidAccountName($username, $email, $passwort);
+            $error = $validator->isValidAccountInput($username, $email, $passwort);
             
             if ($error == '') {
                 $supSer->newSupporter($safePost);
@@ -67,7 +68,7 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter/{uid}/edit", name="supporter_edit", requirements={"uid"="\d+"})
      */
-    public function supporterEdit($uid, Request $request, UserDao $uDao, UserAccount $accSer, SupporterService $supSer)
+    public function supporterEdit($uid, Request $request, UserDao $uDao, UserAccount $validator, SupporterService $supSer)
     {
         $user_id  = $uid;
         $username = '';
@@ -85,7 +86,7 @@ class SupporterController extends AbstractController
             $email    = $safePost->get('email');
             $passwort = $safePost->get('passwort');
 
-            $error = $accSer-> isValidAccountNameByUpdate($user_id, $username, $email, $passwort);
+            $error = $validator->isValidAccountInputByUpdate($user_id, $username, $email, $passwort);
             
             if ($error == '') {
                 $supSer->updateSupporter($user_id, $safePost);

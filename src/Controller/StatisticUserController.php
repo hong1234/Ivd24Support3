@@ -6,9 +6,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 // use App\Repository\ProductRepository;
 
+use App\Validator\UserAccount;
+
 use App\Dao\UserDao;
 use App\Service\StatisticUserService;
-use App\Service\UserAccount;
+
 
 /**
  *
@@ -29,7 +31,7 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser/new", name="statisticuser_new")
      */
-    public function newStatisticUser(Request $request, UserDao $uDao, UserAccount $accSer, StatisticUserService $staSer)
+    public function newStatisticUser(Request $request, UserDao $uDao, UserAccount $validator, StatisticUserService $staSer)
     {
         $username = '';
         $email    = '';
@@ -45,12 +47,12 @@ class StatisticUserController extends AbstractController
             //var_dump($safePost); exit;
             $safePost = $request->request;
 
-            $username  =  $safePost->get('username');
-            $email     =  $safePost->get('email');
-            $passwort  =  $safePost->get('passwort');
-            $gs_id     =  $safePost->get('geschaeftsstelle');
+            $username =  $safePost->get('username');
+            $email    =  $safePost->get('email');
+            $passwort =  $safePost->get('passwort');
+            $gs_id    =  $safePost->get('geschaeftsstelle');
 
-            $error = $accSer-> isValidAccountName($username, $email, $passwort);
+            $error = $validator->isValidAccountInput($username, $email, $passwort);
             
             if ($error == '') {
                 $staSer->newStatisticUser($safePost);
@@ -74,7 +76,7 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser/{uid}/edit", name="statisticuser_edit", requirements={"uid"="\d+"})
      */
-    public function statisticuserEdit($uid, Request $request, UserDao $uDao, UserAccount $accSer, StatisticUserService $staSer)
+    public function statisticuserEdit($uid, Request $request, UserDao $uDao, UserAccount $validator, StatisticUserService $staSer)
     {
         $user_id = $uid;
         $username = '';
@@ -90,10 +92,10 @@ class StatisticUserController extends AbstractController
             $safePost = $request->request;
             $username = $safePost->get('username');
             $email    = $safePost->get('email');
-            $passwort  =  $safePost->get('passwort');
+            $passwort =  $safePost->get('passwort');
             $gs_id    = $safePost->get('geschaeftsstelle');
 
-            $error = $accSer-> isValidAccountNameByUpdate($user_id, $username, $email, $passwort);
+            $error = $validator->isValidAccountInputByUpdate($user_id, $username, $email, $passwort);
             
             if ($error == '') {
                 $staSer->updateStatisticUser($user_id, $safePost);
