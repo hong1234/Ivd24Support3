@@ -174,7 +174,7 @@ class MaklerService
 
         $firma    = $safePost->get('firma');
         $telefon  = $safePost->get('telefon');
-        $telefax  = $safePost->get('fax');
+        $telefax  = $safePost->get('telefax');
         $homepage = $safePost->get('homepage');
         $mobil    = $safePost->get('mobil');
         

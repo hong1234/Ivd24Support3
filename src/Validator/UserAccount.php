@@ -99,21 +99,21 @@ class UserAccount
     public function isEmptyUsername($username){
         $error = '';
         if($username == ''){
-            $error = $error."|--username leer--";
+            $error = "|--username leer--";
         }
         return $error;
     }
     public function isEmptyEmail($email){
         $error = '';
         if($email == ''){
-            $error = $error."|--email leer--";
+            $error = "|--email leer--";
         }
         return $error;
     }
     public function isEmptyPasswort($passwort){
         $error = '';
         if($passwort == ''){
-            $error = $error."|--passwort leer--";
+            $error = "|--passwort leer--";
         }
         return $error;
     }
@@ -121,7 +121,7 @@ class UserAccount
     public function isEmptyFtpPasswort($ftppasswort){
         $error = '';
         if($ftppasswort == ''){
-            $error = $error."|--FtpPasswort leer--";
+            $error = "|--FtpPasswort leer--";
         }
         return $error;
     }
@@ -129,9 +129,8 @@ class UserAccount
     public function isEmptySeoUrl($seo_url){
         $error = '';
         if($seo_url == ''){
-            $error = $error."|--seo_url leer--";
+            $error = "|--seo_url leer--";
         }
-
         return $error;
     }
 

@@ -82,4 +82,8 @@ class StringFormat
         return $passwordcrypt;
     }
 
+    public function getRandPassWord(){
+        return $this->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@');
+    }
+        
 }

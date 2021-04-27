@@ -96,8 +96,8 @@ class MaklerController extends AbstractController
     
                 'email'    => '', 
                 'username' => '',
-                'passwort' => $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@'),
-                'ftppasswort' => $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@')
+                'passwort' => $sfService->getRandPassWord(),
+                'ftppasswort' => $sfService->getRandPassWord()
             ]; 
         }
         
@@ -123,6 +123,7 @@ class MaklerController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
             //$safePost = filter_input_array(INPUT_POST);// post parameters
+            //$safePost = $request->request->all();// post parameters as array
             //var_dump($safePost); exit;
 
             $safePost = $request->request;
@@ -146,16 +147,17 @@ class MaklerController extends AbstractController
                 ]);
             }
 
-            $user_makler = $safePost->all();// post parameters as array
+            $makler = $safePost->all();// post parameters as array
         }
 
         if ($request->isMethod('GET')) {
-            $user_makler = $mService->getMaklerData($user_id);
+            $makler = $mService->getMaklerData($user_id);
+            $makler['telefax'] = $makler['fax'];
         }
 
         return $this->render('makler/edit.html.twig', [
             'user_id' => $user_id,
-            'makler'  => $user_makler,
+            'makler'  => $makler,
             'error'   => $error
         ]);
 
