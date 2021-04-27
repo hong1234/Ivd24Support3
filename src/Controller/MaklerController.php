@@ -34,62 +34,20 @@ class MaklerController extends AbstractController
             ['mkategorie_id' => 'Ex2', 'mkname' => 'Existenzgründer im 2. Jahr'],
             ['mkategorie_id' => 'EM', 'mkname' => 'Ehrenmitglieder']
         );
-
-        $geschaeftsstelle_id = '';
-        $bundesland_id = '';
-        $mkategorie_id = '';
-
-        $mitgliedsnummer = '';
-        $firma = '';
-        $anrede = '';
-        $titel = '';
-        $vorname = '';
-        $name    = '';
-        $strasse = '';
-        $plz     = '';
-        $ort     = '';
-        
-        $telefon = '';
-        $telefax = '';
-        $homepage = '';
-        $seo_url = '';
-        
-        $username = '';
-        $email = '';
-        $passwort = $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@');
-        $ftppasswort = $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@');
-        
         $error = '';
 
         //if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
-            //$safePost = filter_input_array(INPUT_POST);// post parameters
+            //$safePost = filter_input_array(INPUT_POST);// post parameters as array
+            //$safePost = $request->request->all();// post parameters as array
             //var_dump($safePost); exit;
 
             $safePost = $request->request;
 
-            $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
-            $bundesland_id = $safePost->get('bundesland');
-            $mkategorie_id = $safePost->get('mkategorien');
-
-            $mitgliedsnummer = $safePost->get('mnummer');
-            $firma  = $safePost->get('firma');
-            $anrede = $safePost->get('anrede');
-            $titel  = $safePost->get('titel');
-            $vorname = $safePost->get('vorname');
-            $name    = $safePost->get('name');
-            $strasse = $safePost->get('strasse');
-            $plz     = $safePost->get('plz');
-            $ort     = $safePost->get('ort');
-            
-            $telefon  = $safePost->get('telefon');
-            $telefax  = $safePost->get('telefax');
-            $homepage = $safePost->get('homepage');
-            
             $username = $safePost->get('username');
             $email    = $safePost->get('email'); 
-            $passwort = $safePost->get('userpasswort');
+            $passwort = $safePost->get('passwort');
             $ftppasswort = $safePost->get('ftppasswort');
             $seo_url  = $safePost->get('seo_url');
 
@@ -97,8 +55,9 @@ class MaklerController extends AbstractController
             $empty1 = $validator->isEmptyUsername($username);
             $empty2 = $validator->isEmptyEmail($email);
             $empty3 = $validator->isEmptyPasswort($passwort);
-            $empty4 = $validator->isEmptySeoUrl($seo_url);
-            $error1 = $empty1.$empty2.$empty3.$empty4;
+            $empty4 = $validator->isEmptyFtpPasswort($ftppasswort);
+            $empty5 = $validator->isEmptySeoUrl($seo_url);
+            $error1 = $empty1.$empty2.$empty3.$empty4.$empty5;
 
             $error2 = $validator->isValidEmail($email);
             $error3 = $validator->isValidSeoUrl($seo_url);
@@ -111,39 +70,43 @@ class MaklerController extends AbstractController
                 ]);
             }
 
+            $makler = $safePost->all();// post parameters as array
+        }
+
+        if ($request->isMethod('GET')) {
+            $makler = [
+                'geschaeftsstelle_id' => '', 
+                'bundesland_id' => '', 
+                'mkategorie_id' => '', 
+    
+                'mitgliedsnummer' => '', 
+                'firma'   => '',   
+                'anrede'  => '', 
+                'titel'   => '', 
+                'vorname' => '',
+                'name'    => '', 
+                'strasse' => '',
+                'plz'     => '',  
+                'ort'     => '', 
+    
+                'telefon'  => '',
+                'telefax'  => '',
+                'homepage' => '',
+                'seo_url'  => '',
+    
+                'email'    => '', 
+                'username' => '',
+                'passwort' => $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@'),
+                'ftppasswort' => $sfService->rand_str(8, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&%!#@')
+            ]; 
         }
         
         return $this->render('makler/new.html.twig', [
-
             'geschaeftsstelle' => $geschaeftsstelle,
             'bundeslaender' => $bundeslaender,
             'mkategorien' => $mkategorien,
-
-            'geschaeftsstelle_id' => $geschaeftsstelle_id,
-            'bundesland_id' => $bundesland_id,
-            'mkategorie_id' => $mkategorie_id,
-
-            'mitgliedsnummer' => $mitgliedsnummer,
-            'firma'   => $firma,
-            'anrede'  => $anrede,
-            'titel'   => $titel,
-            'vorname' => $vorname,
-            'name'    => $name,
-            'strasse' => $strasse,
-            'plz'     => $plz,
-            'ort'     => $ort,
-
-            'telefon'  => $telefon,
-            'telefax'  => $telefax,
-            'homepage' => $homepage,
-            'seo_url'  => $seo_url,
-
-            'email'    => $email,
-            'username' => $username,
-            'passwort' => $passwort,
-            'ftppasswort' => $ftppasswort,
-
-            'error'    => $error  
+            'makler' => $makler,
+            'error'  => $error  
         ]);
 
     }

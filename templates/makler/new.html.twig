@@ -37,50 +37,50 @@
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="plz">PLZ</label>
-                                    <input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ" value="{{plz}}" required>
+                                    <input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ" value="{{makler.plz}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="ort">Ort</label>
-                                    <input type="text" class="form-control" id="ort" name="ort" placeholder="Ort" value="{{ort}}" required>
+                                    <input type="text" class="form-control" id="ort" name="ort" placeholder="Ort" value="{{makler.ort}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="Strasse">Straße Nr.</label>
-                                    <input type="text" class="form-control" id="strasse" name="strasse" placeholder="Straße & Hausnummer" value="{{strasse}}" required>
+                                    <input type="text" class="form-control" id="strasse" name="strasse" placeholder="Straße & Hausnummer" value="{{makler.strasse}}" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="Firma">Firmenname</label>
-                                    <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" value="{{firma}}" required>
+                                    <input type="text" class="form-control" id="firma" name="firma" placeholder="Firma" value="{{makler.firma}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="Anrede">Anrede</label>
                                     <select id="anrede" name="anrede" class="form-control" required>
-                                        <option value="Herr" {% if anrede == 'Herr' %} selected {% endif %}>Herr</option>
-                                        <option value="Frau" {% if anrede == 'Frau' %} selected {% endif %}>Frau</option>
+                                        <option value="Herr" {% if makler.anrede == 'Herr' %} selected {% endif %}>Herr</option>
+                                        <option value="Frau" {% if makler.anrede == 'Frau' %} selected {% endif %}>Frau</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="Titel">Titel</label>
-                                    <input type="text" class="form-control" id="titel" name="titel" placeholder="Prof. Dr." value="{{titel}}">
+                                    <input type="text" class="form-control" id="titel" name="titel" placeholder="Prof. Dr." value="{{makler.titel}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="Vorname">Vorname</label>
-                                    <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname" value="{{vorname}}" required>
+                                    <input type="text" class="form-control" id="vorname" name="vorname" placeholder="Vorname" value="{{makler.vorname}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="name">Nachname</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nachname" value="{{name}}" required>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nachname" value="{{makler.name}}" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="mnummer">Mitgliedsnummer</label>
-                                    <input type="text" class="form-control" id="mnummer" name="mnummer" placeholder="Mitgliedsnummer" value="{{mitgliedsnummer}}">
+                                    <label for="Mitgliedsnummer">Mitgliedsnummer</label>
+                                    <input type="text" class="form-control" id="mitgliedsnummer" name="mitgliedsnummer" placeholder="Mitgliedsnummer" value="{{makler.mitgliedsnummer}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="mkategorien">Art der Mitgliedschaft</label>
-                                    <select id="mkategorien" name="mkategorien" class="form-control" required>
+                                    <select id="mkategorien" name="mkategorie_id" class="form-control" required>
                                         {% for mkategorie in mkategorien %}
-                                            <option value={{ mkategorie.mkategorie_id|e }} {% if mkategorie.mkategorie_id == mkategorie_id %} selected {% endif %}>{{ mkategorie.mkname|e }}</option>
+                                            <option value={{ mkategorie.mkategorie_id|e }} {% if mkategorie.mkategorie_id == makler.mkategorie_id %} selected {% endif %}>{{ mkategorie.mkname|e }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -92,10 +92,10 @@
                                         <div class="form-group">
                                         <label for="Geschaefststelle">Geschäftsstelle</label>
                                         <div>
-                                        <select id="geschaeftsstelle" name="geschaeftsstelle" class="form-control" required>
+                                        <select id="geschaeftsstelle" name="geschaeftsstelle_id" class="form-control" required>
                                             <option value="">--Bitte wählen Sie eine Geschäftsstelle--</option>
                                             {% for stelle in geschaeftsstelle %}
-                                                <option value={{ stelle.geschaeftsstelle_id|e }} {% if stelle.geschaeftsstelle_id == geschaeftsstelle_id %} selected {% endif %}>{{ stelle.name|e }}</option>
+                                                <option value={{ stelle.geschaeftsstelle_id|e }} {% if stelle.geschaeftsstelle_id == makler.geschaeftsstelle_id %} selected {% endif %}>{{ stelle.name|e }}</option>
                                             {% endfor %}
                                         </select>
                                         </div>
@@ -104,10 +104,10 @@
                                         <div class="form-group">
                                         <label for="Bundesland">Bundesland</label>
                                         <div>
-                                        <select id="bundesland" name="bundesland" class="form-control" required>
+                                        <select id="bundesland" name="bundesland_id" class="form-control" required>
                                             <option value="">--Bitte wählen Sie ein Bundesland--</option>
                                             {% for land in bundeslaender %}
-                                                <option value={{ land.geo_bundesland_id|e }} {% if land.geo_bundesland_id == bundesland_id %} selected {% endif %}>{{ land.bundesland|e }}</option>
+                                                <option value={{ land.geo_bundesland_id|e }} {% if land.geo_bundesland_id == makler.bundesland_id %} selected {% endif %}>{{ land.bundesland|e }}</option>
                                             {% endfor %}
                                         </select>
                                         </div>
@@ -128,22 +128,22 @@
                                 
                                 <div class="form-group">
                                     <label for="Telefon">Telefonnummer</label>
-                                    <input type="text" class="form-control" id="telefon" name="telefon" placeholder="Telefon" value="{{telefon}}" required>
+                                    <input type="text" class="form-control" id="telefon" name="telefon" placeholder="Telefon" value="{{makler.telefon}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="Telefax">Fax</label>
-                                    <input type="text" class="form-control" id="telefax" name="telefax" placeholder="Telefax" value="{{telefax}}">
+                                    <input type="text" class="form-control" id="telefax" name="telefax" placeholder="Telefax" value="{{makler.telefax}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="Homepage">Homepage</label>
-                                    <input type="text" class="form-control" id="homepage" name="homepage" placeholder="Homepage" value="{{homepage}}">
+                                    <input type="text" class="form-control" id="homepage" name="homepage" placeholder="Homepage" value="{{makler.homepage}}">
                                 </div>
 
                                 <div id="hong_element2">
                                     <div style="width: 70%; float: left;">
                                         <div class="form-group">
                                     	    <label for="Homepage">SEO-URL</label>
-                                    	    <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="seo_url" value="{{seo_url}}" required>
+                                    	    <input type="text" class="form-control" id="seo_url" name="seo_url" placeholder="seo_url" value="{{makler.seo_url}}" required>
                                 	    </div>  
                                     </div>
 
@@ -178,15 +178,15 @@
                             <!-- text input -->
                             <div class="form-group">
                                 <label for="Email">Emailadresse</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" value="{{email}}" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="E-Mailadresse" value="{{makler.email}}" required>
                             </div>
                             <div class="form-group">
                                 <label for="username">Benutzername</label>
-                                <input type="username" class="form-control" id="username" name="username" placeholder="Benutzername" value="{{username}}" required>
+                                <input type="username" class="form-control" id="username" name="username" placeholder="Benutzername" value="{{makler.username}}" required>
                             </div>
                             <div class="form-group">
                                 <label for="UserPasswort">Passwort <small>Klartext</small></label>
-                                <input type="text" class="form-control" id="userpasswort" name="userpasswort" placeholder="Passwort" value="{{passwort}}" required>
+                                <input type="text" class="form-control" id="passwort" name="passwort" placeholder="Passwort" value="{{makler.passwort}}" required>
                             </div>
                         </div>
                     <!-- /.box-body -->
@@ -200,7 +200,7 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="FTP-Passwort">FTP Passwort <small>Klartext</small></label>
-                                <input type="text" class="form-control" id="ftppasswort" name="ftppasswort" placeholder="FTP-Passwort" value="{{ftppasswort}}" required>
+                                <input type="text" class="form-control" id="ftppasswort" name="ftppasswort" placeholder="FTP-Passwort" value="{{makler.ftppasswort}}" required>
                             </div>
                         </div>
                         <div class="box-footer">

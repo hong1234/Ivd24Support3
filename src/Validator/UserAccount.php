@@ -118,6 +118,14 @@ class UserAccount
         return $error;
     }
 
+    public function isEmptyFtpPasswort($ftppasswort){
+        $error = '';
+        if($ftppasswort == ''){
+            $error = $error."|--FtpPasswort leer--";
+        }
+        return $error;
+    }
+
     public function isEmptySeoUrl($seo_url){
         $error = '';
         if($seo_url == ''){

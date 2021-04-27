@@ -58,6 +58,11 @@ class MaklerService
 
     public function newMakler($safePost) {
 
+        $geschaeftsstelle_id = $safePost->get('geschaeftsstelle_id');
+        $bundesland_id = $safePost->get('bundesland_id');
+        $mkategorie_id = $safePost->get('mkategorie_id');
+
+        $mitgliedsnummer = $safePost->get('mnummer');
         $anrede        = $safePost->get('anrede');
         $titel         = $safePost->get('titel');
         $vorname       = $safePost->get('vorname');
@@ -65,22 +70,17 @@ class MaklerService
         $strasse       = $safePost->get('strasse');
         $plz           = $safePost->get('plz');
         $ort           = $safePost->get('ort');
-        $bundesland_id = $safePost->get('bundesland');
-        $mitgliedsnummer = $safePost->get('mnummer');
-        $mkategorie_id = $safePost->get('mkategorien');
-
+        
         $firma    = $safePost->get('firma');
         $telefon  = $safePost->get('telefon');
         $telefax  = $safePost->get('telefax');
         $homepage = $safePost->get('homepage');
-	    $seo_url  = $safePost->get('seo_url');
-
+	    
         $username    = $safePost->get('username');
         $email       = $safePost->get('email');
-        $passwort    = $safePost->get('userpasswort');
+        $passwort    = $safePost->get('passwort');
         $ftppasswort = $safePost->get('ftppasswort');
-        
-        $geschaeftsstelle_id = $safePost->get('geschaeftsstelle');
+        $seo_url     = $safePost->get('seo_url');
         
         //---------
         $ftppasswortcrypt = $this->fmService->getPwCrypt($ftppasswort);
