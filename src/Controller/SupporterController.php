@@ -42,13 +42,16 @@ class SupporterController extends AbstractController
 
             $safePost = $request->request;
 
-            $username  =  $safePost->get('username');  //validation
-            $email     =  $safePost->get('email');     //validation
-            $passwort  =  $safePost->get('passwort');
+            $username = $safePost->get('username');  //validation
+            $email    = $safePost->get('email');     //validation
+            $passwort = $safePost->get('passwort');
 
             //validation
-            //$error = $validator->isValidAccountInput($username, $email, $passwort);
-            $error1 = $validator->isEmptyA($username, $email, $passwort);
+            $empty1 = $validator->isEmptyUsername($username);
+            $empty2 = $validator->isEmptyEmail($email);
+            $empty3 = $validator->isEmptyPasswort($passwort);
+            $error1 = $empty1.$empty2.$empty3;
+
             $error2 = $validator->isValidEmail($email);
             $error  = $error1.$error2;
             
@@ -91,8 +94,11 @@ class SupporterController extends AbstractController
             $passwort = $safePost->get('passwort');
 
             //validation
-            // $error = $validator->isValidAccountInputByUpdate($user_id, $username, $email, $passwort);
-            $error1 = $validator->isEmptyA($username, $email, $passwort);
+            $empty1 = $validator->isEmptyUsername($username);
+            $empty2 = $validator->isEmptyEmail($email);
+            $empty3 = $validator->isEmptyPasswort($passwort);
+            $error1 = $empty1.$empty2.$empty3;
+            
             $error2 = $validator->isValidEmailByUpdate($user_id, $email);
             $error  = $error1.$error2;
             
@@ -143,9 +149,9 @@ class SupporterController extends AbstractController
         ]);
 
         return $this->render('supporter/del.html.twig', [
-            'user_id'    => $user_id,
-            'username'   => $suser['username'],
-            'email'      => $suser['email']
+            'user_id'  => $user_id,
+            'username' => $suser['username'],
+            'email'    => $suser['email']
         ]);
     }
 }

@@ -53,8 +53,11 @@ class StatisticUserController extends AbstractController
             $gs_id    = $safePost->get('geschaeftsstelle');
 
             //validation
-            //$error = $validator->isValidAccountInput($username, $email, $passwort);
-            $error1 = $validator->isEmptyA($username, $email, $passwort);
+            $empty1 = $validator->isEmptyUsername($username);
+            $empty2 = $validator->isEmptyEmail($email);
+            $empty3 = $validator->isEmptyPasswort($passwort);
+            $error1 = $empty1.$empty2.$empty3;
+            
             $error2 = $validator->isValidEmail($email);
             $error  = $error1.$error2;
             
@@ -97,12 +100,15 @@ class StatisticUserController extends AbstractController
 
             $username = $safePost->get('username');
             $email    = $safePost->get('email');
-            $passwort =  $safePost->get('passwort');
+            $passwort = $safePost->get('passwort');
             $gs_id    = $safePost->get('geschaeftsstelle');
 
             //validation
-            // $error = $validator->isValidAccountInputByUpdate($user_id, $username, $email, $passwort);
-            $error1 = $validator->isEmptyA($username, $email, $passwort);
+            $empty1 = $validator->isEmptyUsername($username);
+            $empty2 = $validator->isEmptyEmail($email);
+            $empty3 = $validator->isEmptyPasswort($passwort);
+            $error1 = $empty1.$empty2.$empty3;
+
             $error2 = $validator->isValidEmailByUpdate($user_id, $email);
             $error  = $error1.$error2;
             
@@ -157,10 +163,10 @@ class StatisticUserController extends AbstractController
         ]);
 
         return $this->render('statisticuser/del.html.twig', [
-            'user_id'           => $user_id,
-            'username'          => $suser['username'],
-            'email'             => $suser['email'],
-            'geschaeftsstelle'  => $suser['gs_name']
+            'user_id'          => $user_id,
+            'username'         => $suser['username'],
+            'email'            => $suser['email'],
+            'geschaeftsstelle' => $suser['gs_name']
         ]);
     }
 

@@ -77,11 +77,11 @@ class MaklerController extends AbstractController
             $firma  = $safePost->get('firma');
             $anrede = $safePost->get('anrede');
             $titel  = $safePost->get('titel');
-            $vorname  = $safePost->get('vorname');
-            $name     = $safePost->get('name');
-            $strasse  = $safePost->get('strasse');
-            $plz      = $safePost->get('plz');
-            $ort      = $safePost->get('ort');
+            $vorname = $safePost->get('vorname');
+            $name    = $safePost->get('name');
+            $strasse = $safePost->get('strasse');
+            $plz     = $safePost->get('plz');
+            $ort     = $safePost->get('ort');
             
             $telefon  = $safePost->get('telefon');
             $telefax  = $safePost->get('telefax');
@@ -94,8 +94,12 @@ class MaklerController extends AbstractController
             $seo_url  = $safePost->get('seo_url');
 
             //validation
-            //$error = $validator->isValidMaklerData($email, $seo_url);
-            $error1 = $validator->isEmpty($username, $email, $passwort, $seo_url);
+            $empty1 = $validator->isEmptyUsername($username);
+            $empty2 = $validator->isEmptyEmail($email);
+            $empty3 = $validator->isEmptyPasswort($passwort);
+            $empty4 = $validator->isEmptySeoUrl($seo_url);
+            $error1 = $empty1.$empty2.$empty3.$empty4;
+
             $error2 = $validator->isValidEmail($email);
             $error3 = $validator->isValidSeoUrl($seo_url);
             $error  = $error1.$error2.$error3;
@@ -164,8 +168,10 @@ class MaklerController extends AbstractController
             $seo_url = $safePost->get('seo_url');
 
             //validation
-            //$error = $validator->isValidMaklerDataByUpdate($user_id, $email, $seo_url);
-            $error1 = $validator->isEmptyByUpdate($email, $seo_url);
+            $empty1 = $validator->isEmptyEmail($email);
+            $empty2 = $validator->isEmptySeoUrl($seo_url);
+            $error1 = $empty1.$empty2;
+
             $error2 = $validator->isValidEmailByUpdate($user_id, $email);
             $error3 = $validator->isValidSeoUrlByUpdate($user_id, $seo_url);
             $error  = $error1.$error2.$error3;

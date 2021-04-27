@@ -96,48 +96,30 @@ class UserAccount
     }
 
     //---------------------------------------------------
-    public function isEmptyA($username, $email, $passwort){
+    public function isEmptyUsername($username){
         $error = '';
-
         if($username == ''){
             $error = $error."|--username leer--";
         }
+        return $error;
+    }
+    public function isEmptyEmail($email){
+        $error = '';
         if($email == ''){
             $error = $error."|--email leer--";
         }
+        return $error;
+    }
+    public function isEmptyPasswort($passwort){
+        $error = '';
         if($passwort == ''){
             $error = $error."|--passwort leer--";
         }
-
         return $error;
     }
 
-    public function isEmpty($username, $email, $passwort, $seo_url){
+    public function isEmptySeoUrl($seo_url){
         $error = '';
-
-        if($username == ''){
-            $error = $error."|--username leer--";
-        }
-        if($email == ''){
-            $error = $error."|--email leer--";
-        }
-        if($passwort == ''){
-            $error = $error."|--passwort leer--";
-        }
-        if($seo_url == ''){
-            $error = $error."|--seo_url leer--";
-        }
-
-        return $error;
-    }
-
-    public function isEmptyByUpdate($email, $seo_url){
-        $error = '';
-
-        if($email == ''){
-            $error = $error."|--email leer--";
-        }
-
         if($seo_url == ''){
             $error = $error."|--seo_url leer--";
         }
