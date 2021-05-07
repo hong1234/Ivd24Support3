@@ -43,6 +43,22 @@ class UserAccount
         return ['status' => $status, 'user_id' => $user_id, 'person' => $person];
     }
 
+    public function getCheckResult2($rs) {
+        
+        $status = false;
+        $user_id = 0;
+        $person = '';
+        
+        if(count($rs)>0){
+            $makler = $rs[0];
+            $status = true;
+            $user_id = $makler['user_id'];
+            $person = 'Makler';
+        }
+        
+        return ['status' => $status, 'user_id' => $user_id, 'person' => $person];
+    }
+
     public function occupiedEmailName($email){
         $rs = $this->uDao->getUserAccountByEmail(['email' => $email]);
         return $this->getCheckResult($rs);
@@ -61,22 +77,6 @@ class UserAccount
     public function occupiedUserNameByUpdate($pre_username, $username){
         $rs = $this->uDao->getUserAccountByUserName2(['pre_username' => $pre_username, 'username' => $username]);
         return $this->getCheckResult($rs); 
-    }
-
-    public function getCheckResult2($rs) {
-        
-        $status = false;
-        $user_id = 0;
-        $person = '';
-        
-        if(count($rs)>0){
-            $makler = $rs[0];
-            $status = true;
-            $user_id = $makler['user_id'];
-            $person = 'Makler';
-        }
-        
-        return ['status' => $status, 'user_id' => $user_id, 'person' => $person];
     }
 
     public function occupiedSeoUrl($seo_url){
@@ -201,8 +201,6 @@ class UserAccount
 
         return $error;
     }
-
-    //---------------------------
 
     public function isValidUserName($username){
         $error = '';
