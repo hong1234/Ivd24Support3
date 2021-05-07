@@ -59,9 +59,10 @@ class MaklerController extends AbstractController
             $empty5 = $validator->isEmptySeoUrl($seo_url);
             $error1 = $empty1.$empty2.$empty3.$empty4.$empty5;
 
-            $error2 = $validator->isValidEmail($email);
-            $error3 = $validator->isValidSeoUrl($seo_url);
-            $error  = $error1.$error2.$error3;
+            $error2 = $validator->isValidUserName($username);
+            $error3 = $validator->isValidEmail($email);
+            $error4 = $validator->isValidSeoUrl($seo_url);
+            $error  = $error1.$error2.$error3.$error4;
            
             if ($error == '') {
                 $mService->newMakler($safePost);

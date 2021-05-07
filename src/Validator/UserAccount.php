@@ -53,21 +53,15 @@ class UserAccount
         return $this->getCheckResult($rs);
     }
 
-    // public function occupiedUserName($username){
-    //     $status = false;
-    //     if(count($this->uDao->getUserAccountByUserName(['username' => $username]))>0){
-    //         $status = true;
-    //     }
-    //     return $status; 
-    // }
+    public function occupiedUserName($username){
+        $rs = $this->uDao->getUserAccountByUserName(['username' => $username]);
+        return $this->getCheckResult($rs); 
+    }
 
-    // public function occupiedUserNameByUpdate($pre_username, $username){
-    //     $status = false;
-    //     if(count($this->uDao->getUserAccountByUserName2(['pre_username' => $pre_username, 'username' => $username]))>0){
-    //         $status = true;
-    //     }
-    //     return $status; 
-    // }
+    public function occupiedUserNameByUpdate($pre_username, $username){
+        $rs = $this->uDao->getUserAccountByUserName2(['pre_username' => $pre_username, 'username' => $username]);
+        return $this->getCheckResult($rs); 
+    }
 
     public function getCheckResult2($rs) {
         
@@ -206,6 +200,37 @@ class UserAccount
         }
 
         return $error;
+    }
+
+    //---------------------------
+
+    public function isValidUserName($username){
+        $error = '';
+        $rs = $this->occupiedUserName($username);
+        if($rs['status']){
+            $person = $rs['person'];
+            $user_id = $rs['user_id'];
+            $error = $error."|--username schon belegt von $person (user_id: $user_id)--";
+            } 
+        return $error;
+    }
+
+    public function isValidUserNameByUpdate($user_id, $username){
+        $error = '';
+
+        $user_account = $this->uDao->getRowInTableByIdentifier('user_account', [
+            'user_id' => $user_id
+        ]);
+        $pre_username = $user_account['username'];
+        
+        $rs = $this->occupiedUserNameByUpdate($pre_username, $username);
+        if($rs['status']){
+            $user_id = $rs['user_id'];
+            $person = $rs['person'];
+            $error = $error."|--username schon belegt von $person (user_id: $user_id)--";
+        }
+
+        return $error; 
     }
 
 }

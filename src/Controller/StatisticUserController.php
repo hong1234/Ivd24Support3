@@ -58,8 +58,9 @@ class StatisticUserController extends AbstractController
             $empty3 = $validator->isEmptyPasswort($passwort);
             $error1 = $empty1.$empty2.$empty3;
             
-            $error2 = $validator->isValidEmail($email);
-            $error  = $error1.$error2;
+            $error2 = $validator->isValidUserName($username);
+            $error3 = $validator->isValidEmail($email);
+            $error  = $error1.$error2.$error3;
             
             if ($error == '') {
                 $staSer->newStatisticUser($safePost);
@@ -109,8 +110,9 @@ class StatisticUserController extends AbstractController
             $empty3 = $validator->isEmptyPasswort($passwort);
             $error1 = $empty1.$empty2.$empty3;
 
-            $error2 = $validator->isValidEmailByUpdate($user_id, $email);
-            $error  = $error1.$error2;
+            $error2 = $validator->isValidUserNameByUpdate($user_id, $username);
+            $error3 = $validator->isValidEmailByUpdate($user_id, $email);
+            $error  = $error1.$error2.$error3;
             
             if ($error == '') {
                 $staSer->updateStatisticUser($user_id, $safePost);
