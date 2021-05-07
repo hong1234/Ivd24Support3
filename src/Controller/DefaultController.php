@@ -21,6 +21,15 @@ use App\Service\MaklerService;
 class DefaultController extends AbstractController
 {
     /**
+     * @Route("/", name="default_index")
+     */
+    public function indexPage()
+    {
+        // redirects to the "homepage" route
+        return $this->redirectToRoute('default_home');
+    }
+    
+    /**
      * @Route("/home", name="default_home")
      */
     public function homePage()
