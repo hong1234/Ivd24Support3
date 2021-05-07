@@ -62,7 +62,7 @@ class MaklerService
         $bundesland_id = $safePost->get('bundesland_id');
         $mkategorie_id = $safePost->get('mkategorie_id');
 
-        $mitgliedsnummer = $safePost->get('mnummer');
+        $mitgliedsnummer = $safePost->get('mitgliedsnummer');
         $anrede        = $safePost->get('anrede');
         $titel         = $safePost->get('titel');
         $vorname       = $safePost->get('vorname');
