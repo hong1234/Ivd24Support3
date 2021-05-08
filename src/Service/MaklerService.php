@@ -37,11 +37,11 @@ class MaklerService
         $move_robot_id   = $gs_werte['move_robot_id'];
         $import_robot_id = $gs_werte['import_robot_id'];
 
-        $bilderordner = "b00".$geschaeftsstelle_id.$user_id;
-        $ftp_benutzer = "f00".$geschaeftsstelle_id.$user_id;
+        // $bilderordner = "b00".$geschaeftsstelle_id.$user_id;
+        // $ftp_benutzer = "f00".$geschaeftsstelle_id.$user_id;
 
-        // $bilderordner = "b00".$bilderserver_id.$user_id;
-        // $ftp_benutzer = "f00".$ftp_server_id.$user_id;
+        $bilderordner = "b00".$bilderserver_id.$user_id;
+        $ftp_benutzer = "f00".$ftp_server_id.$user_id;
 
         $homeftp = "/home/ftpuser/".$ftp_benutzer;
 
