@@ -63,13 +63,13 @@ class MaklerService
         $mkategorie_id = $safePost->get('mkategorie_id');
 
         $mitgliedsnummer = $safePost->get('mitgliedsnummer');
-        $anrede        = $safePost->get('anrede');
-        $titel         = $safePost->get('titel');
-        $vorname       = $safePost->get('vorname');
-        $name          = $safePost->get('name');
-        $strasse       = $safePost->get('strasse');
-        $plz           = $safePost->get('plz');
-        $ort           = $safePost->get('ort');
+        $anrede   = $safePost->get('anrede');
+        $titel    = $safePost->get('titel');
+        $vorname  = $safePost->get('vorname');
+        $name     = $safePost->get('name');
+        $strasse  = $safePost->get('strasse');
+        $plz      = $safePost->get('plz');
+        $ort      = $safePost->get('ort');
         
         $firma    = $safePost->get('firma');
         $telefon  = $safePost->get('telefon');
@@ -146,7 +146,7 @@ class MaklerService
 
             $this->sqService->addToSendQueue('makler_new', [
                 'username' => $username,
-                'email'    => $email, 
+                'email'    => $email,
                 'passwort' => $passwort
             ]);
             

@@ -40,6 +40,7 @@ class BaseDao {
                 SET 
                 sendername      = :sendername,
                 absender_mail   = :absender_mail,
+                reply_mail      = :reply_mail,
                 empfaenger_name = :empfaenger_name,
                 empfaenger_mail = :empfaenger_mail,
                 betreff         = :betreff,

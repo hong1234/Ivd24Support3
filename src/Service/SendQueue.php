@@ -37,8 +37,9 @@ class SendQueue
             $geschaeftsstelle = $data['geschaeftsstelle'];
         }
 
-        $sendername      = 'Ivd24Admin';
+        $sendername      = 'IVD24Immobilien';
         $absender_mail   = 'noreply@ivd24immobilien.de';
+        $reply_mail      = 'noreply@ivd24immobilien.de';
         $empfaenger_name = $username;
         $empfaenger_mail = $email;
         $insertdate      = time();
@@ -65,7 +66,7 @@ class SendQueue
             Ein attraktives Partnerangebot, das wir Ihnen im ivd24-Business-Club anbieten, ist beispielsweise StoryBox. Informationen dazu finden sie unter https://www.ivd24immobilien.de/newsletter-storybox
             Doch nun genug der Information. Jetzt kann es losgehen! Vervollständigen Sie Ihre Daten mit Logo und Schwerpunkten noch heute und schalten Sie sich für die Suche frei, um möglichst schnell von unserem Service zu profitieren.
             Nutzen Sie dazu folgende Zugangsdaten:
-            Benutzername: $email 
+            Benutzername: $username 
             Passwort:$passwort
             Ihre FTP-Zugangsdaten finden Sie unter: Mein IVD24 -> Meine Daten -> FTP-Zugangsdaten 
             Anleitungen zum Einrichten der Schnittstelle finden Sie unter: Mein IVD24 -> Meine Daten -> Hilfe/FAQ 
@@ -73,7 +74,7 @@ class SendQueue
             Mit freundlichen Grüßen
             Ihr ivd24 Team";
             $nachricht_html = $this->twig->render('email/new.makler.html.twig', [
-                'email'    => $email,
+                'username' => $username,
                 'passwort' => $passwort
             ]);
         }
@@ -139,6 +140,7 @@ class SendQueue
         $this->bDao->insertSendQueue([
             'sendername'      => $sendername, 
             'absender_mail'   => $absender_mail,
+            'reply_mail'      => $reply_mail,
             'empfaenger_name' => $empfaenger_name,
             'empfaenger_mail' => $empfaenger_mail,
             'betreff'         => $betreff,
