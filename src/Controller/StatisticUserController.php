@@ -10,7 +10,7 @@ use App\Validator\UserAccount;
 
 use App\Dao\UserDao;
 use App\Service\StatisticUserService;
-
+use App\Service\StringFormat;
 
 /**
  *
@@ -31,14 +31,8 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser/new", name="statisticuser_new")
      */
-    public function newStatisticUser(Request $request, UserDao $uDao, UserAccount $validator, StatisticUserService $staSer)
+    public function newStatisticUser(Request $request, UserDao $uDao, UserAccount $validator, StatisticUserService $staSer, StringFormat $sfService)
     {
-        $username = '';
-        $email    = '';
-        $passwort = '';
-        $gs_id    = '1';
-        $error    = '';
-        
         $geschaeftsstelle = $uDao->getAllRowsInTable('user_geschaeftsstelle');
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
@@ -69,6 +63,14 @@ class StatisticUserController extends AbstractController
                 ]);
             } 
             
+        }
+
+        if ($request->isMethod('GET')) {
+            $username = '';
+            $email    = '';
+            $passwort = $sfService->getRandPassWord();
+            $gs_id    = '1';
+            $error    = '';
         }
 
         return $this->render('statisticuser/new.html.twig', [

@@ -10,6 +10,7 @@ use App\Validator\UserAccount;
 
 use App\Dao\UserDao;
 use App\Service\SupporterService;
+use App\Service\StringFormat;
 
 /**
  *
@@ -30,14 +31,10 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter/new", name="supporter_new")
      */
-    public function newSupporter(Request $request, UserAccount $validator, SupporterService $supSer)
+    public function newSupporter(Request $request, UserAccount $validator, SupporterService $supSer, StringFormat $sfService)
     {
         // $manager = $this->getDoctrine()->getManager();
-        $username = '';
-        $email    = '';
-        $passwort = '';
-        $error    = '';
-
+        
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
             $safePost = $request->request;
@@ -63,6 +60,13 @@ class SupporterController extends AbstractController
                 ]);   
             } 
 
+        }
+
+        if ($request->isMethod('GET')) {
+            $username = '';
+            $email    = '';
+            $passwort = $sfService->getRandPassWord();
+            $error    = '';
         }
 
         return $this->render('supporter/new.html.twig', [
