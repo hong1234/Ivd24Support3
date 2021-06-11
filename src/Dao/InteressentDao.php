@@ -15,7 +15,8 @@ class InteressentDao extends UserDao {
         $sql = "SELECT user_interessent.user_id AS userId, loeschung, loesch_datum, loesch_send, recht_id, art_id, user_interessent.email AS userEmail, username, anrede, vorname, name, firma  
                 FROM user_interessent 
                 INNER JOIN user_account ON user_interessent.user_id = user_account.user_id 
-                WHERE user_account.loeschung = 1 AND user_account.art_id = 1 AND NOW() >= DATE_ADD(user_account.loesch_datum, INTERVAL 7 DAY)";
+                WHERE user_account.loeschung = 1 AND user_account.art_id = 1"; 
+                // AND NOW() >= DATE_ADD(user_account.loesch_datum, INTERVAL 7 DAY)";
         return $this->doQuery($sql, $values);
     }
 
