@@ -23,10 +23,10 @@ class BcUserService
             $row2 = array();
 
             $row2[] = $row['user_id'];
-            $row2[] = $row['returncode'];    // string 'info@kaiser-immobilien.de' (length=25)
-            $row2[] = $row['company_name']; 
-
-            $status   = 'nicht-bz';
+            $row2[] = $row['company_name'];
+            $row2[] = $row['returncode'];    // string 'info@kaiser-immobilien.de'
+    
+            $status = 'nicht-bz';
             if($row['paid'] == 1){
                 $status = 'bezahlt';
             }
@@ -53,10 +53,10 @@ class BcUserService
             $row2 = array();
 
             $row2[] = $row['user_id'];
-            $row2[] = $row['returncode'];    // string 'info@kaiser-immobilien.de' (length=25)
-            $row2[] = $row['company_name']; 
-
-            $status   = 'nicht-bz';
+            $row2[] = $row['company_name'];
+            $row2[] = $row['returncode'];    // string 'info@kaiser-immobilien.de'
+             
+            $status = 'nicht-bz';
             if($row['paid'] == 1){
                 $status = 'bezahlt';
             }
