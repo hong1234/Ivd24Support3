@@ -23,20 +23,20 @@ class InteressentDao extends UserDao {
     public function updateUserInteressent(iterable $values=[]){
         $sql = "UPDATE user_interessent 
                 SET
-                anrede       = :anrede, 
-                titel        = :titel, 
-                namenstitel  = :namenstitel, 
-                name         = :name, 
-                vorname      = :vorname, 
-                firma        = :firma, 
-                strasse      = :strasse, 
-                plz          = :plz, 
-                ort          = :ort,  
-                email        = :email, 
-                telefon      = :telefon, 
-                fax          = :telefax, 
-                homepage     = :homepage, 
-                mobil        = :mobil
+                anrede      = :anrede, 
+                titel       = :titel, 
+                namenstitel = :namenstitel, 
+                name        = :name, 
+                vorname     = :vorname, 
+                firma       = :firma, 
+                strasse     = :strasse, 
+                plz         = :plz, 
+                ort         = :ort,  
+                email       = :email, 
+                telefon     = :telefon, 
+                fax         = :telefax, 
+                homepage    = :homepage, 
+                mobil       = :mobil
                 WHERE user_id = :user_id
                 ";
         return $this->doSQL($sql, $values);
