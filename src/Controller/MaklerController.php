@@ -190,13 +190,29 @@ class MaklerController extends AbstractController
     }
     
     /**
-     * @Route("/makler/{uid}/lock/{gesperrt}", name="makler_lock_unlock")
+     * @Route("/makler/{uid}/lock", name="makler_lock")
      */
-    public function maklerLock($uid, $gesperrt, UserDao $uDao)
+    public function maklerLock($uid, UserDao $uDao)
     {
         $user_id  = $uid;
         $uDao->updateUserAccountGesperrt([
-            'gesperrt' => $gesperrt,
+            'gesperrt' => 1,
+            'user_id'  => $user_id
+        ]);
+
+        return $this->redirectToRoute('makler_list', [
+            //'paramName' => 'value'
+        ]);
+    }
+
+    /**
+     * @Route("/makler/{uid}/unlock", name="makler_unlock")
+     */
+    public function maklerUnLock($uid, UserDao $uDao)
+    {
+        $user_id  = $uid;
+        $uDao->updateUserAccountGesperrt([
+            'gesperrt' => 0,
             'user_id'  => $user_id
         ]);
 

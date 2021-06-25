@@ -82,13 +82,29 @@ class InteressentController extends AbstractController
     }
 
     /**
-     * @Route("/interessent/{uid}/lock/{gesperrt}", name="interessent_lock_unlock", requirements={"uid"="\d+"})
+     * @Route("/interessent/{uid}/lock", name="interessent_lock", requirements={"uid"="\d+"})
      */
-    public function interessentLock($uid, $gesperrt, UserDao $uDao)
+    public function interessentLock($uid, UserDao $uDao)
     {
         $user_id  = $uid;
         $uDao->updateUserAccountGesperrt([
-            'gesperrt' => $gesperrt,
+            'gesperrt' => 1,
+            'user_id'  => $user_id
+        ]);
+        
+        return $this->redirectToRoute('interessent_list', [
+            //'paramName' => 'value'
+        ]);
+    }
+
+    /**
+     * @Route("/interessent/{uid}/unlock", name="interessent_unlock", requirements={"uid"="\d+"})
+     */
+    public function interessentUnLock($uid, UserDao $uDao)
+    {
+        $user_id  = $uid;
+        $uDao->updateUserAccountGesperrt([
+            'gesperrt' => 0,
             'user_id'  => $user_id
         ]);
         

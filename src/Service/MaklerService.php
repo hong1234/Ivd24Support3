@@ -340,18 +340,19 @@ class MaklerService
             $row2[] = date("Y-m-d", (int)$row['lastlogin']);
             
             $links = "";
-            $links = "<a href='https://ivd24immobilien.de/wp-admin/admin.php?page=ivd24Admin_show&id=".$row['userId']."&art=5' target='_blank'>Login als Makler</a><br>";
-            $links = $links."<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</a><br>";
+            $links = "<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</a><br>";
             $links = $links."<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";
             $links = $links."<a href=".$this->router->generate('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
             if($row['gesperrt'] == 1){
-                $links = $links."<a href=".$this->router->generate('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
+                $links = $links."<a href=".$this->router->generate('makler_unlock', array('uid' => $row['userId'])).">Account entsperren</a><br>";
             } else {
-                $links = $links."<a href=".$this->router->generate('makler_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br>";
+                $links = $links."<a href=".$this->router->generate('makler_lock', array('uid' => $row['userId'])).">Account sperren</a><br>";
             }
             if($row['loeschung'] == 0){
                 $links = $links."<a class='into_delete-list' href=".$this->router->generate('makler_into_delete', array('uid' => $row['userId'])).">In Delete-List schieben</a><br>";
             }
+
+            $links = $links."<a href='https://ivd24immobilien.de/wp-admin/admin.php?page=ivd24Admin_show&id=".$row['userId']."&art=5' target='_blank'>Login als Makler</a><br>";
             
             $row2[] = $links;
 

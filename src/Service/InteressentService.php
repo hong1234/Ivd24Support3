@@ -109,10 +109,10 @@ class InteressentService
             $str1 = "<a href=".$this->router->generate('interessent_edit', array('uid' => $row['userId'])).">Bearbeiten</a><br>";
             $str2 = "<a href=".$this->router->generate('interessent_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
             $str3 = "";
-            if($row['gesperrt']==1){        
-                $str3 = "<a href=".$this->router->generate('interessent_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 0)).">Account entsperren</a><br>";
+            if($row['gesperrt'] == 1){        
+                $str3 = "<a href=".$this->router->generate('interessent_unlock', array('uid' => $row['userId'])).">Account entsperren</a><br>";
             } else {
-                $str3 = "<a href=".$this->router->generate('interessent_lock_unlock', array('uid' => $row['userId'], 'gesperrt' => 1)).">Account sperren</a><br><br>";
+                $str3 = "<a href=".$this->router->generate('interessent_lock', array('uid' => $row['userId'])).">Account sperren</a><br><br>";
             }
             $row2[] = $str1.$str2.$str3;
                           
