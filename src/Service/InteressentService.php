@@ -24,51 +24,49 @@ class InteressentService
 
     public function interessentUpdate($user_id, $safePost){
 
-        $email        = $safePost->get('email');
-        $anrede       = $safePost->get('anrede');
-        $titel        = $safePost->get('titel');
-        $namenstitel  = $safePost->get('namenstitel');
-        $vorname      = $safePost->get('vorname');
-        $name         = $safePost->get('name');
-        $firma        = $safePost->get('firma');
-        $strasse      = $safePost->get('strasse');
-        $plz          = $safePost->get('plz');
-        $ort          = $safePost->get('ort');
-        $telefon      = $safePost->get('telefon');
-        $telefax      = $safePost->get('telefax');
-        $homepage     = $safePost->get('homepage');
-		$mobil        = $safePost->get('mobil');
+        $email       = $safePost->get('email');
+        $anrede      = $safePost->get('anrede');
+        $titel       = $safePost->get('titel');
+        $namenstitel = $safePost->get('namenstitel');
+        $vorname     = $safePost->get('vorname');
+        $name        = $safePost->get('name');
+        $firma       = $safePost->get('firma');
+        $strasse     = $safePost->get('strasse');
+        $plz         = $safePost->get('plz');
+        $ort         = $safePost->get('ort');
+        $telefon     = $safePost->get('telefon');
+        $telefax     = $safePost->get('telefax');
+        $homepage    = $safePost->get('homepage');
+		$mobil       = $safePost->get('mobil');
 
         $em = $this->iDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
 
             $this->iDao->updateUserAccountEmail([
-                'email'     => $email,
-                'user_id'   => $user_id
+                'email'   => $email,
+                'user_id' => $user_id
             ]);
             
             $this->iDao->updateUserInteressent([
-                'anrede'        => $anrede, 
-                'titel'         => $titel, 
-                'namenstitel'   => $namenstitel, 
-                'name'          => $name, 
-                'vorname'       => $vorname, 
-                'firma'         => $firma, 
-                'strasse'       => $strasse, 
-                'plz'           => $plz, 
-                'ort'           => $ort,  
-                'email'         => $email, 
-                'telefon'       => $telefon, 
-                'telefax'       => $telefax, 
-                'homepage'      => $homepage, 
-                'mobil'         => $mobil,
-                'user_id'       => $user_id
+                'anrede'      => $anrede, 
+                'titel'       => $titel, 
+                'namenstitel' => $namenstitel, 
+                'name'        => $name, 
+                'vorname'     => $vorname, 
+                'firma'       => $firma, 
+                'strasse'     => $strasse, 
+                'plz'         => $plz, 
+                'ort'         => $ort,  
+                'email'       => $email, 
+                'telefon'     => $telefon, 
+                'telefax'     => $telefax, 
+                'homepage'    => $homepage, 
+                'mobil'       => $mobil,
+                'user_id'     => $user_id
             ]);
 
-            //--------
             $em->getConnection()->commit();     
-          
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             throw $e;
@@ -112,7 +110,7 @@ class InteressentService
             if($row['gesperrt'] == 1){        
                 $str3 = "<a href=".$this->router->generate('interessent_unlock', array('uid' => $row['userId'])).">Account entsperren</a><br>";
             } else {
-                $str3 = "<a href=".$this->router->generate('interessent_lock', array('uid' => $row['userId'])).">Account sperren</a><br><br>";
+                $str3 = "<a href=".$this->router->generate('interessent_lock', array('uid' => $row['userId'])).">Account sperren</a><br>";
             }
             $row2[] = $str1.$str2.$str3;
                           

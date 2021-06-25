@@ -32,16 +32,16 @@ class SupporterService
         $em->getConnection()->beginTransaction();
         try {    
             $this->uDao->insertAccountForSupporter([
-                'art_id'            => '4',
-                'recht_id'          => '9',
-                'kennwort'          =>  md5($passwort), 
-                'username'          =>  $username,      
-                'email'             =>  $email,         
-                'regdate'           =>  time(),         // Registrierungsdatum = timestamp vom Zeitpunkt des Anlegens
-                'authentifiziert'   => '1',             // Authentifiziert = 1
-                'gesperrt'          => '0',             
-                'loeschung'         => '0',             
-                'newsletter'        => 'N'   
+                'art_id'          => '4',
+                'recht_id'        => '9',
+                'kennwort'        =>  md5($passwort), 
+                'username'        =>  $username,      
+                'email'           =>  $email,         
+                'regdate'         =>  time(),         // Registrierungsdatum = timestamp vom Zeitpunkt des Anlegens
+                'authentifiziert' => '1',             // Authentifiziert = 1
+                'gesperrt'        => '0',             
+                'loeschung'       => '0',             
+                'newsletter'      => 'N'   
             ]);
     
             $user_id = $em->getConnection()->lastInsertId();
@@ -73,18 +73,18 @@ class SupporterService
         $em->getConnection()->beginTransaction();
         try {
             $this->uDao->updateSupportUser([
-                'username'    => $username,
-                'email'       => $email,
-                'kennwort'    => md5($passwort),
-                'user_id'     => $user_id
+                'username' => $username,
+                'email'    => $email,
+                'kennwort' => md5($passwort),
+                'user_id'  => $user_id
             ]);
             
             $this->loginDao->updateLoginUser($email, $passwort, $roles, $user_id);
              
             $this->sqSer->addToSendQueue('supporter_edit', [
-                'username'  => $username, 
-                'email'     => $email, 
-                'passwort'  => $passwort
+                'username' => $username, 
+                'email'    => $email, 
+                'passwort' => $passwort
             ]);
 
             $em->getConnection()->commit();   

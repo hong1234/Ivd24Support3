@@ -142,8 +142,8 @@ class InteressentController extends AbstractController
         $username = $user_account['username'];
 
         return $this->render('interessent/pwedit.html.twig', [
-            'user_id'    => $user_id,
-            'username'   => $username
+            'user_id'  => $user_id,
+            'username' => $username
         ]);
     }
 

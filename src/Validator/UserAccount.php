@@ -89,7 +89,7 @@ class UserAccount
         return $this->getCheckResult2($rs);
     }
 
-    //---------------------------------------------------
+    //--------------
     public function isEmptyUsername($username){
         $error = '';
         if($username == ''){

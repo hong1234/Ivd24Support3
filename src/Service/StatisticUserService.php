@@ -41,17 +41,17 @@ class StatisticUserService
         $em->getConnection()->beginTransaction();
         try {
             $this->uDao->insertAccountForStatisticUser([
-                'art_id'                =>  '4',
-                'recht_id'              =>  '8',
-                'geschaeftsstellen_id'  =>  $gs_id,         //Geschaeftsstellen_id 
-                'kennwort'              =>  md5($passwort), 
-                'username'              =>  $username,      
-                'email'                 =>  $email,         
-                'regdate'               =>  time(),         // Registrierungsdatum = timestamp vom Zeitpunkt des Anlegens
-                'authentifiziert'       =>  '1',            // Authentifiziert = 1
-                'gesperrt'              =>  '0',            
-                'loeschung'             =>  '0',            
-                'newsletter'            =>  'N'             // newsletter = 'N'
+                'art_id'               =>  '4',
+                'recht_id'             =>  '8',
+                'geschaeftsstellen_id' =>  $gs_id,         //Geschaeftsstellen_id 
+                'kennwort'             =>  md5($passwort), 
+                'username'             =>  $username,      
+                'email'                =>  $email,         
+                'regdate'              =>  time(),         // Registrierungsdatum = timestamp vom Zeitpunkt des Anlegens
+                'authentifiziert'      =>  '1',            // Authentifiziert = 1
+                'gesperrt'             =>  '0',            
+                'loeschung'            =>  '0',            
+                'newsletter'           =>  'N'             // newsletter = 'N'
             ]);  
 
             $user_id = $em->getConnection()->lastInsertId();
