@@ -26,7 +26,7 @@ class ApiController extends AbstractController
         $firmaInputString = $request->request->get('firma', '');
 
         $rs = ['status'=> 'ok'];
-        if($firmaInputString == ''){
+        if(trim($firmaInputString) == ''){
             $rs['status'] = 'empty';
         } else {
             $rs['seo_url'] = $fmService->getSeoUrl($firmaInputString); 
