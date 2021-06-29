@@ -224,7 +224,7 @@
             $.ajax({
               method: "POST",
               url: "/seourl",
-              data: { firma: $("#firma").val() }
+              data: { firma: $("#firma").val() + " " + $("#ort").val() }
             })
             .done(function( res ) {
                 if(res.status=='empty'){
@@ -239,7 +239,7 @@
             $.ajax({
               method: "POST",
               url: "/geschaeftsstelle",
-              data: { plz: $("#plz").val() + " " + $("#ort").val() }
+              data: { plz: $("#plz").val() }
             })
             .done(function( res ) {
                 if(res.status=='empty'){
