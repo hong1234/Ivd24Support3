@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+    <!-- Morris chart -->
+    <link rel="stylesheet" href="{{ asset('bower_components/morris.js/morris.css') }}">
+{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>Überblick</h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Small boxes (Stat box) -->
+      {# <h3> AktienGesamt: {{AnzahlAktienGesamt}}</h3>
+      <h3> AktienIvd24AG: {{AnzahlAktienAG}}</h3>
+      <h3> AktienOhneStakeholder: {{AnzahlAktienOhneZuweisungZuStakeholder}}</h3>
+      <h3> AktienMitStakeholder: {{AnzahlAktienMitZuweisungZuStakeholder}}</h3> #}
+      
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <section class="col-lg-6">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <i class="fa fa-inbox"></i><h3 class="box-title">Shareholder Struktur</h3>
+            </div>
+            <div class="box-body chart-responsive">
+              <div class="chart" id="sales-chart" style="position: relative; height: 300px;"></div>
+            </div>
+          </div>
+          <!-- /.nav-tabs-custom -->
+        </section>
+        <!-- /.Left col -->
+        <!-- right col (We are only adding the ID to make the widgets sortable)-->
+        <section class="col-lg-6">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <i class="fa fa-inbox"></i><h3 class="box-title">Stakeholder Struktur</h3>
+            </div>
+            <div class="box-body chart-responsive">
+              <div class="chart" id="line-chart" style="height: 300px;"></div>
+            </div>
+          </div>
+        </section>
+        <!-- right col -->
+      </div>
+      <!-- /.row (main row) -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block zusatz %}
+    <!-- Morris.js charts -->
+    <script src="{{ asset('bower_components/raphael/raphael.min.js') }}"></script>
+    <script src="{{ asset('bower_components/morris.js/morris.min.js') }}"></script>
+
+    <script>
+        // DONUT CHART
+        var donut = new Morris.Donut({
+            element  : 'sales-chart',
+            resize   : true,
+            colors   : ['#3c8dbc', '#f56954', '#00a65a', '#FFD133'],
+            data     : {{donutData|json_encode|raw}},
+            hideHover: 'auto'
+        });
+
+  // AREA CHART
+  {# var area = new Morris.Area({
+    element: 'revenue-chart',
+    resize: true,
+    data: {{areaData|json_encode|raw}},
+    xkey: 'day',
+    ykeys: ['nfrei', 'frei', 'gesamt'],
+    labels: ['nicht freigegeben Objekte', 'freigegeben Objekte', 'Objekte gesamt'],
+    //lineColors: ['#9a32a8', '#a86b32', '#3c8dbc'],
+    lineColors: ['#00a65a', '#f56954', '#3c8dbc'],
+    hideHover: 'auto'
+  }); #}
+
+  // LINE CHART
+  {# var line = new Morris.Line({
+    element          : 'line-chart',
+    resize           : true,
+    data             : {{lineData|json_encode|raw}},
+    xkey             : 'day',
+    ykeys            : ['ivdSud', 'gesamt'],
+    labels           : ['Ivd Süd', 'Gesamt'],
+    lineColors       : ['#f56954', '#3c8dbc'],
+    lineWidth        : 2,
+    hideHover        : 'auto',
+    //gridTextColor    : '#fff',
+    //gridStrokeWidth  : 0.4,
+    //pointSize        : 4,
+    //pointStrokeColors: ['#efefef'],
+    //gridLineColor    : '#efefef',
+    //gridTextFamily   : 'Open Sans',
+    //gridTextSize     : 10
+  }); #}
+
+</script> 
+{% endblock %}
+

@@ -7,7 +7,6 @@
 /public/bundles/
 /var/
 /vendor/
-/maklerOrigin/
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###

@@ -1,0 +1,64 @@
+{% extends 'baseList.html.twig' %}
+
+{% block title %}Aktionäre{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Aktionäre</h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Übersicht</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example1" class="table table-bordered table-striped display" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th style='width: 8%;'>User-ID</th>
+                                        <th style='width: 12%;'>Mitgliedsnummer</th>
+                                        <th style='width: 12%;'>Vorname, Name</th>
+                                        <th style='width: 16%;'>Firma</th>
+                                        <th style='width: 16%;'>E-Mail</th>
+                                        <th style='width: 12%;'>Anzahl Aktien</th>
+                                        <th style='width: 10%;'>Stakeholder</th>
+                                        <th style='width: 14%;'>&nbsp;</th>
+                                    </tr>
+                                </thead>
+                            </table>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+  </div>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+
+    <script>
+        {# $(document).ready(function() {
+            var myElemente = document.getElementsByClassName("into_delete-list");
+            for(var i = 0; i < myElemente.length; i++) {
+                myElemente[i].addEventListener("click", function(event){
+                    var answer = window.confirm("Wollen Sie den Makler wirklich in Del-List schieben?");
+                    if (answer) {
+                        //some code
+                    }
+                    else {
+                        //some code
+                        event.preventDefault();
+                    } 
+                });
+            }  
+        }); #}
+    </script>
+{% endblock %}
