@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Service\StockService;
 
-use App\Dao\ObjectDao;
+use App\Dao\StockDao;
 
 /**
  *
@@ -16,10 +16,12 @@ use App\Dao\ObjectDao;
 class StockController extends AbstractController
 {
     private $stockService;
+    private $stockDao;
    
-    public function __construct(StockService $stockService)
+    public function __construct(StockDao $stockDao, StockService $stockService)
     {
         $this->stockService = $stockService;
+        $this->stockDao = $stockDao;
     }
 
     /**
@@ -52,10 +54,6 @@ class StockController extends AbstractController
         );
 
         return $this->render('stock/statistic.html.twig', [
-            // 'AnzahlAktienGesamt' => $AnzahlAktienGesamt,
-            // 'AnzahlAktienAG' => $AnzahlAktienAG,
-            // 'AnzahlAktienOhneZuweisungZuStakeholder' => $AnzahlAktienOhneZuweisungZuStakeholder,
-            // 'AnzahlAktienMitZuweisungZuStakeholder' => $AnzahlAktienMitZuweisungZuStakeholder,
             'donutData' => $donutData
         ]);
     }
@@ -79,6 +77,50 @@ class StockController extends AbstractController
         // $rows = $this->stockService->shareholderList();
         return $this->render('stock/generalmeeting.html.twig', [
             'message' => "Opps, derzeit eine Baustelle !"
+        ]);
+    }
+
+    /**
+     * @Route("/stock/test", name="stock_test")
+     */
+    public function stockTest()
+    {
+        // $rows = $this->stockDao->getStakeholders();
+
+        // $rows = $this->stockDao->getMembersOfStakeholder([
+        //     'user_id_stakeholder' => 112049 // 112138
+        // ]);
+
+        // $rows = $this->stockDao->getAktienAnzahlOfUser([
+        //     'user_id' => 112049
+        // ]);
+
+        // $rows = $this->stockDao->getAktienAnzahlOfStakeholder([
+        //     'user_id_stakeholder' => 112049 // 112138
+        // ]);
+
+        $rows = $this->stockDao->getStakeholderStruktur();
+
+//         array (size=2)
+//   0 => 
+//     array (size=4)
+//       'user_id_stakeholder' => string '112049' (length=6)
+//       'stakeholder' => string 'Test Stakeholder IVDWest' (length=24)
+//       'aktien_az' => string '1' (length=1)
+//       'aktien_az_stakeholder' => string '1' (length=1)
+//   1 => 
+//     array (size=4)
+//       'user_id_stakeholder' => string '112138' (length=6)
+//       'stakeholder' => string 'Test Stakeholder IVDSüd' (length=24)
+//       'aktien_az' => string '4' (length=1)
+//       'aktien_az_stakeholder' => string '1' (length=1)
+
+        // $rows = $this->stockDao->getStockNumberWithOutStakeholder();
+
+        var_dump($rows); exit;
+
+        return $this->render('stock/test.html.twig', [
+            'rows' => $rows
         ]);
     }
 
