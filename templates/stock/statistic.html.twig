@@ -43,7 +43,28 @@
               <i class="fa fa-inbox"></i><h3 class="box-title">Stakeholder Struktur</h3>
             </div>
             <div class="box-body chart-responsive">
-              <div class="chart" id="line-chart" style="height: 300px;"></div>
+              <div class="chart" id="line-chart" style="height: 300px;">
+
+                <table width="100%">
+                  <thead>
+                    <tr>
+                      <th>Holder</th>
+                      <th>Anteil (%)</th>
+                      <th>Bemerkung</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                   {% for item in stakeholderStruktur %}
+                    <tr>
+                      <td width="45%">{{ item.holder }}</th>
+                      <td width="20%">{{ item.percent }}</th>
+                      <td width="35%">{{ item.note }}</th>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
             </div>
           </div>
         </section>

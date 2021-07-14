@@ -19,9 +19,9 @@ class StockService
         return $rs['AnzahlAktienGesamt'];
     }
 
-    public function getStockNumberAG() {
-        $rs = $this->stockDao->getStockNumberAG();
-        return $rs['AnzahlAktienAG'];
+    public function getStockNumberWithStakeholder() {
+        $rs = $this->stockDao->getStockNumberWithStakeholder();
+        return $rs['AnzahlAktienMitZuweisungZuStakeholder'];
     }
 
     public function getStockNumberWithOutStakeholder() {
@@ -29,9 +29,80 @@ class StockService
         return $rs['AnzahlAktienOhneZuweisungZuStakeholder'];
     }
 
-    public function getStockNumberWithStakeholder() {
-        $rs = $this->stockDao->getStockNumberWithStakeholder();
-        return $rs['AnzahlAktienMitZuweisungZuStakeholder'];
+    public function getStockNumberAG() {
+        $rs = $this->stockDao->getStockNumberAG();
+        return $rs['AnzahlAktienAG'];
+    }
+
+    public function getShareholderStruktur() {
+
+        $AnzahlAktienGesamt = $this->getStockNumber();
+        $AnzahlAktienAG = $this->getStockNumberAG();
+        $AnzahlAktienOhneZuweisungZuStakeholder = $this->getStockNumberWithOutStakeholder();
+        $AnzahlAktienMitZuweisungZuStakeholder = $this->getStockNumberWithStakeholder();
+
+        $donutData = array(
+            [
+                'label' => 'AktienGesamt',
+                'value' => $AnzahlAktienGesamt
+            ],
+            [
+                'label' => 'AktienIvd24AG',
+                'value' => $AnzahlAktienAG
+            ],
+            [
+                'label' => 'AktienOhneStakeholder',
+                'value' => $AnzahlAktienOhneZuweisungZuStakeholder
+            ],
+            [
+                'label' => 'AktienMitStakeholder',
+                'value' => $AnzahlAktienMitZuweisungZuStakeholder
+            ]
+        );
+
+        return $donutData;
+
+    }
+
+    public function getStakeholderStruktur() {
+        $rs = array();
+
+        $AnzahlAktienGesamt = $this->getStockNumber();
+
+        $stmt = $this->stockDao->getStakeholderStruktur();
+        while ($row = $stmt->fetch()) {
+            $aktien_az = $row['aktien_az'];
+            $aktien_az_stakeholder = $row['aktien_az_stakeholder'];
+
+            $row2 = array();
+            $row2['holder'] = $row['stakeholder'];
+            $row2['percent'] = round($aktien_az*100/$AnzahlAktienGesamt, 4);
+            $row2['note'] = "$aktien_az Aktien davon $aktien_az_stakeholder im Eigenbesitz";
+
+            $rs[] = $row2;
+        }
+
+        $AnzahlAktienOhneZuweisungZuStakeholder = $this->getStockNumberWithOutStakeholder();
+        $row2 = array();
+        $row2['holder'] = 'Aktien ohne Zuweisung zu Stakeholder';
+        $row2['percent'] = round($AnzahlAktienOhneZuweisungZuStakeholder*100/$AnzahlAktienGesamt, 4);
+        $row2['note'] = "$AnzahlAktienOhneZuweisungZuStakeholder Aktien";
+        $rs[] = $row2;
+
+        $AnzahlAktienAG = $this->getStockNumberAG();
+        $row2 = array();
+        $row2['holder'] = 'Ivd Immobilien AG';
+        $row2['percent'] = round($AnzahlAktienAG*100/$AnzahlAktienGesamt, 4);
+        $row2['note'] = "$AnzahlAktienAG Aktien";
+        $rs[] = $row2;
+
+        $row2 = array();
+        $row2['holder'] = 'Total';
+        $row2['percent'] = 100;
+        $row2['note'] = "$AnzahlAktienGesamt Aktien";
+        $rs[] = $row2;
+
+        return $rs;
     }
 
     public function shareholderList() {
