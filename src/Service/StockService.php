@@ -111,27 +111,28 @@ class StockService
         
         $rs = array();
         while ($row = $stmt->fetch()) {
+            if($row['aktien_az']>0){
+                $row2 = array();
+                $row2[] = $row['user_id'];
+                $row2[] = $row['mitgliedsnummer'];
+                $row2[] = $row['vorname'].' '.$row['name'];
+                $row2[] = $row['firma'];
+                $row2[] = $row['email'];
+                $row2[] = $row['aktien_az'];
+                if($row['user_id_stakeholder'] == NULL){
+                    $row2[] = '--';
+                } else {
+                    $row2[] = $row['stakeholder'];
+                }
             
-            $row2 = array();
-            $row2[] = $row['user_id'];
-            $row2[] = $row['mitgliedsnummer'];
-            $row2[] = $row['vorname'].' '.$row['name'];
-            $row2[] = $row['firma'];
-            $row2[] = $row['email'];
-            $row2[] = $row['aktien_az'];
-            if($row['user_id_stakeholder'] == NULL){
-                $row2[] = '--';
-            } else {
-                $row2[] = $row['stakeholder'];
-            }
+                $links = "links";
+                // $links = "<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Aktienkaufvertrag</a><br>";
+                // $links = $links."<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">Rechnung zum Aktienkauf</a><br>";
             
-            $links = "links";
-            // $links = "<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Aktienkaufvertrag</a><br>";
-            // $links = $links."<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">Rechnung zum Aktienkauf</a><br>";
-            
-            $row2[] = $links;
+                $row2[] = $links;
 
-            $rs[] = $row2;
+                $rs[] = $row2;
+            }
         }
 
         return $rs;
