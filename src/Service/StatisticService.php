@@ -14,42 +14,78 @@ class StatisticService
         $this->oDao = $oDao; 
     }
 
-    public function getBoxsData(int $user_id) {
-
+    public function geschaeftsstelleId(int $user_id) {
         $ac = $this->sDao->getUserGeschaeftsstelle([
             'user_id' => $user_id
         ]);
 
-        $geschaeftsstelle_id   = $ac['geschaeftsstellen_id'];
-        $geschaeftsstelle_name = $ac['name'];
+        $geschaeftsstelle_id = (int)$ac['geschaeftsstellen_id'];
+        // $geschaeftsstelle_name = $ac['name'];
+        return $geschaeftsstelle_id;
+    }
 
-        if($geschaeftsstelle_name=='ivd24immobilien AG'){  // $geschaeftsstelle_id =6;
-            $stmt = $this->sDao->getActivMaklerProRegion();
-        } else {
-            $stmt = $this->sDao->getActivMaklerOnRegion([
-                'geschaeftsstelle_id' => $geschaeftsstelle_id
-            ]);
-        }
+    public function getBoxsData(int $user_id) {
+
+        $geschaeftsstelle_id = $this->geschaeftsstelleId($user_id);
+        
+        $temp = [];
+        $temp['name'] = 'IVD Süd';
+        $temp['geschaeftsstelle_id'] = 12;
+        $temp['count_makler_on_regional_office'] = 0;
 
         $rows1 = array();
-        while($row = $stmt->fetch()) {
+        if($geschaeftsstelle_id == 6) {
+            $rows1[] = $temp;
+            $stmt = $this->sDao->getActivMaklerProRegion();
+            while($row = $stmt->fetch()) {
+                if((int)$row['geschaeftsstelle_id'] == 1 || (int)$row['geschaeftsstelle_id'] == 2 ){
+                    $rows1[0]['count_makler_on_regional_office'] = $rows1[0]['count_makler_on_regional_office'] + $row['count_makler_on_regional_office'];
+                } else {
+                    $rows1[] = $row;
+                }
+            }
+        } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
+            $reg1 = $this->sDao->getActivMaklerOnRegion(['geschaeftsstelle_id' => 1]);
+            $reg2 = $this->sDao->getActivMaklerOnRegion(['geschaeftsstelle_id' => 2]);
+            $temp['count_makler_on_regional_office'] = $reg1['count_makler_on_regional_office'] + $reg2['count_makler_on_regional_office'];
+
+            $rows1[] = $temp;
+        } else {
+            $row = $this->sDao->getActivMaklerOnRegion(['geschaeftsstelle_id' => $geschaeftsstelle_id]);
             $rows1[] = $row;
         }
 
-        if($geschaeftsstelle_name=='ivd24immobilien AG'){
-            $stmt = $this->sDao->getActivMaklerHaveObjectProRegion();
-        } else {
-            $stmt = $this->sDao->getActivMaklerHaveObjectOnRegion([
-                'geschaeftsstelle_id' => $geschaeftsstelle_id
-            ]);
-        }
+        //--------------------
+        $temp = [];
+        $temp['name'] = 'IVD Süd';
+        $temp['geschaeftsstelle_id'] = 12;
+        $temp['count_makler_with_aktive_objectdata'] = 0;
 
         $rows2 = array();
-        while($row = $stmt->fetch()) {
+        if($geschaeftsstelle_id == 6){
+            $rows2[] = $temp;
+            $stmt = $this->sDao->getActivMaklerHaveObjectProRegion();
+            while($row = $stmt->fetch()) {
+                if((int)$row['geschaeftsstelle_id'] == 1 || (int)$row['geschaeftsstelle_id'] == 2){
+                    $rows2[0]['count_makler_with_aktive_objectdata'] = $rows2[0]['count_makler_with_aktive_objectdata'] + $row['count_makler_with_aktive_objectdata'];
+                } else {
+                    $rows2[] = $row;
+                }
+            }
+
+        } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
+            $reg1 = $this->sDao->getActivMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => 1]);
+            $reg2 = $this->sDao->getActivMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => 2]);
+            $temp['count_makler_with_aktive_objectdata'] = $reg1['count_makler_with_aktive_objectdata'] + $reg2['count_makler_with_aktive_objectdata'];
+
+            $rows2[] = $temp;
+
+        } else {
+            $row = $this->sDao->getActivMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => $geschaeftsstelle_id]);
             $rows2[] = $row;
         }
 
-        // result -----
+        // result ---------------
         $i = 0;
         $rowsB = array();
         while ($i < count($rows1)) {
@@ -60,7 +96,7 @@ class StatisticService
             $tmp['name'] = $a['name'];
             $tmp['count_makler_on_regional_office'] = $a['count_makler_on_regional_office'];
             //$tmp['count_makler_with_aktive_objectdata'] = $b['count_makler_with_aktive_objectdata'];
-            $tmp['percent'] = round($b['count_makler_with_aktive_objectdata']/$a['count_makler_on_regional_office'], 2)*100;
+            $tmp['percent'] = round(100*$b['count_makler_with_aktive_objectdata']/$a['count_makler_on_regional_office'], 2);
 
             $rowsB[] = $tmp;
       

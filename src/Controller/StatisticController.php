@@ -6,7 +6,7 @@ use Symfony\Component\Routing\Annotation\Route;
 // use Symfony\Component\HttpFoundation\Request;
 // use App\Repository\ProductRepository;
 
-use App\Dao\StatisticDao;
+// use App\Dao\StatisticDao;
 
 use App\Service\StatisticService;
 
