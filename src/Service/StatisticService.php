@@ -106,24 +106,54 @@ class StatisticService
         return $rowsB;
     }
 
+    public function getObjectStatistic(int $geschaeftsstelle_id) {
+        // $total = 0;
+        // $activ = 0;
+        // $inact = 0;
+
+        // $total = $this->oDao->getObjectTotal()['Anzah_Gesamtl_Objekte'];
+        // $activ = $this->oDao->getObjectActiv()['Anzahl_freigegeben_Objekte'];
+        // $inact = $this->oDao->getObjectInActiv()['Anzahl_nicht_freigegeben_Objekte'];
+
+        if($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
+            $total1 = $this->oDao->getObjectTotal2(['geschaeftsstelle_id' => 1])['Anzah_Gesamtl_Objekte'];
+            $activ1 = $this->oDao->getObjectActiv2(['geschaeftsstelle_id' => 1])['Anzahl_freigegeben_Objekte'];
+            $inact1 = $this->oDao->getObjectInActiv2(['geschaeftsstelle_id' => 1])['Anzahl_nicht_freigegeben_Objekte'];
+
+            $total2 = $this->oDao->getObjectTotal2(['geschaeftsstelle_id' => 2])['Anzah_Gesamtl_Objekte'];
+            $activ2 = $this->oDao->getObjectActiv2(['geschaeftsstelle_id' => 2])['Anzahl_freigegeben_Objekte'];
+            $inact2 = $this->oDao->getObjectInActiv2(['geschaeftsstelle_id' => 2])['Anzahl_nicht_freigegeben_Objekte'];
+
+            $total = $total1 + $total2;
+            $activ = $activ1 + $activ2;
+            $inact = $inact1 + $inact2;
+
+        } else {
+            $total = $this->oDao->getObjectTotal2(['geschaeftsstelle_id' => $geschaeftsstelle_id])['Anzah_Gesamtl_Objekte'];
+            $activ = $this->oDao->getObjectActiv2(['geschaeftsstelle_id' => $geschaeftsstelle_id])['Anzahl_freigegeben_Objekte'];
+            $inact = $this->oDao->getObjectInActiv2(['geschaeftsstelle_id' => $geschaeftsstelle_id])['Anzahl_nicht_freigegeben_Objekte'];
+        }
+
+        return ['total'=>$total, 'activ'=>$activ, 'inact'=>$inact];
+    }
+
     public function getDonutData(int $user_id) {
 
-        $total = $this->oDao->getObjectTotal()['Anzah_Gesamtl_Objekte'];
-        $activ = $this->oDao->getObjectActiv()['Anzahl_freigegeben_Objekte'];
-        $inact = $this->oDao->getObjectInActiv()['Anzahl_nicht_freigegeben_Objekte'];
+        $geschaeftsstelle_id = $this->geschaeftsstelleId($user_id);
+        $rs = $this->getObjectStatistic($geschaeftsstelle_id);
 
         $donutData = array(
             [
                 'label' => 'Gesamtl Objekte',
-                'value' => $total
+                'value' => $rs['total']
             ],
             [
                 'label' => 'freigegeben Objekte',
-                'value' => $activ
+                'value' => $rs['activ']
             ],
             [
                 'label' => 'nicht freigegeben Objekte',
-                'value' => $inact
+                'value' => $rs['inact']
             ]
         );
 
@@ -131,86 +161,91 @@ class StatisticService
     }
 
     public function getAreaData(int $user_id) {
+
+        $geschaeftsstelle_id = $this->geschaeftsstelleId($user_id);
+        $rs = $this->getObjectStatistic($geschaeftsstelle_id);
+        
         $areaData = array(
             [
-                'day' =>'2020-02-01',
-                'gesamt' =>8700,
-                'frei' =>5700,
-                'nfrei' =>3000
-            ],
-            [
-                'day' =>'2020-03-01',
-                'gesamt' =>2700,
-                'frei' =>1700,
-                'nfrei' =>1000
-            ],
-            [
-                'day' =>'2020-04-01',
-                'gesamt' =>3000,
-                'frei' =>2000,
-                'nfrei' =>900
-            ],
-            [
-                'day' =>'2020-05-01',
-                'gesamt' =>2666,
-                'frei' =>1666,
-                'nfrei' =>1000
-            ],
-            [
                 'day' =>'2020-06-01',
-                'gesamt' =>2778,
-                'frei' =>2294,
-                'nfrei' =>500
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
             ],
             [
                 'day' =>'2020-07-01',
-                'gesamt' =>4912,
-                'frei' =>1969,
-                'nfrei' =>2000
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
             ],
             [
                 'day' =>'2020-08-01',
-                'gesamt' =>3767,
-                'frei' =>3597,
-                'nfrei' =>100
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
             ],
             [
                 'day' =>'2020-09-01',
-                'gesamt' =>6810,
-                'frei' =>1914,
-                'nfrei' =>3000
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
             ],
             [
                 'day' =>'2020-10-01',
-                'gesamt' =>5670,
-                'frei' =>4293,
-                'nfrei' =>1000
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
             ],
             [
                 'day' =>'2020-11-01',
-                'gesamt' =>4820,
-                'frei' =>3795,
-                'nfrei' =>1100
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
             ],
             [
                 'day' =>'2020-12-01',
-                'gesamt' =>15073,
-                'frei' =>5967,
-                'nfrei' =>9000
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
             ],
             [
                 'day' =>'2021-01-01',
-                'gesamt' =>10687,
-                'frei' =>4460,
-                'nfrei' =>5000
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
             ],
             [
                 'day' =>'2021-02-01',
-                'gesamt' =>8432,
-                'frei' =>5713,
-                'nfrei' =>3000
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
+            ],
+            [
+                'day' =>'2021-03-01',
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
+            ],
+            [
+                'day' =>'2021-04-01',
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
+            ],
+            [
+                'day' =>'2021-05-01',
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
+            ],
+            [
+                'day' =>'2021-06-01',
+                'gesamt' => $rs['total'],
+                'frei' => $rs['activ'],
+                'nfrei' => $rs['inact']
             ]
         );
+
         return $areaData;
     }
 
@@ -284,6 +319,5 @@ class StatisticService
         );
         return $lineData;
     }
-
 
 }

@@ -3,10 +3,6 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-// use Symfony\Component\HttpFoundation\Request;
-// use App\Repository\ProductRepository;
-
-// use App\Dao\StatisticDao;
 
 use App\Service\StatisticService;
 
@@ -28,8 +24,8 @@ class StatisticController extends AbstractController
      */
     public function Dashboard()
     {
-        //$this->getUser()->getEmail();
-        //$roles = $this->getUser()->getRoles();
+        // $this->getUser()->getEmail();
+        // $roles = $this->getUser()->getRoles();
 
         $user_id = $this->getUser()->getUserid();
         $boxs = $this->sService->getBoxsData($user_id);
