@@ -121,7 +121,7 @@ class UserDao extends BaseDao {
     public function getUserGeschaeftsstelle(iterable $values=[]){
         $sql = "SELECT user_id, user_account.geschaeftsstellen_id, user_geschaeftsstelle.name 
                 FROM user_account 
-                LEFT JOIN user_geschaeftsstelle ON  user_account.geschaeftsstellen_id = user_geschaeftsstelle.geschaeftsstelle_id
+                INNER JOIN user_geschaeftsstelle ON  user_account.geschaeftsstellen_id = user_geschaeftsstelle.geschaeftsstelle_id
                 WHERE user_id = :user_id";
         return $this->doQuery($sql, $values)->fetch();
     }
