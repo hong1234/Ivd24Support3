@@ -7,8 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 // use App\Repository\ProductRepository;
 
 use App\Dao\StatisticDao;
-use App\Dao\ObjectDao;
-use App\Service\MaklerService;
+
+use App\Service\StatisticService;
 
 /**
  *
@@ -16,244 +16,36 @@ use App\Service\MaklerService;
  */
 class StatisticController extends AbstractController
 {
+    private $sService;
+
+    public function __construct(StatisticService $sService)
+    {
+        $this->sService = $sService;
+    }
+
     /**
      * @Route("/dashboard", name="statistic_dashboard")
      */
-    public function Dashboard(MaklerService $mService, StatisticDao $sDao, ObjectDao $oDao)
+    public function Dashboard()
     {
         //$this->getUser()->getEmail();
         //$roles = $this->getUser()->getRoles();
-        //var_dump($this->getUser()->getUserid());exit;
 
         $user_id = $this->getUser()->getUserid();
-
-        $ac = $sDao->getUserGeschaeftsstelle([
-            'user_id' => $user_id
-        ]);
-
-        $geschaeftsstelle_id   = $ac['geschaeftsstellen_id'];
-        $geschaeftsstelle_name = $ac['name'];
-
-        if($geschaeftsstelle_name=='ivd24immobilien AG'){  // $geschaeftsstelle_id =6;
-            $stmt = $sDao->getActivMaklerProRegion();
-        } else {
-            $stmt = $sDao->getActivMaklerOnRegion([
-                'geschaeftsstelle_id' => $geschaeftsstelle_id
-            ]);
-        }
-
-        $rows1 = array();
-        while($row = $stmt->fetch()) {
-            $rows1[] = $row;
-        }
-
-        if($geschaeftsstelle_name=='ivd24immobilien AG'){
-            $stmt = $sDao->getActivMaklerHaveObjectProRegion();
-        } else {
-            $stmt = $sDao->getActivMaklerHaveObjectOnRegion([
-                'geschaeftsstelle_id' => $geschaeftsstelle_id
-            ]);
-        }
-
-        $rows2 = array();
-        while($row = $stmt->fetch()) {
-            $rows2[] = $row;
-        }
-
-        // result -----
-        $i = 0;
-        $rowsB = array();
-        while ($i < count($rows1)) {
-            $tmp = array();
-            $a = $rows1[$i];
-            $b = $rows2[$i];
-
-            $tmp['name'] = $a['name'];
-            $tmp['count_makler_on_regional_office'] = $a['count_makler_on_regional_office'];
-            //$tmp['count_makler_with_aktive_objectdata'] = $b['count_makler_with_aktive_objectdata'];
-            $tmp['percent'] = round($b['count_makler_with_aktive_objectdata']/$a['count_makler_on_regional_office'], 2)*100;
-
-            $rowsB[] = $tmp;
-      
-            $i++;
-        }
+        $boxs = $this->sService->getBoxsData($user_id);
 
         //makler table-----------
         // $rows = $mService->MaklerList();
 
-        $total = $oDao->getObjectTotal()['Anzah_Gesamtl_Objekte'];
-        $activ = $oDao->getObjectActiv()['Anzahl_freigegeben_Objekte'];
-        $inact = $oDao->getObjectInActiv()['Anzahl_nicht_freigegeben_Objekte'];
-
-        $donutData = array(
-            [
-                'label' => 'Gesamtl Objekte',
-                'value' => $total
-            ],
-            [
-                'label' => 'freigegeben Objekte',
-                'value' => $activ
-            ],
-            [
-                'label' => 'nicht freigegeben Objekte',
-                'value' => $inact
-            ]
-        );
-
-        $areaData = array(
-            [
-                'day' =>'2020-02-01',
-                'gesamt' =>8700,
-                'frei' =>5700,
-                'nfrei' =>3000
-            ],
-            [
-                'day' =>'2020-03-01',
-                'gesamt' =>2700,
-                'frei' =>1700,
-                'nfrei' =>1000
-            ],
-            [
-                'day' =>'2020-04-01',
-                'gesamt' =>3000,
-                'frei' =>2000,
-                'nfrei' =>900
-            ],
-            [
-                'day' =>'2020-05-01',
-                'gesamt' =>2666,
-                'frei' =>1666,
-                'nfrei' =>1000
-            ],
-            [
-                'day' =>'2020-06-01',
-                'gesamt' =>2778,
-                'frei' =>2294,
-                'nfrei' =>500
-            ],
-            [
-                'day' =>'2020-07-01',
-                'gesamt' =>4912,
-                'frei' =>1969,
-                'nfrei' =>2000
-            ],
-            [
-                'day' =>'2020-08-01',
-                'gesamt' =>3767,
-                'frei' =>3597,
-                'nfrei' =>100
-            ],
-            [
-                'day' =>'2020-09-01',
-                'gesamt' =>6810,
-                'frei' =>1914,
-                'nfrei' =>3000
-            ],
-            [
-                'day' =>'2020-10-01',
-                'gesamt' =>5670,
-                'frei' =>4293,
-                'nfrei' =>1000
-            ],
-            [
-                'day' =>'2020-11-01',
-                'gesamt' =>4820,
-                'frei' =>3795,
-                'nfrei' =>1100
-            ],
-            [
-                'day' =>'2020-12-01',
-                'gesamt' =>15073,
-                'frei' =>5967,
-                'nfrei' =>9000
-            ],
-            [
-                'day' =>'2021-01-01',
-                'gesamt' =>10687,
-                'frei' =>4460,
-                'nfrei' =>5000
-            ],
-            [
-                'day' =>'2021-02-01',
-                'gesamt' =>8432,
-                'frei' =>5713,
-                'nfrei' =>3000
-            ]
-        );
-
-        $lineData = array(
-            [
-                'day' =>'2020-02-01',
-                'gesamt' =>8666,
-                'ivdSud' =>6600
-            ],
-            [
-                'day' =>'2020-03-01',
-                'gesamt' =>5666,
-                'ivdSud' =>2800
-            ],
-            [
-                'day' =>'2020-04-01',
-                'gesamt' =>3948,
-                'ivdSud' =>2000
-            ],
-            [
-                'day' =>'2020-05-01',
-                'gesamt' =>2666,
-                'ivdSud' =>1333
-            ],
-            [
-                'day' =>'2020-06-01',
-                'gesamt' =>2778,
-                'ivdSud' =>1433
-            ],
-            [
-                'day' =>'2020-07-01',
-                'gesamt' =>4912,
-                'ivdSud' =>2333
-            ],
-            [
-                'day' =>'2020-08-01',
-                'gesamt' =>3767,
-                'ivdSud' =>2633
-            ],
-            [
-                'day' =>'2020-09-01',
-                'gesamt' =>6810,
-                'ivdSud' =>3333
-            ],
-            [
-                'day' =>'2020-10-01',
-                'gesamt' =>5670,
-                'ivdSud' =>4333
-            ],
-            [
-                'day' =>'2020-11-01',
-                'gesamt' =>4820,
-                'ivdSud' =>2410
-            ],
-            [
-                'day' =>'2020-12-01',
-                'gesamt' =>15073,
-                'ivdSud' =>8000
-            ],
-            [
-                'day' =>'2021-01-01',
-                'gesamt' =>10687,
-                'ivdSud' =>5000
-            ],
-            [
-                'day' =>'2021-02-01',
-                'gesamt' =>8432,
-                'ivdSud' =>4216
-            ]
-        );
+        $donutData = $this->sService->getDonutData($user_id);
+        $areaData = $this->sService->getAreaData($user_id);
+        $lineData = $this->sService->getLineDataData($user_id);
         
-        return $this->render('statistic/dashboard1.html.twig', [
+        return $this->render('statistic/dashboard.html.twig', [
             'lineData'  => $lineData,
             'areaData'  => $areaData,
             'donutData' => $donutData,
-            'rowsB'     => $rowsB,
+            'rowsB'     => $boxs,
             'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
         ]);
     }

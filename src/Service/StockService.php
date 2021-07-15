@@ -61,7 +61,6 @@ class StockService
         );
 
         return $donutData;
-
     }
 
     public function getStakeholderStruktur() {
