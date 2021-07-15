@@ -34,6 +34,7 @@ class SupporterService
             $this->uDao->insertAccountForSupporter([
                 'art_id'          => '4',
                 'recht_id'        => '9',
+                'geschaeftsstellen_id' => '6',
                 'kennwort'        =>  md5($passwort), 
                 'username'        =>  $username,      
                 'email'           =>  $email,         

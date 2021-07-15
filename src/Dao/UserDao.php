@@ -88,6 +88,7 @@ class UserDao extends BaseDao {
                 SET 
                 art_id               = :art_id, 
                 recht_id             = :recht_id,
+                geschaeftsstellen_id = :geschaeftsstellen_id,
                 kennwort             = :kennwort,
                 username             = :username,
                 email                = :email,

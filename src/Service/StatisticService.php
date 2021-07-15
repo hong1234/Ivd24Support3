@@ -111,10 +111,13 @@ class StatisticService
         $activ = 0;
         $inact = 0;
         if($geschaeftsstelle_id == 6) {
+
             $total = $this->oDao->getObjectTotal()['Anzah_Gesamtl_Objekte'];
             $activ = $this->oDao->getObjectActiv()['Anzahl_freigegeben_Objekte'];
             $inact = $this->oDao->getObjectInActiv()['Anzahl_nicht_freigegeben_Objekte'];
+
         } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
+
             $total1 = $this->oDao->getObjectTotal2(['geschaeftsstelle_id' => 1])['Anzah_Gesamtl_Objekte'];
             $activ1 = $this->oDao->getObjectActiv2(['geschaeftsstelle_id' => 1])['Anzahl_freigegeben_Objekte'];
             $inact1 = $this->oDao->getObjectInActiv2(['geschaeftsstelle_id' => 1])['Anzahl_nicht_freigegeben_Objekte'];
@@ -128,6 +131,7 @@ class StatisticService
             $inact = $inact1 + $inact2;
 
         } else {
+            
             $total = $this->oDao->getObjectTotal2(['geschaeftsstelle_id' => $geschaeftsstelle_id])['Anzah_Gesamtl_Objekte'];
             $activ = $this->oDao->getObjectActiv2(['geschaeftsstelle_id' => $geschaeftsstelle_id])['Anzahl_freigegeben_Objekte'];
             $inact = $this->oDao->getObjectInActiv2(['geschaeftsstelle_id' => $geschaeftsstelle_id])['Anzahl_nicht_freigegeben_Objekte'];
