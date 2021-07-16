@@ -57,6 +57,11 @@ class StatisticUserController extends AbstractController
                     //'paramName' => 'value'
                 ]);
             } 
+
+            $username = $safePost->get('username');
+            $email    = $safePost->get('email');
+            $passwort = $safePost->get('passwort');
+            $gs_id    = $safePost->get('geschaeftsstelle');
             
         }
 
@@ -106,6 +111,12 @@ class StatisticUserController extends AbstractController
                     //'paramName' => 'value'
                 ]);     
             } 
+
+            $username = $safePost->get('username');
+            $email    = $safePost->get('email');
+            $passwort = $safePost->get('passwort');
+            $gs_id    = $safePost->get('geschaeftsstelle');
+
         }
 
         if ($request->isMethod('GET')) {

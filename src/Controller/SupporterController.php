@@ -55,7 +55,11 @@ class SupporterController extends AbstractController
                 return $this->redirectToRoute('supporter_list', [
                     //'paramName' => 'value'
                 ]);   
-            } 
+            }
+            
+            $username = $safePost->get('username');
+            $email    = $safePost->get('email');
+            $passwort = $safePost->get('passwort');
 
         }
 
@@ -98,7 +102,11 @@ class SupporterController extends AbstractController
                 return $this->redirectToRoute('supporter_list', [
                     //'paramName' => 'value'
                 ]);  
-            } 
+            }
+            
+            $username = $safePost->get('username');
+            $email    = $safePost->get('email');
+            $passwort = $safePost->get('passwort');
              
         }
 
