@@ -5,11 +5,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-use App\Validator\UserAccount;
-
 use App\Dao\UserDao;
 use App\Service\SupporterService;
 use App\Service\StringFormat;
+use App\Validator\UserAccount;
 
 /**
  *
@@ -43,10 +42,10 @@ class SupporterController extends AbstractController
     {
         // $manager = $this->getDoctrine()->getManager();
         $error = '';
+
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
             $safePost = $request->request;
-
             //validation
             $error = $validator->isValidSupporterInput($safePost);
 
@@ -84,16 +83,12 @@ class SupporterController extends AbstractController
     public function supporterEdit($uid, Request $request, UserAccount $validator)
     {
         $user_id  = $uid;
-        $username = '';
-        $email    = '';
-        $passwort = '';
         $error = '';
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // post parameters
             //$safePost = filter_input_array(INPUT_POST);
             $safePost = $request->request;
-
             //validation
             $error = $validator->isValidSupporterInputByUpdate($user_id, $safePost);
             
@@ -116,7 +111,8 @@ class SupporterController extends AbstractController
             ]);
 
             $username = $suser['username'];
-            $email    = $suser['email'];
+            $email = $suser['email'];
+            $passwort = '';
         }
 
         return $this->render('supporter/edit.html.twig', [

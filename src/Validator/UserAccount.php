@@ -334,11 +334,9 @@ class UserAccount
         $username = $safePost->get('username');
         $email    = $safePost->get('email');
         $passwort = $safePost->get('passwort');
-        $gs_id    = $safePost->get('geschaeftsstelle');
+        // $gs_id    = $safePost->get('geschaeftsstelle');
 
-        //validation
         $error = '';
-
         $error = $error.$this->isEmptyUsername($username);
         $error = $error.$this->isEmptyEmail($email);
         $error = $error.$this->isEmptyPasswort($passwort);
@@ -361,8 +359,8 @@ class UserAccount
         $error = $error.$this->isEmptyEmail($email);
         $error = $error.$this->isEmptyPasswort($passwort);
 
-        $error = $this->isValidUserNameByUpdate($user_id, $username);
-        $error = $this->isValidEmailByUpdate($user_id, $email);
+        $error = $error.$this->isValidUserNameByUpdate($user_id, $username);
+        $error = $error.$this->isValidEmailByUpdate($user_id, $email);
         
         return $error;
     }

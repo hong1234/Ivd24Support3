@@ -45,9 +45,7 @@ class StatisticUserController extends AbstractController
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             //post parameters
-            //$safePost = filter_input_array(INPUT_POST);
             $safePost = $request->request;
-
             //validation
             $error = $validator->isValidStatisticUserInput($safePost);
             
@@ -74,6 +72,7 @@ class StatisticUserController extends AbstractController
         }
 
         $geschaeftsstelle = $this->uDao->getAllRowsInTable('user_geschaeftsstelle');
+
         return $this->render('statisticuser/new.html.twig', [
             'username'           => $username,
             'email'              => $email,
@@ -91,14 +90,8 @@ class StatisticUserController extends AbstractController
     public function statisticUserEdit($uid, Request $request, UserAccount $validator)
     {
         $user_id = $uid;
-        $username = '';
-        $email    = '';
-        $passwort = '';
-        $gs_id    = '1';
-        $error    = '';
+        $error = '';
         
-        $geschaeftsstellen = $this->uDao->getAllRowsInTable('user_geschaeftsstelle');
-
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // post parameters
             $safePost = $request->request;
@@ -126,16 +119,20 @@ class StatisticUserController extends AbstractController
 
             $username = $suser['username'];
             $email    = $suser['email'];
+            $passwort = '';
             $gs_id    = $suser['geschaeftsstelleId'];
         }
 
+        $geschaeftsstellen = $this->uDao->getAllRowsInTable('user_geschaeftsstelle');
+
         return $this->render('statisticuser/edit.html.twig', [
-            'user_id'            => $user_id,
-            'username'           => $username,
-            'email'              => $email,
+            'user_id'  => $user_id,
+            'username' => $username,
+            'email'    => $email,
+            'passwort' => $passwort,
             'geschaeftsstelleId' => $gs_id,
-            'geschaeftsstellen'  => $geschaeftsstellen,
-            'error'              => $error
+            'geschaeftsstellen' => $geschaeftsstellen,
+            'error' => $error
         ]);
 
     }
@@ -148,7 +145,6 @@ class StatisticUserController extends AbstractController
         $user_id = $uid;
 
         if ($request->isMethod('POST')){
-            
             if($request->request->get('savebutton')){
                 $this->suService->deleteStatisticUser($user_id);
             }

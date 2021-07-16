@@ -33,8 +33,9 @@ class MaklerController extends AbstractController
         $error = '';
         //if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+
             //$safePost = filter_input_array(INPUT_POST);// post parameters as array
-            //$safePost = $request->request->all();// post parameters as array
+            //$postArray = $request->request->all();// post parameters as array
             $safePost = $request->request;
 
             //validation
@@ -47,7 +48,7 @@ class MaklerController extends AbstractController
                 ]);
             }
 
-            $makler = $safePost->all();// post parameters as array
+            $makler = $safePost->all(); // post parameters as array
         }
 
         if ($request->isMethod('GET')) {
@@ -105,8 +106,9 @@ class MaklerController extends AbstractController
 
         // if(isset($_POST['savebutton'])) { // savebutton: true
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+
             //$safePost = filter_input_array(INPUT_POST);// post parameters
-            //$safePost = $request->request->all();// post parameters as array
+            //$postArray = $request->request->all();// post parameters as array
             $safePost = $request->request;
 
             //validation
@@ -119,7 +121,7 @@ class MaklerController extends AbstractController
                 ]);
             }
 
-            $makler = $safePost->all();// post parameters as array
+            $makler = $safePost->all(); // post parameters as array
         }
 
         if ($request->isMethod('GET')) {
@@ -223,7 +225,6 @@ class MaklerController extends AbstractController
     {
         $user_id = $uid;
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-
             $safePost = $request->request;
             $this->mService->maklerPwEdit($user_id, $safePost);
             return $this->redirectToRoute('makler_list', []);

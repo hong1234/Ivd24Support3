@@ -102,24 +102,24 @@ class MaklerService
             $userMaklerConfig = $this->userMaklerConfig($geschaeftsstelle_id, $user_id);
     
             $this->mDao->insertMakler([
-                'user_id'             => $user_id,
+                'user_id'         => $user_id,
                 'geschaeftsstelle_id' => $geschaeftsstelle_id,
-                'mitgliedsnummer'     => $mitgliedsnummer,
-                'mkategorie_id'       => $mkategorie_id,
-                'anrede'              => $anrede,
-                'titel'               => $titel,
-                'name'                => $name,
-                'vorname'             => $vorname,
-                'firma'               => $firma,
-                'strasse'             => $strasse,
-                'plz'                 => $plz,
-                'ort'                 => $ort,
-                'email'               => $email,
-                'telefon'             => $telefon,
-                'telefax'             => $telefax,
-                'homepage'            => $homepage,
-                'seo_url'             => $seo_url,
-                'bundesland_id'       => $bundesland_id
+                'mitgliedsnummer' => $mitgliedsnummer,
+                'mkategorie_id'   => $mkategorie_id,
+                'anrede'          => $anrede,
+                'titel'           => $titel,
+                'name'            => $name,
+                'vorname'         => $vorname,
+                'firma'           => $firma,
+                'strasse'         => $strasse,
+                'plz'             => $plz,
+                'ort'             => $ort,
+                'email'           => $email,
+                'telefon'         => $telefon,
+                'telefax'         => $telefax,
+                'homepage'        => $homepage,
+                'seo_url'         => $seo_url,
+                'bundesland_id'   => $bundesland_id
             ]);
    
             $this->mDao->insertUserMaklerConfig([
@@ -306,7 +306,6 @@ class MaklerService
         $em = $this->mDao->getEm();
         $em->getConnection()->beginTransaction();
         try {
-
             //$this->insertUserDelete($user_id);
 
             while ($row = $stmt->fetch()) {
