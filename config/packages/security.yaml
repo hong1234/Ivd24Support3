@@ -23,8 +23,8 @@ security:
 
             logout:
                 path: app_logout
-                target: /home
-                #target: default_home
+                #target: /home
+                target: /
 
             # activate different ways to authenticate
 

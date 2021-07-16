@@ -21,7 +21,8 @@ class DefaultController extends AbstractController
     public function indexPage()
     {
         // redirects to the "homepage" route
-        return $this->redirectToRoute('default_home');
+        // return $this->redirectToRoute('default_home');
+        return $this->redirectToRoute('statistic_dashboard'); 
     }
     
     /**
