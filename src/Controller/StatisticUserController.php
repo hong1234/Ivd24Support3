@@ -4,13 +4,12 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-// use App\Repository\ProductRepository;
 
+use App\Service\StatisticUserService;
+use App\Service\StringFormat;
 use App\Validator\UserAccount;
 
 use App\Dao\UserDao;
-use App\Service\StatisticUserService;
-use App\Service\StringFormat;
 
 /**
  *
@@ -18,11 +17,20 @@ use App\Service\StringFormat;
  */
 class StatisticUserController extends AbstractController
 {
+    private $uDao;
+    private $suService;
+    
+    public function __construct(UserDao $uDao, StatisticUserService $suService)
+    {
+        $this->uDao = $uDao;
+        $this->suService = $suService;
+    }
+
     /**
      * @Route("/statisticuser", name="statisticuser_list")
      */
-    public function statisticuserList(StatisticUserService $staSer) {
-        $rows = $staSer->StatisticUserList();
+    public function statisticuserList() {
+        $rows = $this->suService->StatisticUserList();
         return $this->render('statisticuser/list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -31,33 +39,20 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser/new", name="statisticuser_new")
      */
-    public function newStatisticUser(Request $request, UserDao $uDao, UserAccount $validator, StatisticUserService $staSer, StringFormat $sfService)
+    public function newStatisticUser(Request $request, UserAccount $validator, StringFormat $sfService)
     {
-        $geschaeftsstelle = $uDao->getAllRowsInTable('user_geschaeftsstelle');
+        $error = '';
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             //post parameters
             //$safePost = filter_input_array(INPUT_POST);
-            //var_dump($safePost); exit;
             $safePost = $request->request;
 
-            $username = $safePost->get('username');
-            $email    = $safePost->get('email');
-            $passwort = $safePost->get('passwort');
-            $gs_id    = $safePost->get('geschaeftsstelle');
-
             //validation
-            $empty1 = $validator->isEmptyUsername($username);
-            $empty2 = $validator->isEmptyEmail($email);
-            $empty3 = $validator->isEmptyPasswort($passwort);
-            $error1 = $empty1.$empty2.$empty3;
-            
-            $error2 = $validator->isValidUserName($username);
-            $error3 = $validator->isValidEmail($email);
-            $error  = $error1.$error2.$error3;
+            $error = $validator->isValidStatisticUserInput($safePost);
             
             if ($error == '') {
-                $staSer->newStatisticUser($safePost);
+                $this->suService->newStatisticUser($safePost);
                 return $this->redirectToRoute('statisticuser_list', [
                     //'paramName' => 'value'
                 ]);
@@ -73,6 +68,7 @@ class StatisticUserController extends AbstractController
             $error    = '';
         }
 
+        $geschaeftsstelle = $this->uDao->getAllRowsInTable('user_geschaeftsstelle');
         return $this->render('statisticuser/new.html.twig', [
             'username'           => $username,
             'email'              => $email,
@@ -81,12 +77,13 @@ class StatisticUserController extends AbstractController
             'geschaeftsstelle'   => $geschaeftsstelle,
             'error'              => $error
         ]);
+
     }
 
     /**
      * @Route("/statisticuser/{uid}/edit", name="statisticuser_edit", requirements={"uid"="\d+"})
      */
-    public function statisticuserEdit($uid, Request $request, UserDao $uDao, UserAccount $validator, StatisticUserService $staSer)
+    public function statisticUserEdit($uid, Request $request, UserAccount $validator)
     {
         $user_id = $uid;
         $username = '';
@@ -95,29 +92,16 @@ class StatisticUserController extends AbstractController
         $gs_id    = '1';
         $error    = '';
         
-        $geschaeftsstellen = $uDao->getAllRowsInTable('user_geschaeftsstelle');
+        $geschaeftsstellen = $this->uDao->getAllRowsInTable('user_geschaeftsstelle');
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // post parameters
             $safePost = $request->request;
-
-            $username = $safePost->get('username');
-            $email    = $safePost->get('email');
-            $passwort = $safePost->get('passwort');
-            $gs_id    = $safePost->get('geschaeftsstelle');
-
             //validation
-            $empty1 = $validator->isEmptyUsername($username);
-            $empty2 = $validator->isEmptyEmail($email);
-            $empty3 = $validator->isEmptyPasswort($passwort);
-            $error1 = $empty1.$empty2.$empty3;
-
-            $error2 = $validator->isValidUserNameByUpdate($user_id, $username);
-            $error3 = $validator->isValidEmailByUpdate($user_id, $email);
-            $error  = $error1.$error2.$error3;
+            $error = $validator->isValidStatisticUserInputByUpdate($user_id, $safePost);
             
             if ($error == '') {
-                $staSer->updateStatisticUser($user_id, $safePost);
+                $this->suService->updateStatisticUser($user_id, $safePost);
                 return $this->redirectToRoute('statisticuser_list', [
                     //'paramName' => 'value'
                 ]);     
@@ -125,7 +109,7 @@ class StatisticUserController extends AbstractController
         }
 
         if ($request->isMethod('GET')) {
-            $suser = $uDao->getStatisticUser([
+            $suser = $this->uDao->getStatisticUser([
                 'user_id' => $user_id
             ]);
 
@@ -148,21 +132,21 @@ class StatisticUserController extends AbstractController
     /**
      * @Route("/statisticuser/{uid}/delete", name="statisticuser_delete", requirements={"uid"="\d+"})
      */
-    public function statisticuserDelete($uid, Request $request, UserDao $uDao, StatisticUserService $staSer)
+    public function statisticuserDelete($uid, Request $request)
     {
         $user_id = $uid;
 
         if ($request->isMethod('POST')){
             
             if($request->request->get('savebutton')){
-                $staSer->deleteStatisticUser($user_id);
+                $this->suService->deleteStatisticUser($user_id);
             }
             return $this->redirectToRoute('statisticuser_list', [
                 //'paramName' => 'value'
             ]);
         }
 
-        $suser = $uDao->getStatisticUser([
+        $suser = $this->uDao->getStatisticUser([
             'user_id' => $user_id
         ]);
 

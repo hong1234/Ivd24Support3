@@ -4,7 +4,6 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-// use App\Repository\ProductRepository;
 
 use App\Validator\UserAccount;
 
@@ -18,11 +17,20 @@ use App\Service\StringFormat;
  */
 class SupporterController extends AbstractController
 {
+    private $uDao;
+    private $supService;
+    
+    public function __construct(UserDao $uDao, SupporterService $supService)
+    {
+        $this->uDao = $uDao;
+        $this->supService = $supService;
+    }
+
     /**
      * @Route("/supporter", name="supporter_list")
      */
-    public function supporterList(SupporterService $supSer) {
-        $rows = $supSer->SupporterList();
+    public function supporterList() {
+        $rows = $this->supService->SupporterList();
         return $this->render('supporter/list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -31,30 +39,19 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter/new", name="supporter_new")
      */
-    public function newSupporter(Request $request, UserAccount $validator, SupporterService $supSer, StringFormat $sfService)
+    public function newSupporter(Request $request, UserAccount $validator, StringFormat $sfService)
     {
         // $manager = $this->getDoctrine()->getManager();
-        
+        $error = '';
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
 
             $safePost = $request->request;
 
-            $username = $safePost->get('username');  //validation
-            $email    = $safePost->get('email');     //validation
-            $passwort = $safePost->get('passwort');
-
             //validation
-            $empty1 = $validator->isEmptyUsername($username);
-            $empty2 = $validator->isEmptyEmail($email);
-            $empty3 = $validator->isEmptyPasswort($passwort);
-            $error1 = $empty1.$empty2.$empty3;
+            $error = $validator->isValidSupporterInput($safePost);
 
-            $error2 = $validator->isValidUserName($username);
-            $error3 = $validator->isValidEmail($email);
-            $error  = $error1.$error2.$error3;
-            
             if ($error == '') {
-                $supSer->newSupporter($safePost);
+                $this->supService->newSupporter($safePost);
                 return $this->redirectToRoute('supporter_list', [
                     //'paramName' => 'value'
                 ]);   
@@ -80,36 +77,24 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter/{uid}/edit", name="supporter_edit", requirements={"uid"="\d+"})
      */
-    public function supporterEdit($uid, Request $request, UserDao $uDao, UserAccount $validator, SupporterService $supSer)
+    public function supporterEdit($uid, Request $request, UserAccount $validator)
     {
         $user_id  = $uid;
         $username = '';
         $email    = '';
         $passwort = '';
-        $error    = '';
+        $error = '';
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // post parameters
             //$safePost = filter_input_array(INPUT_POST);
-            //var_dump($safePost); exit;
             $safePost = $request->request;
 
-            $username = $safePost->get('username');
-            $email    = $safePost->get('email');
-            $passwort = $safePost->get('passwort');
-
             //validation
-            $empty1 = $validator->isEmptyUsername($username);
-            $empty2 = $validator->isEmptyEmail($email);
-            $empty3 = $validator->isEmptyPasswort($passwort);
-            $error1 = $empty1.$empty2.$empty3;
-            
-            $error2 = $validator->isValidUserNameByUpdate($user_id, $username);
-            $error3 = $validator->isValidEmailByUpdate($user_id, $email);
-            $error  = $error1.$error2.$error3;
+            $error = $validator->isValidSupporterInputByUpdate($user_id, $safePost);
             
             if ($error == '') {
-                $supSer->updateSupporter($user_id, $safePost);
+                $this->supService->updateSupporter($user_id, $safePost);
                 return $this->redirectToRoute('supporter_list', [
                     //'paramName' => 'value'
                 ]);  
@@ -118,7 +103,7 @@ class SupporterController extends AbstractController
         }
 
         if ($request->isMethod('GET')) {
-            $suser = $uDao->getSupportUser([
+            $suser = $this->uDao->getSupportUser([
                 'user_id' => $user_id
             ]);
 
@@ -138,19 +123,19 @@ class SupporterController extends AbstractController
     /**
      * @Route("/supporter/{uid}/delete", name="supporter_delete", requirements={"uid"="\d+"})
      */
-    public function supporterDelete($uid, Request $request, UserDao $uDao, SupporterService $supSer)
+    public function supporterDelete($uid, Request $request)
     {
         $user_id = $uid;
         if ($request->isMethod('POST')){
             if($request->request->get('savebutton')){  
-                $supSer->deleteSupporter($user_id);
+                $this->supService->deleteSupporter($user_id);
             }
             return $this->redirectToRoute('supporter_list', [
                 //'paramName' => 'value'
             ]);
         }
 
-        $suser = $uDao->getSupportUser([
+        $suser = $this->uDao->getSupportUser([
             'user_id' => $user_id
         ]);
 

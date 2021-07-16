@@ -5,8 +5,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-use App\Dao\UserDao;
 use App\Service\InteressentService;
+use App\Dao\UserDao;
 
 /**
  *
@@ -14,22 +14,31 @@ use App\Service\InteressentService;
  */
 class InteressentController extends AbstractController
 {
+    private $uDao;
+    private $intService;
+    
+    public function __construct(UserDao $uDao, InteressentService $intService)
+    {
+        $this->uDao = $uDao;
+        $this->intService = $intService;
+    }
+
     /**
      * @Route("/interessent/{uid}/edit", name="interessent_edit", requirements={"uid"="\d+"})
      */
-    public function interessentEdit($uid, Request $request, InteressentService $intService)
+    public function interessentEdit($uid, Request $request)
     {
         $user_id = $uid; 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             // $safePost = filter_input_array(INPUT_POST); // post parameters
             $safePost = $request->request;
-            $intService->interessentUpdate($user_id, $safePost);
+            $this->intService->interessentUpdate($user_id, $safePost);
             return $this->redirectToRoute('interessent_list', [
                 //'paramName' => 'value'
             ]);
         }
 
-        $interessent = $intService->getInteressentData($user_id);
+        $interessent = $this->intService->getInteressentData($user_id);
         return $this->render('interessent/edit.html.twig', [
             'user_id'     => $user_id,
             'interessent' => $interessent 
@@ -39,19 +48,19 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/{uid}/delete", name="interessent_delete", requirements={"uid"="\d+"})
      */
-    public function interessentDelete($uid, Request $request, InteressentService $intService)
+    public function interessentDelete($uid, Request $request)
     {
         $user_id = $uid;
         if ($request->isMethod('POST')) {
             if ($request->request->get('savebutton')) {
-                $intService->interessentDelete($user_id);     
+                $this->intService->interessentDelete($user_id);     
             }
             return $this->redirectToRoute('interessent_delete_list', [
                 //'paramName' => 'value'
             ]);
         }
 
-        $interessent = $intService->getInteressentData($user_id);
+        $interessent = $this->intService->getInteressentData($user_id);
         return $this->render('interessent/del.html.twig', [
             'user_id'     => $user_id,
             'interessent' => $interessent
@@ -62,9 +71,9 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent", name="interessent_list")
      */
-    public function interessentList(InteressentService $intService)
+    public function interessentList()
     {
-        $rows = $intService->InteressentList();
+        $rows = $this->intService->InteressentList();
         return $this->render('interessent/list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -73,9 +82,9 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/delete", name="interessent_delete_list")
      */
-    public function interessentDelList(InteressentService $intService)
+    public function interessentDelList()
     {
-        $rows = $intService->InteressentDelList();
+        $rows = $this->intService->InteressentDelList();
         return $this->render('interessent/del.list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -84,10 +93,10 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/{uid}/lock", name="interessent_lock", requirements={"uid"="\d+"})
      */
-    public function interessentLock($uid, UserDao $uDao)
+    public function interessentLock($uid)
     {
         $user_id  = $uid;
-        $uDao->updateUserAccountGesperrt([
+        $this->uDao->updateUserAccountGesperrt([
             'gesperrt' => 1,
             'user_id'  => $user_id
         ]);
@@ -100,10 +109,10 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/{uid}/unlock", name="interessent_unlock", requirements={"uid"="\d+"})
      */
-    public function interessentUnLock($uid, UserDao $uDao)
+    public function interessentUnLock($uid)
     {
         $user_id  = $uid;
-        $uDao->updateUserAccountGesperrt([
+        $this->uDao->updateUserAccountGesperrt([
             'gesperrt' => 0,
             'user_id'  => $user_id
         ]);
@@ -116,7 +125,7 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/{uid}/pwedit", name="interessent_pw_edit", requirements={"uid"="\d+"})
      */
-    public function interessentPwEdit($uid, Request $request, UserDao $uDao)
+    public function interessentPwEdit($uid, Request $request)
     {
         $user_id = $uid; 
 
@@ -126,7 +135,7 @@ class InteressentController extends AbstractController
             $passwort   = $safePost->get('passwort');
             $crypt_passwort = md5($passwort);
 
-            $uDao->updateUserAccountPW([
+            $this->uDao->updateUserAccountPW([
                 'crypt_passwort' => $crypt_passwort,
                 'user_id'        => $user_id
             ]); 
@@ -136,7 +145,7 @@ class InteressentController extends AbstractController
             ]);
         }
         
-        $user_account = $uDao->getRowInTableByIdentifier('user_account', [
+        $user_account = $this->uDao->getRowInTableByIdentifier('user_account', [
             'user_id' => $user_id
         ]);
         $username = $user_account['username'];
@@ -150,10 +159,10 @@ class InteressentController extends AbstractController
     /**
      * @Route("/interessent/{uid}/delete/undo", name="interessent_delete_undo", requirements={"uid"="\d+"})
      */
-    public function deleteUndo($uid, UserDao $uDao)
+    public function deleteUndo($uid)
     {
         $user_id = $uid;
-        $uDao->updateUserAccountLoeschung([
+        $this->uDao->updateUserAccountLoeschung([
             'user_id' => $user_id
         ]);
 

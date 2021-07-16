@@ -14,12 +14,21 @@ use App\Service\BcUserService;
  */
 class BcUserController extends AbstractController
 {
+    private $bcuDao;
+    private $bcUserService;
+    
+    public function __construct(BUserDao $bcuDao, BcUserService $bcUserService)
+    {
+        $this->bcuDao = $bcuDao;
+        $this->bcUserService = $bcUserService;
+    }
+
     /**
      * @Route("/bcuser", name="bcuser_list")
      */
-    public function bcuserList(BcUserService $bcUserService){
+    public function bcuserList(){
 
-        $rows = $bcUserService->BcUserList();
+        $rows = $this->bcUserService->BcUserList();
         return $this->render('bcuser/list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -28,63 +37,63 @@ class BcUserController extends AbstractController
     /**
      * @Route("/bcuser/{uid}/edit", name="bcuser_edit", requirements={"uid"="\d+"})
      */
-    public function bcuserEdit($uid, Request $request, BUserDao $bcuDao){
+    public function bcuserEdit($uid, Request $request){
         
         $user_id = $uid;
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')){
             //$safePost = filter_input_array(INPUT_POST);
             $safePost = $request->request;
-            $userid             = $safePost->get('userid');                 
-            $buchungsdatum      = $safePost->get('buchungsdatum');          //: 2021-01-15           
-            $firma              = $safePost->get('firma');                  
-            $seo_url            = $safePost->get('seo_url');                //eurich-immobilien
-            $start_abo          = $safePost->get('start_abo');               //: 2021-02-01
-            $end_abo            = $safePost->get('end_abo');                 //: 2022-01-31
-            $total_amount       = $safePost->get('total_amount');            //: 360
-            $paket_id           = $safePost->get('paket_id');                //: 2
-            $paid               = $safePost->get('paid');
-            $email              = $safePost->get('email');                   
-            $end_grundriss      = $safePost->get('end_grundriss');           //: 2022-01-31
-            $grundriss_voucher  = $safePost->get('grundriss_voucher');
-            $geraete            = $safePost->get('geraete');                 //: 1
 
-            $bcuDao->updateBUser([
-                'userid'            => $userid,
-                'buchungsdatum'     => $buchungsdatum,
-                'firma'             => $firma,
-                'seo_url'           => $seo_url,
-                'start_abo'         => $start_abo,
-                'end_abo'           => $end_abo,
-                'total_amount'      => $total_amount,
-                'paket_id'          => $paket_id,
-                'paid'              => $paid,
-                'email'             => $email,
-                'end_grundriss'     => $end_grundriss,
+            $userid        = $safePost->get('userid');                 
+            $buchungsdatum = $safePost->get('buchungsdatum');          //: 2021-01-15           
+            $firma         = $safePost->get('firma');                  
+            $seo_url       = $safePost->get('seo_url');                //eurich-immobilien
+            $start_abo     = $safePost->get('start_abo');               //: 2021-02-01
+            $end_abo       = $safePost->get('end_abo');                 //: 2022-01-31
+            $total_amount  = $safePost->get('total_amount');            //: 360
+            $paket_id      = $safePost->get('paket_id');                //: 2
+            $paid          = $safePost->get('paid');
+            $email         = $safePost->get('email');                   
+            $end_grundriss = $safePost->get('end_grundriss');           //: 2022-01-31
+            $grundriss_voucher = $safePost->get('grundriss_voucher');
+            $geraete       = $safePost->get('geraete');                 //: 1
+
+            $this->bcuDao->updateBUser([
+                'userid'         => $userid,
+                'buchungsdatum'  => $buchungsdatum,
+                'firma'          => $firma,
+                'seo_url'        => $seo_url,
+                'start_abo'      => $start_abo,
+                'end_abo'        => $end_abo,
+                'total_amount'   => $total_amount,
+                'paket_id'       => $paket_id,
+                'paid'           => $paid,
+                'email'          => $email,
+                'end_grundriss'  => $end_grundriss,
                 'grundriss_voucher' => $grundriss_voucher,
-                'geraete'           => $geraete,
-                'user_id'           => $user_id
+                'geraete'        => $geraete,
+                'user_id'        => $user_id
             ]);
 
         }
 
-        $row_user  = $bcuDao->getBUser([
+        $row_user  = $this->bcuDao->getBUser([
             'user_id' => $user_id
         ]);
-        //var_dump($row_user);exit;
 
         return $this->render('bcuser/edit.html.twig', [
-            'user_id'   => $user_id,
-            'bcuser'    => $row_user
+            'user_id' => $user_id,
+            'bcuser'  => $row_user
         ]);
     }
 
     /**
      * @Route("/bcuser/delete", name="bcuser_delete_list")
      */
-    public function bcuserDelList(BcUserService $bcUserService){
+    public function bcuserDelList(){
 
-        $rows = $bcUserService->BcUserDelList();
+        $rows = $this->bcUserService->BcUserDelList();
         return $this->render('bcuser/del.list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -93,14 +102,14 @@ class BcUserController extends AbstractController
     /**
      * @Route("/bcuser/{uid}/delete", name="bcuser_delete", requirements={"uid"="\d+"})
      */
-    public function bcuserDelete($uid, Request $request, BUserDao $bcuDao){
+    public function bcuserDelete($uid, Request $request){
         
         $user_id = $uid;
 
         if ($request->isMethod('POST')){
 
             if($request->request->get('savebutton')){
-                $bcuDao->deleteBUser([
+                $this->bcuDao->deleteBUser([
                     'user_id' => $user_id
                 ]);
             }
@@ -109,7 +118,7 @@ class BcUserController extends AbstractController
             ]);
         }
             
-        $row_user  = $bcuDao->getBUser([
+        $row_user  = $this->bcuDao->getBUser([
             'user_id' => $user_id
         ]);
 
