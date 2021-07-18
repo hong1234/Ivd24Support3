@@ -3,8 +3,10 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use App\Service\StatisticService;
+use App\Dao\StatisticDao;
 
 /**
  *
@@ -13,10 +15,12 @@ use App\Service\StatisticService;
 class StatisticController extends AbstractController
 {
     private $sService;
+    private $sDao;
 
-    public function __construct(StatisticService $sService)
+    public function __construct(StatisticDao $sDao, StatisticService $sService)
     {
         $this->sService = $sService;
+        $this->sDao = $sDao;
     }
 
     /**
@@ -27,23 +31,79 @@ class StatisticController extends AbstractController
         // $this->getUser()->getEmail();
         // $roles = $this->getUser()->getRoles();
 
-        $user_id = $this->getUser()->getUserid();
-        $boxs = $this->sService->getBoxsData($user_id);
-
         //makler table-----------
         // $rows = $mService->MaklerList();
 
-        $donutData = $this->sService->getDonutData($user_id);
-        $areaData = $this->sService->getAreaData($user_id);
-        $lineData = $this->sService->getLineDataData($user_id);
+        $user_id = $this->getUser()->getUserid();
+        $geschaeftsstelle_id = $this->sService->geschaeftsstelleId($user_id);
+
+        $boxs = $this->sService->getBoxsData($geschaeftsstelle_id);
+        $donutData = $this->sService->getDonutData($geschaeftsstelle_id);
+        $areaData = $this->sService->getAreaData($geschaeftsstelle_id);
+        $lineData = $this->sService->getLineDataData($geschaeftsstelle_id);
         
         return $this->render('statistic/dashboard.html.twig', [
             'lineData'  => $lineData,
             'areaData'  => $areaData,
             'donutData' => $donutData,
             'rowsB'     => $boxs,
+            'geschaeftsstelle_id' => $geschaeftsstelle_id,
             'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
         ]);
+    }
+
+    /**
+     * @Route("/csv/activmakler/{gsid}", name="statistic_csv_activmakler", requirements={"gsid"="\d+"})
+     */
+    public function csvActivMakler(int $gsid)
+    {
+        $geschaeftsstelle_id = $gsid;
+
+        $rows = $this->sDao->getActivMakler([
+            'geschaeftsstelle_id' => $geschaeftsstelle_id
+        ]);
+        
+        $response = $this->render('statistic/list.csv.twig', [
+            'rows' => $rows
+        ]);
+
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $d = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "ActivMaklerList-".date('Y-m-d').".csv"
+        );
+        $response->headers->set('Content-Disposition', $d);
+        $response->sendHeaders();
+        print "\xEF\xBB\xBF"; // UTF-8 BOM - hack for correct encoding in excel
+        
+        return $response;
+    }
+
+    /**
+     * @Route("/csv/inactivmakler/{gsid}", name="statistic_csv_inactivmakler", requirements={"gsid"="\d+"})
+     */
+    public function csvInActivMakler(int $gsid)
+    {
+        $geschaeftsstelle_id = $gsid;
+
+        $rows = $this->sDao->getInActivMakler([
+            'geschaeftsstelle_id' => $geschaeftsstelle_id
+        ]);
+        
+        $response = $this->render('statistic/list.csv.twig', [
+            'rows' => $rows
+        ]);
+
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $d = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "InActivMaklerList-".date('Y-m-d').".csv"
+        );
+        $response->headers->set('Content-Disposition', $d);
+        $response->sendHeaders();
+        print "\xEF\xBB\xBF"; // UTF-8 BOM - hack for correct encoding in excel
+        
+        return $response;
     }
 
 }

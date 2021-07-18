@@ -61,4 +61,22 @@ class StatisticDao extends UserDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
+    //-------------
+
+    public function getActivMakler(iterable $values=[]){
+        $sql = "SELECT makler.user_id, makler.vorname, makler.name, makler.firma, makler.strasse, makler.plz, makler.ort, makler.email, makler.telefon
+                FROM user_makler makler
+                LEFT JOIN (SELECT * FROM objekt_master GROUP BY user_id) AS ob ON makler.user_id = ob.user_id
+                WHERE ob.user_id IS NOT NULL AND makler.geschaeftsstelle_id=:geschaeftsstelle_id";
+        return $this->doQuery($sql, $values)->fetchAll();
+    }
+
+    public function getInActivMakler(iterable $values=[]){
+        $sql = "SELECT makler.user_id, makler.vorname, makler.name, makler.firma, makler.strasse, makler.plz, makler.ort, makler.email, makler.telefon
+                FROM user_makler makler
+                LEFT JOIN (SELECT * FROM objekt_master GROUP BY user_id) AS ob ON makler.user_id = ob.user_id
+                WHERE ob.user_id IS NULL AND makler.geschaeftsstelle_id=:geschaeftsstelle_id";
+        return $this->doQuery($sql, $values)->fetchAll();
+    }
+
 }

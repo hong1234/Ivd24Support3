@@ -24,9 +24,7 @@ class StatisticService
         return $geschaeftsstelle_id;
     }
 
-    public function getBoxsData(int $user_id) {
-
-        $geschaeftsstelle_id = $this->geschaeftsstelleId($user_id);
+    public function getBoxsData(int $geschaeftsstelle_id) {
         
         $temp = [];
         $temp['name'] = 'IVD Süd';
@@ -140,9 +138,8 @@ class StatisticService
         return ['total'=>$total, 'activ'=>$activ, 'inact'=>$inact];
     }
 
-    public function getDonutData(int $user_id) {
+    public function getDonutData(int $geschaeftsstelle_id) {
 
-        $geschaeftsstelle_id = $this->geschaeftsstelleId($user_id);
         $rs = $this->getObjectStatistic($geschaeftsstelle_id);
 
         $donutData = array(
@@ -163,9 +160,8 @@ class StatisticService
         return $donutData;
     }
 
-    public function getAreaData(int $user_id) {
+    public function getAreaData(int $geschaeftsstelle_id) {
 
-        $geschaeftsstelle_id = $this->geschaeftsstelleId($user_id);
         $rs = $this->getObjectStatistic($geschaeftsstelle_id);
         
         $areaData = array(
@@ -252,7 +248,8 @@ class StatisticService
         return $areaData;
     }
 
-    public function getLineDataData(int $user_id) {
+    public function getLineDataData(int $geschaeftsstelle_id) {
+        
         $lineData = array(
             [
                 'day' =>'2020-02-01',

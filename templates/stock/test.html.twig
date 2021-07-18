@@ -1,18 +1,4 @@
-{% extends 'baseList.html.twig' %}
-
-{% block title %}Test View{% endblock %}
-
-{% block content %}
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <section class="content-header">
-            <h1>Test View</h1>
-        </section>
-        <!-- Main content -->
-        <section class="content">
-            
-        </section>
-  </div>
-  <!-- /.content-wrapper -->
-{% endblock %}
-
+vorname;name;
+{% for row in rows %}
+    "{{ row.vorname|raw }}";"{{ row.name|raw }}";
+{% endfor %}

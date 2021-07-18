@@ -1,0 +1,4 @@
+Vorname;  Name;  Firma;  Straße Nr.;  PLZ;  Ort;  Emailadresse;  Telefonnummer;
+{% for row in rows %}
+    "{{ row.vorname|raw }}";"{{ row.name|raw }}";"{{ row.firma|raw }}";"{{ row.strasse|raw }}";"{{ row.plz|raw }}";"{{ row.ort|raw }}";"{{ row.email|raw }}";"{{ row.telefon|raw }}";
+{% endfor %}

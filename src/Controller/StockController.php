@@ -4,6 +4,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 // use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use App\Service\StockService;
 
@@ -65,12 +66,32 @@ class StockController extends AbstractController
      */
     public function stockTest()
     {
-        $rows = $this->stockService->getStakeholderStruktur();
-        var_dump($rows); exit;
+        //$rows = $this->stockService->getStakeholderStruktur();
+        $rows = [];
+        $rows[] = [
+            'vorname' => 'Hong',
+            'name' => 'Le'
+        ];
+        $rows[] = [
+            'vorname' => 'Hong2',
+            'name' => 'Le2'
+        ];
+        // var_dump($rows); exit;
         
-        return $this->render('stock/test.html.twig', [
+        $response = $this->render('stock/test.html.twig', [
             'rows' => $rows
         ]);
+
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $d = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            "DeveloperList-".date('Y-m-d').".csv"
+        );
+        $response->headers->set('Content-Disposition', $d);
+        $response->sendHeaders();
+        print "\xEF\xBB\xBF"; // UTF-8 BOM - hack for correct encoding in excel
+        
+        return $response;
     }
 
 }
