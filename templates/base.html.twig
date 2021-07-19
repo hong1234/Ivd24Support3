@@ -107,12 +107,12 @@
                         <li class="treeview {% if route_name in ["bcuser_list", "bcuser_edit", "bcuser_delete_list", "bcuser_delete"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-edit"></i> 
-                                <span>BcUserverwaltung</span>
+                                <span>BusinessClub</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if route_name in ["bcuser_list", "bcuser_edit"] %} class="active"{% endif %}><a href="{{ path('bcuser_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User bearbeiten</a></li>
-                                <li {% if route_name in ["bcuser_delete_list", "bcuser_delete"] %} class="active"{% endif %}><a href="{{ path('bcuser_delete_list') }}"><i class="fa fa-circle-o"></i>BusinessClub User löschen</a></li>
+                                <li {% if route_name in ["bcuser_list", "bcuser_edit"] %} class="active"{% endif %}><a href="{{ path('bcuser_list') }}"><i class="fa fa-circle-o"></i>BClub-User bearbeiten</a></li>
+                                <li {% if route_name in ["bcuser_delete_list", "bcuser_delete"] %} class="active"{% endif %}><a href="{{ path('bcuser_delete_list') }}"><i class="fa fa-circle-o"></i>BClub-User löschen</a></li>
                             </ul>
                         </li>
 
