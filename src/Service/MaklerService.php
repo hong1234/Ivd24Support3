@@ -330,6 +330,7 @@ class MaklerService
         while ($row = $stmt->fetch()) {
             $row2 = array();
             $row2[] = $row['userId'];
+            $row2[] = $row['mitgliedsnummer'];
             $row2[] = $row['vorname'].' '.$row['name'];
             $row2[] = $row['firma'];
             $row2[] = $row['maklerEmail'];
