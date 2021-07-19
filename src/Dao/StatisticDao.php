@@ -3,7 +3,7 @@ namespace App\Dao;
 
 class StatisticDao extends UserDao {
 
-    public function getActivMaklerProRegion(iterable $values=[]){ // Die Anzahl der aktiven User pro Geschäftsstelle
+    public function getMaklerProRegion(iterable $values=[]){ // Die Anzahl der aktiven User pro Geschäftsstelle
         $sql = "SELECT 
                 user_geschaeftsstelle.name, 
                 user_geschaeftsstelle.geschaeftsstelle_id, 
@@ -14,7 +14,7 @@ class StatisticDao extends UserDao {
         return $this->doQuery($sql, $values);
     }
 
-    public function getActivMaklerOnRegion(iterable $values=[]){
+    public function getMaklerOnRegion(iterable $values=[]){
         $sql = "SELECT
                 user_geschaeftsstelle.name, 
                 user_geschaeftsstelle.geschaeftsstelle_id, 
@@ -25,7 +25,7 @@ class StatisticDao extends UserDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
-    public function getActivMaklerHaveObjectProRegion(iterable $values=[]){
+    public function getMaklerHaveObjectProRegion(iterable $values=[]){
         // Die Anzahl der aktiven User die auch Objekte bei ivd24 eingestellt haben
         // $query2 = "SELECT
         // user_geschaeftsstelle.name,
@@ -49,7 +49,7 @@ class StatisticDao extends UserDao {
         return $this->doQuery($sql, $values);
     }
 
-    public function getActivMaklerHaveObjectOnRegion(iterable $values=[]){
+    public function getMaklerHaveObjectOnRegion(iterable $values=[]){
         $sql = "SELECT
                 user_geschaeftsstelle.name,
                 user_geschaeftsstelle.geschaeftsstelle_id,

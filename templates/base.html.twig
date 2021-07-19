@@ -65,14 +65,14 @@
                         </li>
 
                         {% if is_granted("ROLE_STATISTIC") %}
-                        <li class="treeview {% if route_name in ["statistic_dashboard"] %}active{% endif %}">
+                        <li class="treeview {% if route_name in ["statistic_dashboard", "statistic_dashboard_region"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-laptop"></i>
                                 <span>Statistic Ansichten</span>
                                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if route_name == "statistic_dashboard" %} class="active"{% endif %}><a href="{{ path('statistic_dashboard') }}"><i class="fa fa-circle-o"></i>Überblick</a></li>
+                                <li {% if route_name in ["statistic_dashboard", "statistic_dashboard_region"] %} class="active"{% endif %}><a href="{{ path('statistic_dashboard') }}"><i class="fa fa-circle-o"></i>Überblick</a></li>
                             </ul>
                         </li>
                         {% endif %}

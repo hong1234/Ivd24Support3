@@ -24,6 +24,29 @@ class StatisticController extends AbstractController
     }
 
     /**
+     * @Route("/dashboard/region/{regid}", name="statistic_dashboard_region", requirements={"regid"="\d+"})
+     */
+    public function DashboardRegion(int $regid)
+    {
+        $geschaeftsstelle_id = $regid;
+
+        $boxs      = $this->sService->statisticMakler($geschaeftsstelle_id);
+        $donutData = $this->sService->getDonutData($geschaeftsstelle_id);
+        $areaData  = $this->sService->getAreaData($geschaeftsstelle_id);
+        $lineData  = $this->sService->getLineDataData($geschaeftsstelle_id);
+        
+        return $this->render('statistic/dashboard.html.twig', [
+            'lineData'  => $lineData,
+            'areaData'  => $areaData,
+            'donutData' => $donutData,
+            'rows' => $boxs,
+            'geschaeftsstelle_id' => $geschaeftsstelle_id,
+            'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
+        ]);
+
+    }
+
+    /**
      * @Route("/dashboard", name="statistic_dashboard")
      */
     public function Dashboard()
@@ -37,16 +60,16 @@ class StatisticController extends AbstractController
         $user_id = $this->getUser()->getUserid();
         $geschaeftsstelle_id = $this->sService->geschaeftsstelleId($user_id);
 
-        $boxs = $this->sService->getBoxsData($geschaeftsstelle_id);
+        $boxs      = $this->sService->statisticMakler($geschaeftsstelle_id);
         $donutData = $this->sService->getDonutData($geschaeftsstelle_id);
-        $areaData = $this->sService->getAreaData($geschaeftsstelle_id);
-        $lineData = $this->sService->getLineDataData($geschaeftsstelle_id);
+        $areaData  = $this->sService->getAreaData($geschaeftsstelle_id);
+        $lineData  = $this->sService->getLineDataData($geschaeftsstelle_id);
         
         return $this->render('statistic/dashboard.html.twig', [
             'lineData'  => $lineData,
             'areaData'  => $areaData,
             'donutData' => $donutData,
-            'rowsB'     => $boxs,
+            'rows'     => $boxs,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
             'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
         ]);

@@ -11,8 +11,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Überblick
-        <small>Überblick</small>
+        {% if geschaeftsstelle_id != 6 %} Ivd Region	{% endif %} Überblick
+        {# <small>Überblick</small> #}
       </h1>
       <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -24,20 +24,24 @@
     <section class="content">
       <!-- Small boxes (Stat box) -->
       <div class="row">
-        {% for row in rowsB %}
-        <div class="col-lg-3 col-xs-6">
-          <div class="small-box {{CssArray[loop.index % 5]}}">
-            <div class="inner">
-              <h3>{{ row.count_makler_on_regional_office|e }}</h3>
-              <h5>Mitglieder <b>{{ row.name|e }}</b></h5>
-              <p>davon haben <b>{{ row.percent|e }}%</b> aktive Objekte eingestellt</p>
+        {% for row in rows %}
+          {% if row.geschaeftsstelle_id != 6 and row.geschaeftsstelle_id != 9 %}
+            <div class="col-lg-3 col-xs-6">
+	            <div class="small-box {{CssArray[loop.index % 6]}}">
+                <div class="inner">
+                  <h3>{{ row.count_makler_on_regional_office|e }}</h3>
+                  <h5>Mitglieder <b>{{ row.name|e }}</b></h5>
+                  <p>davon haben <b>{{ row.percent|e }}%</b> aktive Objekte eingestellt</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                {% if geschaeftsstelle_id == 6 %}
+                  <a href="/statistic/dashboard/region/{{ row.geschaeftsstelle_id|e }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                {% endif %}
+              </div>
             </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
+          {% endif %}
         {% endfor %}
       </div>
       <!-- /.row -->
@@ -136,49 +140,48 @@
     <script src="{{ asset('bower_components/morris.js/morris.min.js') }}"></script>
 
     <script>
+      // DONUT CHART
+      var donut = new Morris.Donut({
+        element  : 'sales-chart',
+        resize   : true,
+        colors   : ['#3c8dbc', '#f56954', '#00a65a'],
+        data     : {{donutData|json_encode|raw}},
+        hideHover: 'auto'
+      });
 
-  // DONUT CHART
-  var donut = new Morris.Donut({
-    element  : 'sales-chart',
-    resize   : true,
-    colors   : ['#3c8dbc', '#f56954', '#00a65a'],
-    data     : {{donutData|json_encode|raw}},
-    hideHover: 'auto'
-  });
+      // AREA CHART
+      var area = new Morris.Area({
+        element: 'revenue-chart',
+        resize: true,
+        data: {{areaData|json_encode|raw}},
+        xkey: 'day',
+        ykeys: ['nfrei', 'frei', 'gesamt'],
+        labels: ['nicht freigegeben Objekte', 'freigegeben Objekte', 'Objekte gesamt'],
+        //lineColors: ['#9a32a8', '#a86b32', '#3c8dbc'],
+        lineColors: ['#00a65a', '#f56954', '#3c8dbc'],
+        hideHover: 'auto'
+      });
 
-  // AREA CHART
-  var area = new Morris.Area({
-    element: 'revenue-chart',
-    resize: true,
-    data: {{areaData|json_encode|raw}},
-    xkey: 'day',
-    ykeys: ['nfrei', 'frei', 'gesamt'],
-    labels: ['nicht freigegeben Objekte', 'freigegeben Objekte', 'Objekte gesamt'],
-    //lineColors: ['#9a32a8', '#a86b32', '#3c8dbc'],
-    lineColors: ['#00a65a', '#f56954', '#3c8dbc'],
-    hideHover: 'auto'
-  });
+      // LINE CHART
+      var line = new Morris.Line({
+        element    : 'line-chart',
+        resize     : true,
+        data       : {{lineData|json_encode|raw}},
+        xkey       : 'day',
+        ykeys      : ['ivdSud', 'gesamt'],
+        labels     : ['Ivd Süd', 'Gesamt'],
+        lineColors : ['#f56954', '#3c8dbc'],
+        lineWidth  : 2,
+        hideHover  : 'auto',
+        //gridTextColor    : '#fff',
+        //gridStrokeWidth  : 0.4,
+        //pointSize        : 4,
+        //pointStrokeColors: ['#efefef'],
+        //gridLineColor    : '#efefef',
+        //gridTextFamily   : 'Open Sans',
+        //gridTextSize     : 10
+      });
 
-  // LINE CHART
-  var line = new Morris.Line({
-    element          : 'line-chart',
-    resize           : true,
-    data             : {{lineData|json_encode|raw}},
-    xkey             : 'day',
-    ykeys            : ['ivdSud', 'gesamt'],
-    labels           : ['Ivd Süd', 'Gesamt'],
-    lineColors       : ['#f56954', '#3c8dbc'],
-    lineWidth        : 2,
-    hideHover        : 'auto',
-    //gridTextColor    : '#fff',
-    //gridStrokeWidth  : 0.4,
-    //pointSize        : 4,
-    //pointStrokeColors: ['#efefef'],
-    //gridLineColor    : '#efefef',
-    //gridTextFamily   : 'Open Sans',
-    //gridTextSize     : 10
-  });
-
-</script>
+    </script>
 {% endblock %}
 

@@ -24,17 +24,19 @@ class StatisticService
         return $geschaeftsstelle_id;
     }
 
-    public function getBoxsData(int $geschaeftsstelle_id) {
-        
-        $temp = [];
-        $temp['name'] = 'IVD Süd';
-        $temp['geschaeftsstelle_id'] = 12;
-        $temp['count_makler_on_regional_office'] = 0;
+    public function statisticMakler(int $geschaeftsstelle_id) {
 
         $rows1 = array();
-        if($geschaeftsstelle_id == 6) {
-            $rows1[] = $temp;
-            $stmt = $this->sDao->getActivMaklerProRegion();
+        if($geschaeftsstelle_id == 6) { // all maklers
+            
+            $stmt = $this->sDao->getMaklerProRegion();
+
+            $rows1[] = [
+                'name' => 'IVD Süd',
+                'geschaeftsstelle_id' => 1,
+                'count_makler_on_regional_office' => 0
+            ];
+
             while($row = $stmt->fetch()) {
                 if((int)$row['geschaeftsstelle_id'] == 1 || (int)$row['geschaeftsstelle_id'] == 2 ){
                     $rows1[0]['count_makler_on_regional_office'] = $rows1[0]['count_makler_on_regional_office'] + $row['count_makler_on_regional_office'];
@@ -42,27 +44,38 @@ class StatisticService
                     $rows1[] = $row;
                 }
             }
-        } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
-            $reg1 = $this->sDao->getActivMaklerOnRegion(['geschaeftsstelle_id' => 1]);
-            $reg2 = $this->sDao->getActivMaklerOnRegion(['geschaeftsstelle_id' => 2]);
-            $temp['count_makler_on_regional_office'] = $reg1['count_makler_on_regional_office'] + $reg2['count_makler_on_regional_office'];
 
-            $rows1[] = $temp;
+        } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
+
+            $reg1 = $this->sDao->getMaklerOnRegion(['geschaeftsstelle_id' => 1]);
+            $reg2 = $this->sDao->getMaklerOnRegion(['geschaeftsstelle_id' => 2]);
+
+            $row = [
+                'name' => 'IVD Süd',
+                'geschaeftsstelle_id' => $geschaeftsstelle_id,
+                'count_makler_on_regional_office' => $reg1['count_makler_on_regional_office'] + $reg2['count_makler_on_regional_office']
+            ];
+
+            $rows1[] = $row;
+
         } else {
-            $row = $this->sDao->getActivMaklerOnRegion(['geschaeftsstelle_id' => $geschaeftsstelle_id]);
+
+            $row = $this->sDao->getMaklerOnRegion(['geschaeftsstelle_id' => $geschaeftsstelle_id]);
             $rows1[] = $row;
         }
 
-        //--------------------
-        $temp = [];
-        $temp['name'] = 'IVD Süd';
-        $temp['geschaeftsstelle_id'] = 12;
-        $temp['count_makler_with_aktive_objectdata'] = 0;
-
+        //------
         $rows2 = array();
         if($geschaeftsstelle_id == 6){
-            $rows2[] = $temp;
-            $stmt = $this->sDao->getActivMaklerHaveObjectProRegion();
+            
+            $stmt = $this->sDao->getMaklerHaveObjectProRegion();
+
+            $rows2[] = [
+                'name' => 'IVD Süd',
+                'geschaeftsstelle_id' => 1,
+                'count_makler_with_aktive_objectdata' => 0
+            ];
+
             while($row = $stmt->fetch()) {
                 if((int)$row['geschaeftsstelle_id'] == 1 || (int)$row['geschaeftsstelle_id'] == 2){
                     $rows2[0]['count_makler_with_aktive_objectdata'] = $rows2[0]['count_makler_with_aktive_objectdata'] + $row['count_makler_with_aktive_objectdata'];
@@ -72,42 +85,50 @@ class StatisticService
             }
 
         } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
-            $reg1 = $this->sDao->getActivMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => 1]);
-            $reg2 = $this->sDao->getActivMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => 2]);
-            $temp['count_makler_with_aktive_objectdata'] = $reg1['count_makler_with_aktive_objectdata'] + $reg2['count_makler_with_aktive_objectdata'];
 
-            $rows2[] = $temp;
+            $reg1 = $this->sDao->getMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => 1]);
+            $reg2 = $this->sDao->getMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => 2]);
+
+            $row = [
+                'name' => 'IVD Süd',
+                'geschaeftsstelle_id' => $geschaeftsstelle_id,
+                'count_makler_with_aktive_objectdata' => $reg1['count_makler_with_aktive_objectdata'] + $reg2['count_makler_with_aktive_objectdata']
+            ];
+
+            $rows2[] = $row;
 
         } else {
-            $row = $this->sDao->getActivMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => $geschaeftsstelle_id]);
+
+            $row = $this->sDao->getMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => $geschaeftsstelle_id]);
             $rows2[] = $row;
         }
 
         // result ---------------
+        
+        $rows = array();
         $i = 0;
-        $rowsB = array();
         while ($i < count($rows1)) {
-            $tmp = array();
+            
             $a = $rows1[$i];
             $b = $rows2[$i];
 
-            $tmp['name'] = $a['name'];
-            $tmp['count_makler_on_regional_office'] = $a['count_makler_on_regional_office'];
-            //$tmp['count_makler_with_aktive_objectdata'] = $b['count_makler_with_aktive_objectdata'];
-            $tmp['percent'] = round(100*$b['count_makler_with_aktive_objectdata']/$a['count_makler_on_regional_office'], 2);
+            $row = [
+                'name' => $a['name'],
+                'geschaeftsstelle_id' => $a['geschaeftsstelle_id'],
+                'count_makler_on_regional_office' => $a['count_makler_on_regional_office'],
+                'percent' => round(100*$b['count_makler_with_aktive_objectdata']/$a['count_makler_on_regional_office'], 2)
+            ];
 
-            $rowsB[] = $tmp;
+            $rows[] = $row;
       
             $i++;
         }
         
-        return $rowsB;
+        return $rows;
     }
 
-    public function getObjectStatistic(int $geschaeftsstelle_id) {
-        $total = 0;
-        $activ = 0;
-        $inact = 0;
+    public function statisticObject(int $geschaeftsstelle_id) {
+
         if($geschaeftsstelle_id == 6) {
 
             $total = $this->oDao->getObjectTotal()['Anzah_Gesamtl_Objekte'];
@@ -140,7 +161,7 @@ class StatisticService
 
     public function getDonutData(int $geschaeftsstelle_id) {
 
-        $rs = $this->getObjectStatistic($geschaeftsstelle_id);
+        $rs = $this->statisticObject($geschaeftsstelle_id);
 
         $donutData = array(
             [
@@ -162,7 +183,7 @@ class StatisticService
 
     public function getAreaData(int $geschaeftsstelle_id) {
 
-        $rs = $this->getObjectStatistic($geschaeftsstelle_id);
+        $rs = $this->statisticObject($geschaeftsstelle_id);
         
         $areaData = array(
             [
