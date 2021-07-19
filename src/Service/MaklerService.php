@@ -334,7 +334,7 @@ class MaklerService
             $row2[] = $row['vorname'].' '.$row['name'];
             $row2[] = $row['firma'];
             $row2[] = $row['maklerEmail'];
-            $row2[] = $row['seo_url'];
+            // $row2[] = $row['seo_url'];
             $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
             $row2[] = date("Y-m-d", (int)$row['lastlogin']);
             
@@ -370,10 +370,10 @@ class MaklerService
             $tmp = array();
   
             $tmp[] = $row['user_id'];
+            $tmp[] = $row['mitgliedsnummer'];
             $tmp[] = $row['vorname'].' '.$row['name'];
             $tmp[] = $row['firma'];
             $tmp[] = $row['email'];
-            $tmp[] = $row['mitgliedsnummer'];
             $tmp[] = substr($row['loesch_datum'], 0, 10);
 
             $link1 = "<a href=".$this->router->generate('makler_delete', array('uid' => $row['user_id'])).">Löschen</a><br>";
