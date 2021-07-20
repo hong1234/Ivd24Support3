@@ -4,7 +4,6 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-// use App\Repository\ProductRepository;
 //use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 //use App\Dao\MaklerDao;
@@ -17,6 +16,19 @@ use App\Service\StringFormat;
  */
 class ApiController extends AbstractController
 {
+    /**
+     * @Route("/maklerdata", name="api_makler_data")
+     */
+    public function maklerData(Request $request)
+    {
+        $maklerId = $request->request->get('maklerId', '');
+        $rs = [
+            'data' => "more data of makler Nr. more data of makler Nr. $maklerId"
+        ];
+        
+        return $this->json($rs);
+    }
+    
     /**
      * @Route("/seourl", name="api_seourl")
      */

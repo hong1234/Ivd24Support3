@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User-Aktienkäufe verifizieren{% endblock %}
+
+{% block content %}
+   <div class="content-wrapper">
+
+      <section class="content-header">
+        <h1>Aktien Kauf verifizieren</h1>
+      </section>
+      <!-- Main content -->
+      <section class="content">
+         <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+               {# <form action="/supporter/stock/verify/{{user_id}}" method="POST"> #}
+               <form action="{{ path('stock_verify', {'userid': user_id}) }}" method="POST">
+                  <div class="box box-warning">
+                     <div class="box-body">
+                     
+                        <h4>Infos zum Kunden</h4>
+                        User-Id: {{makler.user_id}}<br>
+                        Firma: {{makler.firma}}<br>
+                        Name: {{makler.vorname}} {{makler.name}}<br>
+                        Adresse:<br>
+                        {{makler.strasse}}<br>
+                        {{makler.plz}} {{makler.ort}}<br>
+                        Email: {{makler.email}}<br>
+                        Telefon: {{makler.telefon}}<br><br>
+                        
+                        <h4>Anzahl Aktien: {{makler.aktien_az}}</h4>
+                        {% for item in aktien %}
+                           Aktienhash: {{item.aktienhash}}<br>
+                           Datum der Aktie: {{item.creation_date}}<br>
+                           Kaufdatum der Aktie: {{item.purchase_date}}<br><br>
+                        {% endfor %}
+
+                        <h4>Dokumenten zum Aktienkauf</h4>
+                        {% for doc in docs %}
+                           Document: {{doc.document_name}}<br>
+                           Document-path: {{doc.document_path}}<br><br>
+                        {% endfor %}
+                        
+                     </div>
+                     
+			            <div class="box-footer">
+                        <button type="submit" class="btn btn-primary" name="savebutton" value="true">Aktien Kauf verifizieren</button>
+                     </div>
+                     <!-- /.box-body -->
+                  </div>
+               </form>
+            </div>
+         </div>
+      </section>
+
+   </div>
+  
+{% endblock %}

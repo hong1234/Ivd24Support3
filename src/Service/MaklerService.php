@@ -329,7 +329,7 @@ class MaklerService
         $rows = array();
         while ($row = $stmt->fetch()) {
             $row2 = array();
-            $row2[] = $row['userId'];
+            $row2[] = "<a id='".$row['userId']."' onclick='moreInfo(this, ".$row['userId'].")'>".$row['userId']."</a>";
             $row2[] = $row['mitgliedsnummer'];
             $row2[] = $row['vorname'].' '.$row['name'];
             $row2[] = $row['firma'];

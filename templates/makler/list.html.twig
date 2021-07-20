@@ -15,6 +15,7 @@
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title">Übersicht</h3>
+                            <div id="moredata"></div>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -61,5 +62,55 @@
                 });
             }  
         }); #}
+
+        {# $(document).ready(function() {
+            var myElemente = document.getElementsByClassName("sorting_1");
+            for(var i = 0; i < myElemente.length; i++) {
+                myElemente[i].addEventListener("click", function(event){
+                    alert("Bitte geben Sie PLZ-Angabe zuerst");
+                });
+            }  
+        }); #}
+
+        function moreInfo(elem, param) {
+            //console.log(elem.parentElement.parentElement);
+            //var newElem = document.createElement ("tr");
+            //newElem.innerHTML = "sample text";
+            //newElem.style.color = "red";
+
+            //elem.parentElement.parentElement.appendChild( newElem );
+
+            //var el = document.createElement("span");
+            //el.innerHTML = "test";
+            //var div = document.getElementById("foo");
+            
+
+            //newElem.innerHTML = "sample text";
+            //newElem.style.color = "red";
+            //var el = document.createElement("td");
+            //el.innerHTML = "sample text";
+            //elem.parentElement.parentElement.appendChild( newElem );
+            //insertAfter(elem.parentElement.parentElement, newElem).appendChild( el );
+
+            $.ajax({
+              method: "POST",
+              url: "/maklerdata",
+              data: { maklerId: param }
+            })
+            .done(function(res) {
+                // var s= document.getElementById('moredata');
+                // s.innerHTML = '<h1>'+res.data+'</h1>';
+                var newElem = document.createElement ("tr");
+                var el = document.createElement("td");
+                el.innerHTML = res.data;
+                el.style.width = "100%";
+                insertAfter(elem.parentElement.parentElement, newElem).appendChild( el );
+            });
+        }
+
+        function insertAfter(referenceNode, newNode) {
+            return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+        }  
+
     </script>
 {% endblock %}

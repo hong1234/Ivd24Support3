@@ -137,4 +137,53 @@ class StockService
         return $rs;
     }
 
+    public function notVerifiedList() {
+        $stmt = $this->stockDao->getNotVerifiedAktien();
+        $rs = array();
+        while ($row = $stmt->fetch()) {
+            $row2 = array();
+            $row2[] = $row['user_id'];
+            $row2[] = $row['mitgliedsnummer'];
+            $row2[] = $row['vorname'].' '.$row['name'];
+            $row2[] = $row['firma'];
+            $row2[] = $row['email'];
+            $row2[] = date("Y-m-d", (int)$row['lastlogin']);
+
+            $links = "<a href=".$this->router->generate('stock_verify', array('userid' => $row['user_id'])).">Kauf verifizieren</a><br>";
+            $row2[] = $links;
+
+            $rs[] = $row2;
+        }
+
+        return $rs;
+    }
+
+    public function maklerData($user_id){
+        $makler = $this->stockDao->getVeryfiMakler([
+            'user_id' => $user_id
+        ]);
+        return $makler;
+    }
+
+    public function maklerAktien($user_id){
+        $aktien = $this->stockDao->getNotVerifiedUserAktien([
+            'user_id' => $user_id
+        ]);
+        return $aktien;
+    }
+
+    public function aktienDoc($user_id){
+        $docs = $this->stockDao->getAktienDoc([
+            'user_id' => $user_id
+        ]);
+        return $docs;
+    }
+
+    public function verifyUserAktien(int $user_id){
+        $rs = $this->stockDao->updateVerified([
+            'user_id' => $user_id
+        ]);
+        return $rs;
+    }
+
 }

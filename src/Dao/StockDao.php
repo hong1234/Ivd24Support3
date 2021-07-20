@@ -92,4 +92,43 @@ class StockDao extends BaseDao {
     //     return $this->doQuery($sql, $values)->fetchAll();
     // }
 
+    //---------------
+
+    // eine Liste aller noch nicht verifizierten Aktienkäufe
+    public function getNotVerifiedAktien(iterable $values=[]){
+        $sql = "SELECT aktien.user_id, user_makler.mitgliedsnummer,  user_makler.vorname, user_makler.name, user_makler.firma, user_makler.email, user_account.lastlogin 
+                FROM aktien
+                LEFT JOIN user_makler ON user_makler.user_id = aktien.user_id
+                LEFT JOIN user_account ON user_account.user_id = user_makler.user_id
+                WHERE aktien.purchase_date IS NOT NULL AND aktien.purchase_verified = 0 
+                GROUP BY aktien.user_id";
+        return $this->doQuery($sql, $values);
+    }
+
+    // noch nicht verifizierten Aktienkäufe von dem user
+    public function getNotVerifiedUserAktien(iterable $values=[]){
+        $sql = "SELECT aktien_id, aktienhash, creation_date, purchase_date
+                FROM aktien
+                WHERE aktien.purchase_date IS NOT NULL AND aktien.purchase_verified = 0 AND aktien.user_id = :user_id";
+        return $this->doQuery($sql, $values)->fetchAll();
+    }
+
+    public function getVeryfiMakler(iterable $values=[]){
+        $sql = "SELECT user_makler.user_id, user_makler.mitgliedsnummer, user_makler.firma, user_makler.vorname, user_makler.name, user_makler.strasse, user_makler.plz, user_makler.ort, user_makler.email, user_makler.telefon, 
+                (SELECT count(aktien.user_id) FROM aktien WHERE aktien.user_id = user_makler.user_id) AS aktien_az
+                FROM user_makler
+                WHERE user_makler.user_id = :user_id";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getAktienDoc(iterable $values=[]){
+        $sql = "SELECT * FROM aktien_documents WHERE user_id = :user_id";
+        return $this->doQuery($sql, $values)->fetchAll();
+    }
+
+    public function updateVerified(iterable $values=[]){
+        $sql  = "UPDATE aktien SET purchase_verified = 1 WHERE user_id = :user_id";
+        return $this->doSQL($sql, $values);
+    }
+
 }

@@ -3,8 +3,8 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-// use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\Request;
+// use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use App\Service\StockService;
 
@@ -62,13 +62,40 @@ class StockController extends AbstractController
     }
 
     /**
-     * @Route("/stock/test", name="stock_test")
+     * @Route("/stock/notverified", name="stock_notverified")
      */
-    public function stockTest()
+    public function notVerifiedList()
     {
-        
-        
-        //return $response;
+        $rows = $this->stockService->notVerifiedList();
+        return $this->render('stock/notverifiedlist.html.twig', [
+            'dataSet' => $rows
+        ]);
+    }
+
+    /**
+     * @Route("/stock/verify/{userid}", name="stock_verify", requirements={"userid"="\d+"})
+     */
+    public function verifyUserAktien(int $userid, Request $request)
+    {
+        if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+            $this->stockService->verifyUserAktien($userid);
+            return $this->redirectToRoute('stock_notverified', [
+                //'paramName' => 'value'
+            ]);
+        }
+
+        if ($request->isMethod('GET')) {
+            $makler = $this->stockService->maklerData($userid);
+            $aktien = $this->stockService->maklerAktien($userid);
+            $docs   = $this->stockService->aktienDoc($userid);
+            // var_dump($aktien); exit;
+        }
+        return $this->render('stock/verify.html.twig', [
+            'user_id' => $userid,
+            'makler' => $makler,
+            'aktien' => $aktien,
+            'docs' => $docs
+        ]);
     }
 
 }
