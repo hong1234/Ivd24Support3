@@ -19,15 +19,14 @@
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <table id="example1" class="table table-bordered table-striped display" width="100%">
+                            <table id="example1" class="table table-bordered table-striped display" style="width: 100%;" role="grid" aria-describedby="example_info">
                                 <thead>
                                     <tr>
-                                        <th style='width: 8%;'>User-ID</th>
-                                        <th style='width: 8%;'>Mitgliedsnummer</th>
+                                        <th style='width: 10%;'>User-ID</th>
+                                        <th style='width: 10%;'>Mitglied-Nr</th>
                                         <th style='width: 14%;'>Vorname, Name</th>
-                                        <th style='width: 16%;'>Firma</th>
-                                        <th style='width: 16%;'>E-Mail</th>
-                                        {# <th style='width: 14%;'>Seo-Url</th> #}
+                                        <th style='width: 14%;'>Firma</th>
+                                        <th style='width: 14%;'>E-Mail</th>
                                         <th style='width: 10%;'>Reg-Datum</th>
                                         <th style='width: 10%;'>Last-Login</th>
                                         <th style='width: 18%;'>&nbsp;</th>
@@ -72,6 +71,8 @@
             }  
         }); #}
 
+        var focusElem;
+
         function moreInfo(elem, param) {
             //console.log(elem.parentElement.parentElement);
             //var newElem = document.createElement ("tr");
@@ -92,20 +93,43 @@
             //elem.parentElement.parentElement.appendChild( newElem );
             //insertAfter(elem.parentElement.parentElement, newElem).appendChild( el );
 
-            $.ajax({
-              method: "POST",
-              url: "/maklerdata",
-              data: { maklerId: param }
-            })
-            .done(function(res) {
-                // var s= document.getElementById('moredata');
-                // s.innerHTML = '<h1>'+res.data+'</h1>';
-                var newElem = document.createElement ("tr");
-                var el = document.createElement("td");
-                el.innerHTML = res.data;
-                el.style.width = "100%";
-                insertAfter(elem.parentElement.parentElement, newElem).appendChild( el );
-            });
+            if(elem.style.color === "red"){
+
+                elem.style.color = "";
+                document.getElementById('moredata').innerHTML = '';
+
+            } else {
+
+                elem.style.color = "red";
+
+                $.ajax({
+                    method: "POST",
+                    url: "/maklerdata",
+                    data: { maklerId: param }
+                })
+                .done(function(res) {
+                    var s= document.getElementById('moredata');
+                    // s.style.color = "red";
+                    // s.innerHTML = '<h3>'+res.data+'</h3>'+res.data;
+                    s.innerHTML = res.data;
+
+                    //var trElem = document.createElement("tr"); 
+                    //var tdElem = document.createElement("td");
+                    //tdElem.innerHTML = res.data;
+                    // tdElem.style.width = "100%";
+                    // tdElem.innerHTML = "<div><p>I am text in a div. I am text in a div.</p></div>";
+                    //insertAfter(elem.parentElement.parentElement, trElem).appendChild(tdElem);
+
+                    if(focusElem !== undefined){
+                        focusElem.style.color = "";
+                    }
+                    focusElem = elem;
+                
+                    window.scrollTo(0, 0);
+
+                });
+            }
+
         }
 
         function insertAfter(referenceNode, newNode) {

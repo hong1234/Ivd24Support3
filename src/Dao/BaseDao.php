@@ -76,7 +76,6 @@ class BaseDao {
         foreach($values as $key => $value) {
             $sql = $sql."$key = '$value'";
         }
-        //return $sql;
         return $this->doQuery($sql, $values)->fetch(); 
     }
 

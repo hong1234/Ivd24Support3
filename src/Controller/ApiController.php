@@ -6,9 +6,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 //use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-//use App\Dao\MaklerDao;
-use App\Dao\GeoDao;
+use Twig\Environment;
 use App\Service\StringFormat;
+
+use App\Dao\GeoDao;
+use App\Dao\MaklerDao;
+
 
 /**
  *
@@ -19,14 +22,33 @@ class ApiController extends AbstractController
     /**
      * @Route("/maklerdata", name="api_makler_data")
      */
-    public function maklerData(Request $request)
+    public function maklerData(Request $request, Environment $twig, MaklerDao $mDao)
     {
         $maklerId = $request->request->get('maklerId', '');
-        $rs = [
-            'data' => "more data of makler Nr. more data of makler Nr. $maklerId"
-        ];
+
+        $makler = $mDao->getRowInTableByIdentifier('user_makler', [
+            'user_id' => $maklerId
+        ]);
+
+        $bcUser = $mDao->getRowInTableByIdentifier('businessClubUser', [
+            'user_id' => $maklerId
+        ]);
+
+        if($bcUser != null){
+            $BusinessClub = 'Ja';
+        } else {
+            $BusinessClub = 'Nein';
+        }
+
+        $data = $twig->render('makler/more.html.twig', [
+            // 'maklerId' => $maklerId
+            'makler' => $makler,
+            'BusinessClub' => $BusinessClub
+        ]);
         
-        return $this->json($rs);
+        return $this->json([
+            'data' => $data
+        ]);
     }
     
     /**

@@ -1,0 +1,28 @@
+<div class="box box-warning">
+    <div class="box-body">
+        <b>Mehr Daten über Makler (User-Nr: {{makler.user_id}})</b><br><br>
+
+        Adresse:<br>
+        {{makler.strasse}}<br>
+        {{makler.plz}} {{makler.ort}}<br><br>
+
+        Telefon: {{makler.telefon}}<br>
+        Mobil: {{makler.mobil}}<br><br>
+
+        BusinessClub: {{BusinessClub}}<br>
+        {% if BusinessClub == 'Ja' %}
+            <a href='/support/bcuser/{{makler.user_id}}/edit' target='_blank'>BcUser Detail</a><br>
+        {% endif %}
+    </div>
+</div>
+
+{# <table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+<tbody>
+<tr><td>Adresse:</td><td>{{makler.plz}} {{makler.ort}}</td></tr>
+<tr><td>Telefon:</td><td>{{makler.telefon}}</td></tr>
+<tr><td>BusinessClub:</td><td>{{BusinessClub}}</td></tr>
+{% if BusinessClub == 'Ja' %}
+    <tr><td>BusinessClub:</td><td><a href='/support/bcuser/{{makler.user_id}}/edit' target='_blank'>BcUser Detail</a></td></tr>  
+{% endif %}
+</tbody>
+</table> #}
