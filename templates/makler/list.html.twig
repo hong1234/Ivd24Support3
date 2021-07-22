@@ -94,13 +94,10 @@
             //insertAfter(elem.parentElement.parentElement, newElem).appendChild( el );
 
             if(elem.style.color === "red"){
-
                 elem.style.color = "";
                 document.getElementById('moredata').innerHTML = '';
-
             } else {
-
-                elem.style.color = "red";
+                
 
                 $.ajax({
                     method: "POST",
@@ -108,10 +105,13 @@
                     data: { maklerId: param }
                 })
                 .done(function(res) {
+
                     var s= document.getElementById('moredata');
                     // s.style.color = "red";
-                    // s.innerHTML = '<h3>'+res.data+'</h3>'+res.data;
+                    // s.innerHTML = '<h3>'+res.data+'</h3>';
                     s.innerHTML = res.data;
+
+                    elem.style.color = "red";
 
                     //var trElem = document.createElement("tr"); 
                     //var tdElem = document.createElement("td");
@@ -120,7 +120,7 @@
                     // tdElem.innerHTML = "<div><p>I am text in a div. I am text in a div.</p></div>";
                     //insertAfter(elem.parentElement.parentElement, trElem).appendChild(tdElem);
 
-                    if(focusElem !== undefined){
+                    if(focusElem !== undefined && focusElem.id !== elem.id){
                         focusElem.style.color = "";
                     }
                     focusElem = elem;
