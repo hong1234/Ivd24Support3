@@ -1,18 +1,38 @@
 <div class="box box-warning">
     <div class="box-body">
-        <b>Mehr Daten über Makler (User-Nr: {{makler.user_id}})</b><br><br>
+        <b>Weitere Infos über Makler (User-Nr: {{user_id}})</b><br><br>
 
         Adresse:<br>
         {{makler.strasse}}<br>
-        {{makler.plz}} {{makler.ort}}<br><br>
-
+        {{makler.plz}} {{makler.ort}}<br>
+        <br>
         Telefon: {{makler.telefon}}<br>
-        Mobil: {{makler.mobil}}<br><br>
-
-        BusinessClub: {{BusinessClub}}<br>
-        {% if BusinessClub == 'Ja' %}
-            <a href='/support/bcuser/{{makler.user_id}}/edit' target='_blank'>BcUser Detail</a><br>
+        Mobil: {{makler.mobil}}<br>
+        <br>
+        
+        {% if BcClub == 'Ja' %}
+            <a href='/support/bcuser/{{user_id}}/edit' target='_blank'>BusinessClub:</a> Ja<br>
+        {% else %}
+            BusinessClub: Nein<br>
         {% endif %}
+        <br>
+
+        {% if stock.ak_anzahl > 0 %}
+           <a href='/stock/shareholders/{{user_id}}/edit' target='_blank'>Aktien:</a> Ja ({{stock.ak_anzahl}})<br>
+        {% else %}
+            Aktien: Nein<br>
+        {% endif %}
+        <br>
+
+        {% if ftp.ftp_pause == 'N' %}
+            FTP-Pause: Nein <br> 
+            <a href='/support/server/{{user_id}}/edit' target='_blank'>FTP-Import pausieren</a><br>
+        {% else %}
+            FTP-Pause: Ja <br>  
+            <a href='/support/server/{{user_id}}/starten' target='_blank'>FTP-Import starten</a><br>
+        {% endif %}
+        <br>
+        
     </div>
 </div>
 
@@ -22,7 +42,7 @@
 <tr><td>Telefon:</td><td>{{makler.telefon}}</td></tr>
 <tr><td>BusinessClub:</td><td>{{BusinessClub}}</td></tr>
 {% if BusinessClub == 'Ja' %}
-    <tr><td>BusinessClub:</td><td><a href='/support/bcuser/{{makler.user_id}}/edit' target='_blank'>BcUser Detail</a></td></tr>  
+    <tr><td>BusinessClub:</td><td><a href='/support/bcuser/{{user_id}}/edit' target='_blank'>BcUser Detail</a></td></tr>  
 {% endif %}
 </tbody>
 </table> #}

@@ -11,7 +11,7 @@ use App\Service\StringFormat;
 
 use App\Dao\GeoDao;
 use App\Dao\MaklerDao;
-
+use App\Dao\StockDao;
 
 /**
  *
@@ -22,7 +22,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/maklerdata", name="api_makler_data")
      */
-    public function maklerData(Request $request, Environment $twig, MaklerDao $mDao)
+    public function maklerData(Request $request, Environment $twig, MaklerDao $mDao, StockDao $stockDao)
     {
         $maklerId = $request->request->get('maklerId', '');
 
@@ -40,10 +40,20 @@ class ApiController extends AbstractController
             $BusinessClub = 'Nein';
         }
 
+        $stock = $stockDao->getAktienAnzahlByUserId([
+            'user_id' => $maklerId
+        ]);
+
+        $ftp = $mDao->getRowInTableByIdentifier('user_makler_config', [
+            'user_id' => $maklerId
+        ]);
+
         $data = $twig->render('makler/more.html.twig', [
-            // 'maklerId' => $maklerId
+            'user_id' => $maklerId,
             'makler' => $makler,
-            'BusinessClub' => $BusinessClub
+            'BcClub' => $BusinessClub,
+            'stock'  => $stock,
+            'ftp'    => $ftp
         ]);
         
         return $this->json([

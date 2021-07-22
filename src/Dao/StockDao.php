@@ -131,4 +131,9 @@ class StockDao extends BaseDao {
         return $this->doSQL($sql, $values);
     }
 
+    public function getAktienAnzahlByUserId(iterable $values=[]){
+        $sql = "SELECT count(*) AS ak_anzahl FROM aktien WHERE purchase_date IS NOT NULL AND user_id = :user_id";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
 }
