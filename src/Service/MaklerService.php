@@ -329,7 +329,8 @@ class MaklerService
         $rows = array();
         while ($row = $stmt->fetch()) {
             $row2 = array();
-            $row2[] = "<a id='".$row['userId']."' onclick='moreInfo(this, ".$row['userId'].")'>".$row['userId']."</a>";
+            // $row2[] = "<a id='".$row['userId']."' onclick='moreInfo(this, ".$row['userId'].")'>".$row['userId']."</a>";
+            $row2[] = $row['userId'];
             $row2[] = $row['mitgliedsnummer'];
             $row2[] = $row['vorname'].' '.$row['name'];
             $row2[] = $row['firma'];
@@ -338,8 +339,8 @@ class MaklerService
             $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
             $row2[] = date("Y-m-d", (int)$row['lastlogin']);
             
-            $links = "";
-            $links = "<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</a><br>";
+            $links = "<a id='".$row['userId']."' onclick='moreInfo(this, ".$row['userId'].")'>Weitere Infos</a><br>";
+            $links = $links."<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</a><br>";
             $links = $links."<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>";
             $links = $links."<a href=".$this->router->generate('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
             if($row['gesperrt'] == 1){

@@ -1,4 +1,4 @@
-{% extends 'baseList.html.twig' %}
+{% extends 'baseMaklerList.html.twig' %}
 
 {% block title %}Makler Overview{% endblock %}
 
@@ -96,15 +96,18 @@
             if(elem.style.color === "red"){
                 elem.style.color = "";
                 document.getElementById('moredata').innerHTML = '';
+                window.ivdDataTable.columns().search('').draw();
             } else {
                 
-
                 $.ajax({
                     method: "POST",
                     url: "/maklerdata",
                     data: { maklerId: param }
                 })
                 .done(function(res) {
+
+                    //window.ivdDataTable.search(param).draw();
+                    window.ivdDataTable.column(0).search(param).draw();
 
                     var s= document.getElementById('moredata');
                     // s.style.color = "red";
