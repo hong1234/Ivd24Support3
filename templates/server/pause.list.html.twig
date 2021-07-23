@@ -22,14 +22,10 @@
                                 <thead>
                                     <tr>
                                         <th style='width: 8%;'>User-ID</th>
-                                        {# <th style='width: 10%;'>Name</th> #}
                                         <th style='width: 16%;'>Firma</th>
                                         <th style='width: 16%;'>Email</th>
-                                        <th style='width: 14%;'>Host</>
+                                        <th style='width: 14%;'>Host</th>
                                         <th style='width: 8%;'>Ftp_benutzer</th>
-                                        {# <th style='width: 2%;'>Ftp_pw</th> #}
-                                        {# <th style='width: 5%;'>Ftp_pause</th> #}
-                                        {# <th style='width: 5%;'>after_break</th> #}
                                         <th style='width: 12%;'>Import after break</th>
                                         <th style='width: 26%;'>&nbsp;</th>
                                     </tr>
@@ -49,10 +45,11 @@
     {{ parent() }}
 
     <script>
-        $(document).ready(function() {
+        {# $(document).ready(function() {
             var myElemente = document.getElementsByClassName("delete-file");
             for(var i = 0; i < myElemente.length; i++) {
                 myElemente[i].addEventListener("click", function(event){
+
                     var answer = window.confirm("Wollen Sie diese Datei wirklich löschen?");
                     if (answer) {
                         //some code
@@ -61,8 +58,16 @@
                         //some code
                         event.preventDefault();
                     } 
+
                 });
             }  
-        });
+        }); #}
+
+        function showConfirm(event){
+            var answer = window.confirm("Wollen Sie diese Datei wirklich löschen?");
+            if (answer==false) {
+                event.preventDefault();
+            }
+        }
     </script>
 {% endblock %}

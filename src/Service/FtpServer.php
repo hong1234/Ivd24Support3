@@ -25,16 +25,12 @@ class FtpServer
             $row2 = array();
 
             $row2[] = $row['user_id'];
-            //$row2[] = $row['vorname']." ".$row['name'];
             $row2[] = $row['firma'];
             $row2[] = $row['email'];
-            
             $row2[] = $row['hostname'];      
             $row2[] = $row['ftp_benutzer'];  
             //$row2[] = $row['ftp_passwort']; 
-            
             //$row2[] = $row['ftp_pause'];                //  => string 'N' 
-            
             //$row2[] = $row['ftp_import_after_break'];   //  => string '0'
             $importAfterBreak = "Nein";
             if($row['ftp_import_after_break']=='1'){
@@ -69,14 +65,11 @@ class FtpServer
             $row2[] = $row['vorname']." ".$row['name'];
             $row2[] = $row['firma'];
             $row2[] = $row['email'];
-        
             $row2[] = $row['hostname'];                 // string 'ftp001.ivd24immobilien.de'
             $row2[] = $row['ftp_benutzer'];             //  => string 'testuser' (length=8)
             //$row2[] = $row['ftp_passwort'];           //  => string 'Test1234§' (length=10)
-            
             //$row2[] = $row['ftp_pause'];              //  => string 'N' 
             //$row2[] = $row['ftp_import_after_break']; //  => string '0' (length=1)
-            
             $row2[] = "<a href=".$this->router->generate('server_edit', array('uid' => $row['user_id'])).">FTP-Import pausieren</a><br>";  
 
             $rows[] = $row2;
@@ -96,7 +89,7 @@ class FtpServer
                 $co++;
                 if($co > 30) break;
                 $links = $links."<a style='color:blue;' href=".$this->router->generate('server_download_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">Download- $item</a><br>";
-                $links2 = $links2."<a style='color:red;' class='delete-file' href=".$this->router->generate('server_delete_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">Delete- $item</a><br>";
+                $links2 = $links2."<a style='color:red;' onclick='showConfirm(event)' href=".$this->router->generate('server_delete_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">Delete- $item</a><br>";
             }
         } 
         return [$links, $links2];
