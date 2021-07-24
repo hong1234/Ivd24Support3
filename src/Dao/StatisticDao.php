@@ -79,4 +79,21 @@ class StatisticDao extends UserDao {
         return $this->doQuery($sql, $values)->fetchAll();
     }
 
+    //------------
+
+    public function getExposeLast4WeekByUserId(iterable $values=[]){
+        $sql = "SELECT count(*) AS expose_az FROM statistik_hits_objekte_v3 where objekt_user_id = :user_id AND datum > :timepoint";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getRequestLast4WeekByUserId(iterable $values=[]){
+        $sql = "SELECT count(*) AS request_az FROM statistik_anfragen_objekte_v2 where objekt_user_id = :user_id AND datum > :timepoint";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getActivObjectAnzahlByUserId(iterable $values=[]) {
+        $sql = "SELECT COUNT(objekt_id) AS objekt_az FROM objekt_master WHERE user_id = :user_id AND freigabe = 'J'";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
 }

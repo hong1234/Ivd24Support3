@@ -12,6 +12,7 @@ use App\Service\StringFormat;
 use App\Dao\GeoDao;
 use App\Dao\MaklerDao;
 use App\Dao\StockDao;
+use App\Dao\StatisticDao;
 
 /**
  *
@@ -22,7 +23,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/maklerdata", name="api_makler_data")
      */
-    public function maklerData(Request $request, Environment $twig, MaklerDao $mDao, StockDao $stockDao)
+    public function maklerData(Request $request, Environment $twig, MaklerDao $mDao, StockDao $stockDao, StatisticDao $sDao)
     {
         $maklerId = $request->request->get('maklerId', '');
 
@@ -48,12 +49,32 @@ class ApiController extends AbstractController
             'user_id' => $maklerId
         ]);
 
+        $date = new \DateTime();
+        $date->modify('-4 week');
+
+        $expose = $sDao->getExposeLast4WeekByUserId([
+            'user_id' => $maklerId,
+            'timepoint' => $date->format('Y-m-d H:i:s')
+        ]);
+
+        $frage = $sDao->getRequestLast4WeekByUserId([
+            'user_id' => $maklerId,
+            'timepoint' => $date->format('Y-m-d H:i:s')
+        ]);
+
+        $object = $sDao->getActivObjectAnzahlByUserId([
+            'user_id' => $maklerId
+        ]);
+
         $data = $twig->render('makler/more.html.twig', [
             'user_id' => $maklerId,
             'makler' => $makler,
             'BcClub' => $BusinessClub,
             'stock'  => $stock,
-            'ftp'    => $ftp
+            'ftp'    => $ftp,
+            'expose' => $expose,
+            'request' => $frage,
+            'object' => $object
         ]);
         
         return $this->json([

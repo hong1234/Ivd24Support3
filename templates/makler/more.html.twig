@@ -32,6 +32,12 @@
             <a href='/support/server/{{user_id}}/starten' target='_blank'>FTP-Import starten</a><br>
         {% endif %}
         <br>
+
+        Statistik der letzten 4 Wochen: <br>
+
+        Anzahl Anfragen: {{request.request_az}}<br>
+        Anzahl Exposeaufrufe: {{expose.expose_az}}<br>
+        Anzahl Immobilien aktuell: {{object.objekt_az}}
         
     </div>
 </div>
