@@ -336,6 +336,7 @@ class MaklerService
             $row2[] = $row['firma'];
             $row2[] = "<a href = 'mailto: ".$row['maklerEmail']."'>".$row['maklerEmail']."</a>" ;
             // $row2[] = $row['seo_url'];
+            $row2[] = $row['ort'];
             $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
             $row2[] = date("Y-m-d", (int)$row['lastlogin']);
             
