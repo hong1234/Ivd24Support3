@@ -337,8 +337,11 @@ class MaklerService
             $row2[] = "<a href = 'mailto: ".$row['maklerEmail']."'>".$row['maklerEmail']."</a>" ;
             // $row2[] = $row['seo_url'];
             $row2[] = $row['ort'];
-            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
-            $row2[] = date("Y-m-d", (int)$row['lastlogin']);
+            // $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);
+            // $row2[] = date("Y-m-d", (int)$row['lastlogin']);
+
+            $row2[] = $row['reg_date'];
+            $row2[] = $row['last_login'];
             
             $links = "<a id='".$row['userId']."' onclick='moreInfo(this, ".$row['userId'].")'>Weitere Infos</a><br>";
             $links = $links."<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</a><br>";
@@ -376,7 +379,8 @@ class MaklerService
             $tmp[] = $row['vorname'].' '.$row['name'];
             $tmp[] = $row['firma'];
             $tmp[] = $row['email'];
-            $tmp[] = substr($row['loesch_datum'], 0, 10);
+            // $tmp[] = substr($row['loesch_datum'], 0, 10);
+            $tmp[] = $row['loesch_datum'];
 
             $link1 = "<a href=".$this->router->generate('makler_delete', array('uid' => $row['user_id'])).">Löschen</a><br>";
             $link2 = "<a href=".$this->router->generate('makler_delete_undo', array('uid' => $row['user_id'])).">Löschung zurücknehmen</a><br>";

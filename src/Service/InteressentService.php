@@ -101,8 +101,10 @@ class InteressentService
             $row2[] = $row['vorname'].' '.$row['name']; 
             $row2[] = $row['firma']; 
             $row2[] = $row['userEmail']; 
-            $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);    //=> string '1438597868' (length=10)
-            $row2[] = date("Y-m-d", (int)$row['lastlogin']);              // => string '1438954407' (length=10)
+            // $row2[] = date("Y-m-d", (int)$row['registrierungsdatum']);    //=> string '1438597868' (length=10)
+            // $row2[] = date("Y-m-d", (int)$row['lastlogin']);              // => string '1438954407' (length=10)
+            $row2[] = $row['reg_date'];
+            $row2[] = $row['last_login'];
 
             $str1 = "<a href=".$this->router->generate('interessent_edit', array('uid' => $row['userId'])).">Bearbeiten</a><br>";
             $str2 = "<a href=".$this->router->generate('interessent_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>";
@@ -132,8 +134,8 @@ class InteressentService
             $row2[] = $row['vorname'].' '.$row['name'];
             $row2[] = $row['firma'];
             $row2[] = $row['userEmail'];
-            $row2[] = substr($row['loesch_datum'], 0, 10);
-        
+            // $row2[] = substr($row['loesch_datum'], 0, 10);
+            $row2[] = $row['loesch_datum'];
             $str1 = "<a href=".$this->router->generate('interessent_delete', array('uid' => $row['userId'])).">Löschen</a><br>";
             $str2 = "<a href=".$this->router->generate('interessent_delete_undo', array('uid' => $row['userId'])).">Löschung zurücknehmen</a><br>";
             $row2[] = $str1.$str2;

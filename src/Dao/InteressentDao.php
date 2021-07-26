@@ -4,7 +4,7 @@ namespace App\Dao;
 class InteressentDao extends UserDao {
 
     public function getAllInteressent(iterable $values=[]) {
-        $sql = "SELECT user_interessent.user_id AS userId, registrierungsdatum, lastlogin, recht_id, art_id, user_interessent.email AS userEmail, username, gesperrt, anrede, vorname, name, firma  
+        $sql = "SELECT user_interessent.user_id AS userId, DATE_FORMAT(FROM_UNIXTIME(registrierungsdatum), '%Y-%m-%d') AS reg_date, DATE_FORMAT(FROM_UNIXTIME(lastlogin), '%Y-%m-%d') AS last_login, recht_id, art_id, user_interessent.email AS userEmail, username, gesperrt, anrede, vorname, name, firma  
                 FROM user_interessent 
                 INNER JOIN user_account ON user_interessent.user_id = user_account.user_id 
                 WHERE user_account.art_id = 1";
@@ -12,7 +12,7 @@ class InteressentDao extends UserDao {
     }
 
     public function getDelInteressent(iterable $values=[]) {
-        $sql = "SELECT user_interessent.user_id AS userId, loeschung, loesch_datum, loesch_send, recht_id, art_id, user_interessent.email AS userEmail, username, anrede, vorname, name, firma  
+        $sql = "SELECT user_interessent.user_id AS userId, loeschung, DATE_FORMAT(loesch_datum, '%Y-%m-%d') AS loesch_datum, loesch_send, recht_id, art_id, user_interessent.email AS userEmail, username, anrede, vorname, name, firma  
                 FROM user_interessent 
                 INNER JOIN user_account ON user_interessent.user_id = user_account.user_id 
                 WHERE user_account.loeschung = 1 AND user_account.art_id = 1"; 
