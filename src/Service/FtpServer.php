@@ -25,6 +25,8 @@ class FtpServer
             $row2 = array();
 
             $row2[] = $row['user_id'];
+            $row2[] = $row['mitgliedsnummer'];
+            $row2[] = $row['vorname'].' '.$row['name'];;
             $row2[] = $row['firma'];
             $row2[] = $row['email'];
             $row2[] = $row['hostname'];      
@@ -62,6 +64,7 @@ class FtpServer
             $row2 = array();
 
             $row2[] = $row['user_id'];
+            $row2[] = $row['mitgliedsnummer'];
             $row2[] = $row['vorname']." ".$row['name'];
             $row2[] = $row['firma'];
             $row2[] = $row['email'];

@@ -4,7 +4,7 @@ namespace App\Dao;
 class ServerDao extends BaseDao {
 
     public function getAllServerConfig(iterable $values=[]) {
-        $sql = "SELECT m.user_id, m.name, m.vorname, m.firma, m.email, config_server.hostname, mc.ftp_benutzer, mc.ftp_passwort, mc.ftp_pause, mc.ftp_import_after_break  
+        $sql = "SELECT m.user_id, m.mitgliedsnummer, m.vorname, m.name, m.firma, m.email, config_server.hostname, mc.ftp_benutzer, mc.ftp_passwort, mc.ftp_pause, mc.ftp_import_after_break  
                 FROM user_makler m
                 LEFT JOIN user_makler_config mc ON m.user_id = mc.user_id
                 LEFT JOIN config_server ON mc.ftp_server_id = config_server.config_server_id
@@ -31,7 +31,7 @@ class ServerDao extends BaseDao {
     }
 
     public function getAllFtpServerPause(iterable $values=[]) {
-        $sql = "SELECT m.user_id, m.name, m.vorname, m.firma, m.email, config_server.hostname, mc.ftp_benutzer, mc.ftp_passwort, mc.ftp_pause, mc.ftp_import_after_break  
+        $sql = "SELECT m.user_id, m.mitgliedsnummer, m.vorname, m.name, m.firma, m.email, config_server.hostname, mc.ftp_benutzer, mc.ftp_passwort, mc.ftp_pause, mc.ftp_import_after_break  
                 FROM user_makler m
                 LEFT JOIN user_makler_config mc ON m.user_id = mc.user_id
                 LEFT JOIN config_server ON mc.ftp_server_id = config_server.config_server_id
