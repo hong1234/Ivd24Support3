@@ -3,9 +3,19 @@ namespace App\Dao;
 
 class BUserDao extends BaseDao {
 
+    public function getAllNotBUser(iterable $values=[]){
+        $sql = "SELECT m.user_id, m.mitgliedsnummer, m.vorname, m.name, m.firma, m.email, DATE_FORMAT(a.created_at, '%Y-%m-%d') AS reg_date, DATE_FORMAT(a.last_login_at, '%Y-%m-%d') AS last_login
+                FROM user_makler m
+                INNER JOIN user_account a ON  m.user_id = a.user_id
+                LEFT JOIN businessClubUser ON m.user_id = businessClubUser.user_id
+                WHERE a.art_id = 2 AND a.recht_id = 3 AND m.user_id !=0 AND businessClubUser.user_id IS NULL";
+        return $this->doQuery($sql, $values);
+    }
+
     public function getAllBUser(iterable $values=[]) {
-        $sql = "SELECT user_id, returncode, company_name, paid, paket_name, start_abo, end_abo 
+        $sql = "SELECT businessClubUser.user_id, user_makler.mitgliedsnummer, returncode, company_name, paid, paket_name, start_abo, end_abo 
                 FROM businessClubUser 
+                INNER JOIN user_makler ON user_makler.user_id = businessClubUser.user_id
                 LEFT JOIN businessClubPakete ON businessClubUser.paketid = businessClubPakete.paket_id";
         return $this->doQuery($sql, $values);
     }
@@ -35,7 +45,7 @@ class BUserDao extends BaseDao {
                 end_grundriss           = :end_grundriss,
                 grundriss_voucher       = :grundriss_voucher,
                 mobile_devices_storybox = :geraete
-                WHERE           user_id = :user_id";
+                WHERE user_id = :user_id";
 
         return $this->doSQL($sql, $values);
     }

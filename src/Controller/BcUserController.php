@@ -24,9 +24,20 @@ class BcUserController extends AbstractController
     }
 
     /**
+     * @Route("/notbcuser", name="notbcuser_list")
+     */
+    public function notBcUserList(){
+
+        $rows = $this->bcUserService->notBcUserList();
+        return $this->render('bcuser/notlist.html.twig', [
+            'dataSet' => $rows
+        ]);
+    }
+
+    /**
      * @Route("/bcuser", name="bcuser_list")
      */
-    public function bcuserList(){
+    public function bcUserList(){
 
         $rows = $this->bcUserService->BcUserList();
         return $this->render('bcuser/list.html.twig', [

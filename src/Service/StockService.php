@@ -90,7 +90,7 @@ class StockService
 
         $AnzahlAktienAG = $this->getStockNumberAG();
         $row2 = array();
-        $row2['holder'] = 'Ivd Immobilien AG';
+        $row2['holder'] = 'Ivd24 Immobilien AG';
         $row2['percent'] = round($AnzahlAktienAG*100/$AnzahlAktienGesamt, 4);
         $row2['note'] = "$AnzahlAktienAG Aktien";
         $rs[] = $row2;
