@@ -1,28 +1,37 @@
-<div class="box box-warning">
+<div class="col-md-6">
+    <div class="box box-warning">
     <div class="box-body">
-        <b>Weitere Infos über Makler (User-Id: {{user_id}})</b><br><br>
+        <b>Adresse des Maklers (User-Id: {{user_id}})</b><br><br>
 
-        Adresse:<br>
         {{makler.strasse}}<br>
         {{makler.plz}} {{makler.ort}}<br>
         <br>
         Telefon: {{makler.telefon}}<br>
         Mobil: {{makler.mobil}}<br>
         <br>
-        
-        {% if BcClub == 'Ja' %}
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+    </div>
+</div>
+
+<div class="col-md-6">
+    <div class="box box-warning">
+        <div class="box-body">
+            <b>Weitere Infos über Makler (User-Id: {{user_id}})</b><br><br>
+            {% if BcClub == 'Ja' %}
             <a href='/support/bcuser/{{user_id}}/edit' target='_blank'>BusinessClub:</a> Ja<br>
         {% else %}
             BusinessClub: Nein<br>
         {% endif %}
-        <br>
 
         {% if stock.ak_anzahl > 0 %}
            <a href='/stock/shareholders/{{user_id}}/edit' target='_blank'>Aktien:</a> Ja ({{stock.ak_anzahl}})<br>
         {% else %}
             Aktien: Nein<br>
         {% endif %}
-        <br>
 
         {% if ftp.ftp_pause == 'N' %}
             FTP-Pause: Nein <br> 
@@ -39,9 +48,10 @@
         Anzahl Exposeaufrufe: {{expose.expose_az}}<br>
         Anzahl Immobilien aktuell: {{object.objekt_az}}<br>
         <a href='https://anbieter.ivd24immobilien.de/{{makler.seo_url}}' target='_blank'>Immobilien online</a><br>
-        
+        </div>
     </div>
 </div>
+
 
 {# <table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
 <tbody>
