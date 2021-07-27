@@ -96,4 +96,37 @@ class StatisticDao extends UserDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
+    //--------
+    public function getRequestLastTime(iterable $values=[]){
+        $sql = "SELECT count(*) AS req_anzahl
+                FROM statistik_anfragen_objekte_v2 an
+                LEFT JOIN user_makler ON an.objekt_user_id = user_makler.user_id
+                WHERE user_makler.user_id !=0 AND an.datum > :timepoint";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getRequestLastTimeByRegion(iterable $values=[]){
+        $sql = "SELECT count(*) AS req_anzahl
+                FROM statistik_anfragen_objekte_v2 an
+                LEFT JOIN user_makler ON an.objekt_user_id = user_makler.user_id
+                WHERE user_makler.user_id !=0 AND user_makler.geschaeftsstelle_id = :geschaeftsstelle_id AND an.datum > :timepoint";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getRequestTimePeriod(iterable $values=[]){
+        $sql = "SELECT count(*) AS req_anzahl
+                FROM statistik_anfragen_objekte_v2 an
+                LEFT JOIN user_makler ON an.objekt_user_id = user_makler.user_id
+                WHERE user_makler.user_id !=0 AND an.datum > :beginpoint AND an.datum < :endepoint";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getRequestTimePeriodByRegion(iterable $values=[]){
+        $sql = "SELECT count(*) AS req_anzahl
+                FROM statistik_anfragen_objekte_v2 an
+                LEFT JOIN user_makler ON an.objekt_user_id = user_makler.user_id
+                WHERE user_makler.user_id !=0 AND user_makler.geschaeftsstelle_id = :geschaeftsstelle_id AND an.datum > :beginpoint AND an.datum < :endepoint";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
 }

@@ -30,11 +30,6 @@ class DefaultController extends AbstractController
      */
     public function homePage()
     {
-        // $date = new \DateTime();
-        // $date->modify('-4 week');
-        // $date->format('Y-m-d H:i:s');
-        // var_dump($date); exit;
-
         return $this->render('default/home.html.twig', [
         ]);
     }

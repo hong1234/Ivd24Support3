@@ -269,75 +269,123 @@ class StatisticService
         return $areaData;
     }
 
-    public function getLineDataData(int $geschaeftsstelle_id) {
+    public function statisticObjectRequest(int $geschaeftsstelle_id) {
+
+        $result = [];
+        $now = new \DateTime();
+        $begin = new \DateTime();
+        $begin->modify('-4 week');
+
+        for ($c = 0; $c < 12; $c++) {
+
+            if($c>0){
+                $now->modify('-4 week');
+                $begin->modify('-4 week');
+            }
+
+            $rs = [
+                'now' => $now->format('Y-m-d'),
+                'begin' => $begin->format('Y-m-d')
+            ];
+    
+            $now_str = $now->format('Y-m-d H:i:s');
+            $begin_str = $begin->format('Y-m-d H:i:s');
+    
+            if($geschaeftsstelle_id == 6) {
+    
+                $rs1 = $this->sDao->getRequestTimePeriod([
+                    'beginpoint' => $begin_str,
+                    'endepoint' => $now_str
+                ]);
+                $rs['req_anzahl'] = (int)$rs1['req_anzahl'];
+    
+            } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
+                
+                $rs1 = $this->sDao->getRequestTimePeriodByRegion([
+                    'geschaeftsstelle_id' => 1,
+                    'beginpoint' => $begin_str,
+                    'endepoint' => $now_str
+                ]);
+                $rs2 = $this->sDao->getRequestTimePeriodByRegion([
+                    'geschaeftsstelle_id' => 2,
+                    'beginpoint' => $begin_str,
+                    'endepoint' => $now_str
+                ]);
+                $rs['req_anzahl'] = (int)$rs1['req_anzahl'] + (int)$rs2['req_anzahl'];
+    
+            } else {
+    
+                $rs1 = $this->sDao->getRequestTimePeriodByRegion([
+                    'geschaeftsstelle_id' => $geschaeftsstelle_id,
+                    'beginpoint' => $begin_str,
+                    'endepoint' => $now_str
+                ]);
+                $rs['req_anzahl'] = (int)$rs1['req_anzahl'];
+    
+            }
+
+            $result[] = $rs;
+             
+        }
+
+        return $result;
+    }
+
+    public function getRegionName(int $geschaeftsstelle_id) {
+        $geschaeftsstelle_name = '';
+        if($geschaeftsstelle_id==1||$geschaeftsstelle_id==2){
+            $geschaeftsstelle_name = 'ivd-sued';
+        } elseif($geschaeftsstelle_id==3) {
+            $geschaeftsstelle_name = 'ivd-nord';
+        } elseif($geschaeftsstelle_id==4) {
+            $geschaeftsstelle_name = 'ivd-mitte-ost';
+        } elseif($geschaeftsstelle_id==5) {
+            $geschaeftsstelle_name = 'ivd-berlin-brandenburg';
+        } elseif($geschaeftsstelle_id==6){
+            $geschaeftsstelle_name = '';
+        } elseif($geschaeftsstelle_id==7){
+            $geschaeftsstelle_name = 'ivd-west';
+        } elseif($geschaeftsstelle_id==8){
+            $geschaeftsstelle_name = 'ivd-mitte';
+        }
+        return $geschaeftsstelle_name;
+    }
+
+    public function statisticObjectRequestSum(int $geschaeftsstelle_id) {
+        $sum = [];
+        $total = $this->statisticObjectRequest(6);
+
+        if($geschaeftsstelle_id == 6){
+
+            for ($c = 0; $c < 12; $c++) {
+                $temp = [
+                    'day' => $total[$c]['now'],
+                    'gesamt' => $total[$c]['req_anzahl'],
+                    // 'ivdSud' => $region[$c]['req_anzahl']
+                ];
+                $sum[] = $temp;
+            }
+
+        } else {
+
+            $region = $this->statisticObjectRequest($geschaeftsstelle_id);
+            $geschaeftsstelle_name = $this->getRegionName($geschaeftsstelle_id);
+
+            for ($c = 0; $c < 12; $c++) {
+                $temp = [
+                    'day' => $total[$c]['now'],
+                    'gesamt' => $total[$c]['req_anzahl'],
+                    $geschaeftsstelle_name => $region[$c]['req_anzahl']
+                ];
+                $sum[] = $temp;
+            }
+        }
         
-        $lineData = array(
-            [
-                'day' =>'2020-02-01',
-                'gesamt' =>8666,
-                'ivdSud' =>6600
-            ],
-            [
-                'day' =>'2020-03-01',
-                'gesamt' =>5666,
-                'ivdSud' =>2800
-            ],
-            [
-                'day' =>'2020-04-01',
-                'gesamt' =>3948,
-                'ivdSud' =>2000
-            ],
-            [
-                'day' =>'2020-05-01',
-                'gesamt' =>2666,
-                'ivdSud' =>1333
-            ],
-            [
-                'day' =>'2020-06-01',
-                'gesamt' =>2778,
-                'ivdSud' =>1433
-            ],
-            [
-                'day' =>'2020-07-01',
-                'gesamt' =>4912,
-                'ivdSud' =>2333
-            ],
-            [
-                'day' =>'2020-08-01',
-                'gesamt' =>3767,
-                'ivdSud' =>2633
-            ],
-            [
-                'day' =>'2020-09-01',
-                'gesamt' =>6810,
-                'ivdSud' =>3333
-            ],
-            [
-                'day' =>'2020-10-01',
-                'gesamt' =>5670,
-                'ivdSud' =>4333
-            ],
-            [
-                'day' =>'2020-11-01',
-                'gesamt' =>4820,
-                'ivdSud' =>2410
-            ],
-            [
-                'day' =>'2020-12-01',
-                'gesamt' =>15073,
-                'ivdSud' =>8000
-            ],
-            [
-                'day' =>'2021-01-01',
-                'gesamt' =>10687,
-                'ivdSud' =>5000
-            ],
-            [
-                'day' =>'2021-02-01',
-                'gesamt' =>8432,
-                'ivdSud' =>4216
-            ]
-        );
+        return $sum;
+    }
+
+    public function getLineDataData(int $geschaeftsstelle_id) {
+        $lineData = $this->statisticObjectRequestSum($geschaeftsstelle_id);
         return $lineData;
     }
 

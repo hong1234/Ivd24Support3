@@ -29,11 +29,13 @@ class StatisticController extends AbstractController
     public function DashboardRegion(int $regid)
     {
         $geschaeftsstelle_id = $regid;
-
+        
         $boxs      = $this->sService->statisticMakler($geschaeftsstelle_id);
         $donutData = $this->sService->getDonutData($geschaeftsstelle_id);
         $areaData  = $this->sService->getAreaData($geschaeftsstelle_id);
         $lineData  = $this->sService->getLineDataData($geschaeftsstelle_id);
+
+        $geschaeftsstelle_name = $this->sService->getRegionName($geschaeftsstelle_id);
         
         return $this->render('statistic/dashboard.html.twig', [
             'lineData'  => $lineData,
@@ -41,6 +43,7 @@ class StatisticController extends AbstractController
             'donutData' => $donutData,
             'rows' => $boxs,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
+            'geschaeftsstelle_name' => $geschaeftsstelle_name,
             'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
         ]);
 
@@ -64,6 +67,8 @@ class StatisticController extends AbstractController
         $donutData = $this->sService->getDonutData($geschaeftsstelle_id);
         $areaData  = $this->sService->getAreaData($geschaeftsstelle_id);
         $lineData  = $this->sService->getLineDataData($geschaeftsstelle_id);
+
+        $geschaeftsstelle_name = $this->sService->getRegionName($geschaeftsstelle_id);
         
         return $this->render('statistic/dashboard.html.twig', [
             'lineData'  => $lineData,
@@ -71,6 +76,7 @@ class StatisticController extends AbstractController
             'donutData' => $donutData,
             'rows'     => $boxs,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
+            'geschaeftsstelle_name' => $geschaeftsstelle_name,
             'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
         ]);
     }

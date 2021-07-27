@@ -168,9 +168,19 @@
         resize     : true,
         data       : {{lineData|json_encode|raw}},
         xkey       : 'day',
-        ykeys      : ['ivdSud', 'gesamt'],
-        labels     : ['Ivd Süd', 'Gesamt'],
-        lineColors : ['#f56954', '#3c8dbc'],
+
+        {% if geschaeftsstelle_id == 6 %}
+          ykeys      : ['gesamt'],
+          labels     : ['Gesamt'],
+          lineColors : ['#3c8dbc'],
+        {% endif %}
+
+        {% if geschaeftsstelle_id != 6 %}
+          ykeys      : ['{{geschaeftsstelle_name}}', 'gesamt'],
+          labels     : ['{{geschaeftsstelle_name}}', 'Gesamt'],
+          lineColors : ['#f56954', '#3c8dbc'],
+        {% endif %}
+
         lineWidth  : 2,
         hideHover  : 'auto',
         //gridTextColor    : '#fff',
