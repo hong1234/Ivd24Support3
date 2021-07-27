@@ -1,0 +1,44 @@
+{% extends 'baseList.html.twig' %}
+
+{% block title %}Nicht-Aktionär List{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Nicht-Aktionär List</h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Übersicht</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example1" class="table table-bordered table-striped" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th style='width: 8%;'>User-ID</th>
+                                        <th style='width: 8%;'>MitgliedNr</th>
+                                        <th style='width: 16%;'>Vor-, Name</th>
+                                        <th style='width: 18%;'>Firma</th>
+                                        <th style='width: 16%;'>E-Mail</th>
+                                        <th style='width: 8%;'>Telefon</th>
+                                        <th style='width: 10%;'>Ort</th>
+                                        <th style='width: 8%;'>reg_date</th>   
+                                        <th style='width: 8%;'>last_login</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+  <!-- /.content-wrapper -->
+{% endblock %}

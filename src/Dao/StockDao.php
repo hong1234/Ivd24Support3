@@ -57,6 +57,15 @@ class StockDao extends BaseDao {
         return $this->doQuery($sql, $values);
     }
 
+    public function notShareHolderList(iterable $values=[]){
+        $sql = "SELECT m.user_id, m.mitgliedsnummer, m.vorname, m.name, m.firma, m.email, m.telefon, m.ort, DATE_FORMAT(user_account.created_at, '%Y-%m-%d') AS reg_date, DATE_FORMAT(user_account.last_login_at, '%Y-%m-%d') AS last_login
+                FROM user_makler m
+                INNER JOIN user_account ON user_account.user_id = m.user_id
+                LEFT JOIN (SELECT * FROM aktien WHERE aktien.user_id IS NOT NULL GROUP BY aktien.user_id) AS ak  ON ak.user_id = m.user_id
+                WHERE m.user_id != 0 AND user_account.art_id = 2 AND user_account.recht_id = 3 AND ak.user_id IS NULL";
+        return $this->doQuery($sql, $values);
+    }
+
     //---------
 
     public function getStakeholders(iterable $values=[]){

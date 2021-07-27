@@ -104,6 +104,27 @@ class StockService
         return $rs;
     }
 
+    public function notShareholderList(){
+        $stmt = $this->stockDao->notShareHolderList();
+        $rows = array();
+        while ($row = $stmt->fetch()) {
+            $row2 = array();
+            $row2[] = $row['user_id'];
+            $row2[] = $row['mitgliedsnummer'];
+            $row2[] = $row['vorname'].' '.$row['name'];
+            $row2[] = $row['firma']; 
+            $row2[] = $row['email'];
+            $row2[] = $row['telefon'];
+            $row2[] = $row['ort'];
+            $row2[] = $row['reg_date'];  
+            $row2[] = $row['last_login'];  
+
+            $rows[] = $row2;
+        }
+
+        return $rows;
+    }
+
     public function shareholderList() {
 
         $stmt = $this->stockDao->shareholderList();

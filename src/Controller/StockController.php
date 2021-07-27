@@ -40,6 +40,17 @@ class StockController extends AbstractController
     }
 
     /**
+     * @Route("/stock/notshareholders", name="stock_notshareholders")
+     */
+    public function notShareholderList()
+    {
+        $rows = $this->stockService->notShareholderList();
+        return $this->render('stock/notshareholders.html.twig', [
+            'dataSet' => $rows
+        ]);
+    }
+
+    /**
      * @Route("/stock/shareholders", name="stock_shareholders")
      */
     public function shareholderList()
