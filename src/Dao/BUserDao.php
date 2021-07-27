@@ -4,7 +4,7 @@ namespace App\Dao;
 class BUserDao extends BaseDao {
 
     public function getAllNotBUser(iterable $values=[]){
-        $sql = "SELECT m.user_id, m.mitgliedsnummer, m.vorname, m.name, m.firma, m.email, DATE_FORMAT(a.created_at, '%Y-%m-%d') AS reg_date, DATE_FORMAT(a.last_login_at, '%Y-%m-%d') AS last_login
+        $sql = "SELECT m.user_id, m.mitgliedsnummer, m.vorname, m.name, m.firma, m.email, m.telefon, m.ort, DATE_FORMAT(a.created_at, '%Y-%m-%d') AS reg_date, DATE_FORMAT(a.last_login_at, '%Y-%m-%d') AS last_login
                 FROM user_makler m
                 INNER JOIN user_account a ON  m.user_id = a.user_id
                 LEFT JOIN businessClubUser ON m.user_id = businessClubUser.user_id

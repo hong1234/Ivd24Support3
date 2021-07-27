@@ -25,6 +25,8 @@ class BcUserService
             $row2[] = $row['vorname'].' '.$row['name'];
             $row2[] = $row['firma']; 
             $row2[] = $row['email'];
+            $row2[] = $row['telefon'];
+            $row2[] = $row['ort'];
             $row2[] = $row['reg_date'];  
             $row2[] = $row['last_login'];  
 
