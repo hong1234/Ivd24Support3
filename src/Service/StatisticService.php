@@ -20,7 +20,6 @@ class StatisticService
         ]);
 
         $geschaeftsstelle_id = (int)$ac['geschaeftsstellen_id'];
-        // $geschaeftsstelle_name = $ac['name'];
         return $geschaeftsstelle_id;
     }
 
@@ -184,87 +183,31 @@ class StatisticService
     public function getAreaData(int $geschaeftsstelle_id) {
 
         $rs = $this->statisticObject($geschaeftsstelle_id);
+
+        $result = [];
+        $now = new \DateTime();
+        // $begin = new \DateTime();
+        // $begin->modify('-4 week');
+
+        for ($c = 0; $c < 12; $c++) {
+
+            if($c>0){
+                $now->modify('-4 week');
+                // $begin->modify('-4 week');
+            }
+
+            $temp = [
+                'day' => $now->format('Y-m-d'),
+                // 'begin' => $begin->format('Y-m-d')
+                'gesamt' => $rs['total'],
+                'frei'   => $rs['activ'],
+                'nfrei'  => $rs['inact']
+            ];
+
+            $result[] = $temp;
+        }
         
-        $areaData = array(
-            [
-                'day' =>'2020-06-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2020-07-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2020-08-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2020-09-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2020-10-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2020-11-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2020-12-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2021-01-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2021-02-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2021-03-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2021-04-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2021-05-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ],
-            [
-                'day' =>'2021-06-01',
-                'gesamt' => $rs['total'],
-                'frei' => $rs['activ'],
-                'nfrei' => $rs['inact']
-            ]
-        );
+        $areaData = $result;
 
         return $areaData;
     }
@@ -334,19 +277,19 @@ class StatisticService
     public function getRegionName(int $geschaeftsstelle_id) {
         $geschaeftsstelle_name = '';
         if($geschaeftsstelle_id==1||$geschaeftsstelle_id==2){
-            $geschaeftsstelle_name = 'ivd-sued';
+            $geschaeftsstelle_name = 'Ivd-Süd';
         } elseif($geschaeftsstelle_id==3) {
-            $geschaeftsstelle_name = 'ivd-nord';
+            $geschaeftsstelle_name = 'Ivd-Nord';
         } elseif($geschaeftsstelle_id==4) {
-            $geschaeftsstelle_name = 'ivd-mitte-ost';
+            $geschaeftsstelle_name = 'Ivd-Mitte-Ost';
         } elseif($geschaeftsstelle_id==5) {
-            $geschaeftsstelle_name = 'ivd-berlin-brandenburg';
+            $geschaeftsstelle_name = 'Ivd-Berlin-Brandenburg';
         } elseif($geschaeftsstelle_id==6){
             $geschaeftsstelle_name = '';
         } elseif($geschaeftsstelle_id==7){
-            $geschaeftsstelle_name = 'ivd-west';
+            $geschaeftsstelle_name = 'Ivd-West';
         } elseif($geschaeftsstelle_id==8){
-            $geschaeftsstelle_name = 'ivd-mitte';
+            $geschaeftsstelle_name = 'Ivd-Mitte';
         }
         return $geschaeftsstelle_name;
     }
@@ -360,8 +303,7 @@ class StatisticService
             for ($c = 0; $c < 12; $c++) {
                 $temp = [
                     'day' => $total[$c]['now'],
-                    'gesamt' => $total[$c]['req_anzahl'],
-                    // 'ivdSud' => $region[$c]['req_anzahl']
+                    'gesamt' => $total[$c]['req_anzahl']
                 ];
                 $sum[] = $temp;
             }
