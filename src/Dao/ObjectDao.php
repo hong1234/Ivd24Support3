@@ -27,6 +27,14 @@ class ObjectDao extends BaseDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
+    public function getObjectTotal12(iterable $values=[]) {
+        $sql = "SELECT COUNT(objekt_id) AS Anzah_Gesamtl_Objekte 
+                FROM objekt_master
+                LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id
+                WHERE user_makler.geschaeftsstelle_id = :geschaeftsstelle_id1 OR user_makler.geschaeftsstelle_id = :geschaeftsstelle_id2";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
     public function getObjectActiv2(iterable $values=[]) {
         $sql = "SELECT COUNT(objekt_id) AS Anzahl_freigegeben_Objekte 
                 FROM objekt_master
@@ -35,11 +43,27 @@ class ObjectDao extends BaseDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
+    public function getObjectActiv12(iterable $values=[]) {
+        $sql = "SELECT COUNT(objekt_id) AS Anzahl_freigegeben_Objekte 
+                FROM objekt_master
+                LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id 
+                WHERE objekt_master.freigabe = 'J' AND (user_makler.geschaeftsstelle_id = :geschaeftsstelle_id1 OR user_makler.geschaeftsstelle_id = :geschaeftsstelle_id2)";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
     public function getObjectInActiv2(iterable $values=[]) {
         $sql = "SELECT COUNT(objekt_id) AS Anzahl_nicht_freigegeben_Objekte 
                 FROM objekt_master
                 LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id 
                 WHERE freigabe = 'N' AND user_makler.geschaeftsstelle_id = :geschaeftsstelle_id";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getObjectInActiv12(iterable $values=[]) {
+        $sql = "SELECT COUNT(objekt_id) AS Anzahl_nicht_freigegeben_Objekte 
+                FROM objekt_master
+                LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id 
+                WHERE freigabe = 'N' AND (user_makler.geschaeftsstelle_id = :geschaeftsstelle_id1 OR user_makler.geschaeftsstelle_id = :geschaeftsstelle_id2)";
         return $this->doQuery($sql, $values)->fetch();
     }
 

@@ -85,13 +85,17 @@ class StatisticService
 
         } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
 
-            $reg1 = $this->sDao->getMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => 1]);
-            $reg2 = $this->sDao->getMaklerHaveObjectOnRegion(['geschaeftsstelle_id' => 2]);
+            $params = [
+                'geschaeftsstelle_id1' => 1,
+                'geschaeftsstelle_id2' => 2
+            ];
 
+            $reg1 = $this->sDao->getMaklerHaveObjectOnRegion12($params);
+           
             $row = [
-                'name' => 'IVD Süd',
+                'name' => 'IVD-Süd',
                 'geschaeftsstelle_id' => $geschaeftsstelle_id,
-                'count_makler_with_aktive_objectdata' => $reg1['count_makler_with_aktive_objectdata'] + $reg2['count_makler_with_aktive_objectdata']
+                'count_makler_with_aktive_objectdata' => $reg1['count_makler_with_aktive_objectdata']
             ];
 
             $rows2[] = $row;
@@ -136,23 +140,22 @@ class StatisticService
 
         } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
 
-            $total1 = $this->oDao->getObjectTotal2(['geschaeftsstelle_id' => 1])['Anzah_Gesamtl_Objekte'];
-            $activ1 = $this->oDao->getObjectActiv2(['geschaeftsstelle_id' => 1])['Anzahl_freigegeben_Objekte'];
-            $inact1 = $this->oDao->getObjectInActiv2(['geschaeftsstelle_id' => 1])['Anzahl_nicht_freigegeben_Objekte'];
-
-            $total2 = $this->oDao->getObjectTotal2(['geschaeftsstelle_id' => 2])['Anzah_Gesamtl_Objekte'];
-            $activ2 = $this->oDao->getObjectActiv2(['geschaeftsstelle_id' => 2])['Anzahl_freigegeben_Objekte'];
-            $inact2 = $this->oDao->getObjectInActiv2(['geschaeftsstelle_id' => 2])['Anzahl_nicht_freigegeben_Objekte'];
-
-            $total = $total1 + $total2;
-            $activ = $activ1 + $activ2;
-            $inact = $inact1 + $inact2;
+            $params = [
+                'geschaeftsstelle_id1' => 1,
+                'geschaeftsstelle_id2' => 2
+            ];
+            $total = $this->oDao->getObjectTotal12($params)['Anzah_Gesamtl_Objekte'];
+            $activ = $this->oDao->getObjectActiv12($params)['Anzahl_freigegeben_Objekte'];
+            $inact = $this->oDao->getObjectInActiv12($params)['Anzahl_nicht_freigegeben_Objekte'];
 
         } else {
-            
-            $total = $this->oDao->getObjectTotal2(['geschaeftsstelle_id' => $geschaeftsstelle_id])['Anzah_Gesamtl_Objekte'];
-            $activ = $this->oDao->getObjectActiv2(['geschaeftsstelle_id' => $geschaeftsstelle_id])['Anzahl_freigegeben_Objekte'];
-            $inact = $this->oDao->getObjectInActiv2(['geschaeftsstelle_id' => $geschaeftsstelle_id])['Anzahl_nicht_freigegeben_Objekte'];
+
+            $pars = [
+                'geschaeftsstelle_id' => $geschaeftsstelle_id
+            ];
+            $total = $this->oDao->getObjectTotal2($pars)['Anzah_Gesamtl_Objekte'];
+            $activ = $this->oDao->getObjectActiv2($pars)['Anzahl_freigegeben_Objekte'];
+            $inact = $this->oDao->getObjectInActiv2($pars)['Anzahl_nicht_freigegeben_Objekte'];
         }
 
         return ['total'=>$total, 'activ'=>$activ, 'inact'=>$inact];
@@ -215,6 +218,7 @@ class StatisticService
     public function statisticObjectRequest(int $geschaeftsstelle_id) {
 
         $result = [];
+
         $now = new \DateTime();
         $begin = new \DateTime();
         $begin->modify('-4 week');
@@ -226,7 +230,7 @@ class StatisticService
                 $begin->modify('-4 week');
             }
 
-            $rs = [
+            $temp = [
                 'now' => $now->format('Y-m-d'),
                 'begin' => $begin->format('Y-m-d')
             ];
@@ -235,39 +239,34 @@ class StatisticService
             $begin_str = $begin->format('Y-m-d H:i:s');
     
             if($geschaeftsstelle_id == 6) {
-    
-                $rs1 = $this->sDao->getRequestTimePeriod([
+
+                $rs = $this->sDao->getRequestTimePeriod([
                     'beginpoint' => $begin_str,
                     'endepoint' => $now_str
                 ]);
-                $rs['req_anzahl'] = (int)$rs1['req_anzahl'];
-    
+
             } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
+
+                $rs = $this->sDao->getRequestTimePeriodByRegion12([
+                    'geschaeftsstelle_id1' => 1,
+                    'geschaeftsstelle_id2' => 2,
+                    'beginpoint' => $begin_str,
+                    'endepoint' => $now_str
+                ]);
                 
-                $rs1 = $this->sDao->getRequestTimePeriodByRegion([
-                    'geschaeftsstelle_id' => 1,
-                    'beginpoint' => $begin_str,
-                    'endepoint' => $now_str
-                ]);
-                $rs2 = $this->sDao->getRequestTimePeriodByRegion([
-                    'geschaeftsstelle_id' => 2,
-                    'beginpoint' => $begin_str,
-                    'endepoint' => $now_str
-                ]);
-                $rs['req_anzahl'] = (int)$rs1['req_anzahl'] + (int)$rs2['req_anzahl'];
-    
             } else {
     
-                $rs1 = $this->sDao->getRequestTimePeriodByRegion([
+                $rs = $this->sDao->getRequestTimePeriodByRegion([
                     'geschaeftsstelle_id' => $geschaeftsstelle_id,
                     'beginpoint' => $begin_str,
                     'endepoint' => $now_str
                 ]);
-                $rs['req_anzahl'] = (int)$rs1['req_anzahl'];
-    
+                
             }
 
-            $result[] = $rs;
+            $temp['req_anzahl'] = (int)$rs['req_anzahl'];
+
+            $result[] = $temp;
              
         }
 

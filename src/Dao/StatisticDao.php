@@ -61,6 +61,18 @@ class StatisticDao extends UserDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
+    public function getMaklerHaveObjectOnRegion12(iterable $values=[]){
+        $sql = "SELECT
+                user_geschaeftsstelle.name,
+                user_geschaeftsstelle.geschaeftsstelle_id,
+                COUNT(user_geschaeftsstelle.geschaeftsstelle_id) AS count_makler_with_aktive_objectdata
+                FROM user_makler
+                LEFT JOIN user_geschaeftsstelle ON user_geschaeftsstelle.geschaeftsstelle_id = user_makler.geschaeftsstelle_id
+                LEFT JOIN (SELECT * FROM objekt_master GROUP BY user_id) AS ob ON user_makler.user_id = ob.user_id
+                WHERE ob.user_id IS NOT NULL AND (user_makler.geschaeftsstelle_id=:geschaeftsstelle_id1 OR user_makler.geschaeftsstelle_id=:geschaeftsstelle_id2)";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
     //-------------
 
     public function getActivMakler(iterable $values=[]){
@@ -126,6 +138,14 @@ class StatisticDao extends UserDao {
                 FROM statistik_anfragen_objekte_v2 an
                 LEFT JOIN user_makler ON an.objekt_user_id = user_makler.user_id
                 WHERE user_makler.user_id !=0 AND user_makler.geschaeftsstelle_id = :geschaeftsstelle_id AND an.datum > :beginpoint AND an.datum < :endepoint";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getRequestTimePeriodByRegion12(iterable $values=[]){
+        $sql = "SELECT count(*) AS req_anzahl
+                FROM statistik_anfragen_objekte_v2 an
+                LEFT JOIN user_makler ON an.objekt_user_id = user_makler.user_id
+                WHERE user_makler.user_id !=0 AND (user_makler.geschaeftsstelle_id = :geschaeftsstelle_id1 OR user_makler.geschaeftsstelle_id = :geschaeftsstelle_id2) AND an.datum > :beginpoint AND an.datum < :endepoint";
         return $this->doQuery($sql, $values)->fetch();
     }
 
