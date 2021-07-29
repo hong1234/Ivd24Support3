@@ -304,18 +304,12 @@ class StatisticService
         return $geschaeftsstelle_name;
     }
 
-    public function objectRequestTotal12PeriodFromTemp(){
-
-    }
-
-    public function statisticObjectRequestSum(int $geschaeftsstelle_id) {
+    public function objectRequestLineData(int $geschaeftsstelle_id) {
         $sum = [];
-
         // $total = $this->objectRequest12Period(6);
         $total = $this->tempFileHandler->getTempoContent();
 
         if($geschaeftsstelle_id == 6){
-
             for ($i = 0; $i < 12; $i++) {
                 $temp = [
                     'day' => $total[$i]['now'],
@@ -325,7 +319,6 @@ class StatisticService
             }
 
         } else {
-
             $region = $this->objectRequest12Period($geschaeftsstelle_id);
             $geschaeftsstelle_name = $this->getRegionName($geschaeftsstelle_id);
 
@@ -348,7 +341,7 @@ class StatisticService
         // store in tempore
         $this->tempFileHandler->setTempoContent($total);  
 
-        $lineData = $this->statisticObjectRequestSum($geschaeftsstelle_id);
+        $lineData = $this->objectRequestLineData($geschaeftsstelle_id);
         return $lineData;
     }
 
@@ -358,7 +351,7 @@ class StatisticService
         // store in tempore
         // $this->tempFileHandler->setTempoContent($total);  
 
-        $lineData = $this->statisticObjectRequestSum($geschaeftsstelle_id);
+        $lineData = $this->objectRequestLineData($geschaeftsstelle_id);
         return $lineData;
     }
 
