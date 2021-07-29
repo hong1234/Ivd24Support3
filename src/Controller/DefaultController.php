@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 //use App\Service\StringFormat;
 //use App\Service\SendQueue;
 use App\Service\MaklerService;
+use App\Service\StatisticService;
 
 /**
  *
@@ -37,9 +38,9 @@ class DefaultController extends AbstractController
     /**
      * @Route("/test", name="default_test")
      */
-    public function testPage(MaklerService $mS)
+    public function testPage(StatisticService $stService)
     {
-        $state = $mS->getMaklerData(112742);
+        $state = $stService->getLineDataData(1);
 
         var_dump($state); exit;
         // return $this->render('default/test.html.twig', [

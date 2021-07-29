@@ -1,6 +1,8 @@
 <?php
 namespace App\Service;
 
+use App\Service\TempFileHandler;
+
 use App\Dao\StatisticDao;
 use App\Dao\ObjectDao;
 
@@ -8,10 +10,12 @@ class StatisticService
 {
     private $sDao;
     private $oDao;
+    private $tempFileHandler;
     
-    public function __construct(StatisticDao $sDao, ObjectDao $oDao) {
+    public function __construct(StatisticDao $sDao, ObjectDao $oDao, TempFileHandler $tempFileHandler) {
         $this->sDao = $sDao;
-        $this->oDao = $oDao; 
+        $this->oDao = $oDao;
+        $this->tempFileHandler = $tempFileHandler; 
     }
 
     public function geschaeftsstelleId(int $user_id) {
@@ -192,9 +196,9 @@ class StatisticService
         // $begin = new \DateTime();
         // $begin->modify('-4 week');
 
-        for ($c = 0; $c < 12; $c++) {
+        for ($i = 0; $i < 12; $i++) {
 
-            if($c>0){
+            if($i>0){
                 $now->modify('-4 week');
                 // $begin->modify('-4 week');
             }
@@ -215,57 +219,64 @@ class StatisticService
         return $areaData;
     }
 
-    public function statisticObjectRequest(int $geschaeftsstelle_id) {
+    //--------------
 
-        $result = [];
+    public function objectRequestPeriod(int $geschaeftsstelle_id, \DateTime $begin, \DateTime $now) {
+        $temp = [
+            'now' => $now->format('Y-m-d'),
+            'begin' => $begin->format('Y-m-d')
+        ];
+
+        $now_str = $now->format('Y-m-d H:i:s');
+        $begin_str = $begin->format('Y-m-d H:i:s');
+
+        if($geschaeftsstelle_id == 6) {
+
+            $rs = $this->sDao->getRequestTimePeriod([
+                'beginpoint' => $begin_str,
+                'endepoint' => $now_str
+            ]);
+
+        } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
+
+            $rs = $this->sDao->getRequestTimePeriodByRegion12([
+                'geschaeftsstelle_id1' => 1,
+                'geschaeftsstelle_id2' => 2,
+                'beginpoint' => $begin_str,
+                'endepoint' => $now_str
+            ]);
+            
+        } else {
+
+            $rs = $this->sDao->getRequestTimePeriodByRegion([
+                'geschaeftsstelle_id' => $geschaeftsstelle_id,
+                'beginpoint' => $begin_str,
+                'endepoint' => $now_str
+            ]);
+            
+        }
+
+        $temp['req_anzahl'] = (int)$rs['req_anzahl'];
+
+        return $temp;
+    }
+
+    public function objectRequest12Period(int $geschaeftsstelle_id) {
 
         $now = new \DateTime();
         $begin = new \DateTime();
         $begin->modify('-4 week');
 
-        for ($c = 0; $c < 12; $c++) {
+        $result = [];
 
-            if($c>0){
+        for ($i = 0; $i < 12; $i++) {
+
+            if($i>0){
                 $now->modify('-4 week');
                 $begin->modify('-4 week');
             }
 
-            $temp = [
-                'now' => $now->format('Y-m-d'),
-                'begin' => $begin->format('Y-m-d')
-            ];
-    
-            $now_str = $now->format('Y-m-d H:i:s');
-            $begin_str = $begin->format('Y-m-d H:i:s');
-    
-            if($geschaeftsstelle_id == 6) {
-
-                $rs = $this->sDao->getRequestTimePeriod([
-                    'beginpoint' => $begin_str,
-                    'endepoint' => $now_str
-                ]);
-
-            } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
-
-                $rs = $this->sDao->getRequestTimePeriodByRegion12([
-                    'geschaeftsstelle_id1' => 1,
-                    'geschaeftsstelle_id2' => 2,
-                    'beginpoint' => $begin_str,
-                    'endepoint' => $now_str
-                ]);
-                
-            } else {
-    
-                $rs = $this->sDao->getRequestTimePeriodByRegion([
-                    'geschaeftsstelle_id' => $geschaeftsstelle_id,
-                    'beginpoint' => $begin_str,
-                    'endepoint' => $now_str
-                ]);
-                
-            }
-
-            $temp['req_anzahl'] = (int)$rs['req_anzahl'];
-
+            $temp = $this->objectRequestPeriod($geschaeftsstelle_id, $begin, $now);
             $result[] = $temp;
              
         }
@@ -293,30 +304,36 @@ class StatisticService
         return $geschaeftsstelle_name;
     }
 
+    public function objectRequestTotal12PeriodFromTemp(){
+
+    }
+
     public function statisticObjectRequestSum(int $geschaeftsstelle_id) {
         $sum = [];
-        $total = $this->statisticObjectRequest(6);
+
+        // $total = $this->objectRequest12Period(6);
+        $total = $this->tempFileHandler->getTempoContent();
 
         if($geschaeftsstelle_id == 6){
 
-            for ($c = 0; $c < 12; $c++) {
+            for ($i = 0; $i < 12; $i++) {
                 $temp = [
-                    'day' => $total[$c]['now'],
-                    'gesamt' => $total[$c]['req_anzahl']
+                    'day' => $total[$i]['now'],
+                    'gesamt' => $total[$i]['req_anzahl']
                 ];
                 $sum[] = $temp;
             }
 
         } else {
 
-            $region = $this->statisticObjectRequest($geschaeftsstelle_id);
+            $region = $this->objectRequest12Period($geschaeftsstelle_id);
             $geschaeftsstelle_name = $this->getRegionName($geschaeftsstelle_id);
 
-            for ($c = 0; $c < 12; $c++) {
+            for ($i = 0; $i < 12; $i++) {
                 $temp = [
-                    'day' => $total[$c]['now'],
-                    'gesamt' => $total[$c]['req_anzahl'],
-                    $geschaeftsstelle_name => $region[$c]['req_anzahl']
+                    'day' => $total[$i]['now'],
+                    'gesamt' => $total[$i]['req_anzahl'],
+                    $geschaeftsstelle_name => $region[$i]['req_anzahl']
                 ];
                 $sum[] = $temp;
             }
@@ -326,6 +343,21 @@ class StatisticService
     }
 
     public function getLineDataData(int $geschaeftsstelle_id) {
+        // get total array
+        $total = $this->objectRequest12Period(6);
+        // store in tempore
+        $this->tempFileHandler->setTempoContent($total);  
+
+        $lineData = $this->statisticObjectRequestSum($geschaeftsstelle_id);
+        return $lineData;
+    }
+
+    public function getLineDataData2(int $geschaeftsstelle_id) {
+        // get total array
+        // $total = $this->objectRequest12Period(6);
+        // store in tempore
+        // $this->tempFileHandler->setTempoContent($total);  
+
         $lineData = $this->statisticObjectRequestSum($geschaeftsstelle_id);
         return $lineData;
     }
