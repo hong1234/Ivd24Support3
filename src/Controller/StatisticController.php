@@ -38,10 +38,10 @@ class StatisticController extends AbstractController
         $geschaeftsstelle_name = $this->sService->getRegionName($geschaeftsstelle_id);
         
         return $this->render('statistic/dashboard.html.twig', [
-            'lineData'  => $lineData,
-            'areaData'  => $areaData,
+            'rows'      => $boxs,
             'donutData' => $donutData,
-            'rows' => $boxs,
+            'areaData'  => $areaData,
+            'lineData'  => $lineData,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
             'geschaeftsstelle_name' => $geschaeftsstelle_name,
             'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
@@ -71,10 +71,10 @@ class StatisticController extends AbstractController
         $geschaeftsstelle_name = $this->sService->getRegionName($geschaeftsstelle_id);
         
         return $this->render('statistic/dashboard.html.twig', [
-            'lineData'  => $lineData,
-            'areaData'  => $areaData,
+            'rows'      => $boxs,
             'donutData' => $donutData,
-            'rows'     => $boxs,
+            'areaData'  => $areaData,
+            'lineData'  => $lineData,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
             'geschaeftsstelle_name' => $geschaeftsstelle_name,
             'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]

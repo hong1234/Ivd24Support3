@@ -108,7 +108,8 @@ class StatisticService
         
         $rows = array();
         $i = 0;
-        while ($i < count($rows1)) {
+        $az1 = count($rows1);
+        while ($i < $az1) {
             
             $a = $rows1[$i];
             $b = $rows2[$i];
@@ -274,8 +275,8 @@ class StatisticService
             }
 
             $geschaeftsstelle_name = $this->getRegionName($geschaeftsstelle_id);
-
-            for ($i = 0; $i < 12; $i++) {
+            $az2 = count($total);
+            for ($i = 0; $i < $az2; $i++) {
                 $temp = [
                     'day' => $total[$i]['time_span'],
                     'gesamt' => $total[$i]['req_az'],
