@@ -221,67 +221,27 @@ class StatisticService
 
     //--------------
 
-    public function objectRequestPeriod(int $geschaeftsstelle_id, \DateTime $begin, \DateTime $now) {
-        $temp = [
-            'now' => $now->format('Y-m-d'),
-            'begin' => $begin->format('Y-m-d')
-        ];
-
-        $now_str = $now->format('Y-m-d H:i:s');
-        $begin_str = $begin->format('Y-m-d H:i:s');
-
-        if($geschaeftsstelle_id == 6) {
-
-            $rs = $this->sDao->getRequestTimePeriod([
-                'beginpoint' => $begin_str,
-                'endepoint' => $now_str
-            ]);
-
-        } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
-
-            $rs = $this->sDao->getRequestTimePeriodByRegion12([
-                'geschaeftsstelle_id1' => 1,
-                'geschaeftsstelle_id2' => 2,
-                'beginpoint' => $begin_str,
-                'endepoint' => $now_str
-            ]);
-            
-        } else {
-
-            $rs = $this->sDao->getRequestTimePeriodByRegion([
-                'geschaeftsstelle_id' => $geschaeftsstelle_id,
-                'beginpoint' => $begin_str,
-                'endepoint' => $now_str
-            ]);
-            
-        }
-
-        $temp['req_anzahl'] = (int)$rs['req_anzahl'];
-
-        return $temp;
+    public function objectRequestLast12Months() {
+        $arr = $this->sDao->getRequestLast12Months();
+        $begin = count($arr) - 13;
+        $subArray = array_slice($arr, $begin, 12);
+        return $subArray;
     }
 
-    public function objectRequest12Period(int $geschaeftsstelle_id) {
+    public function objectRequestLast12MonthsByRegion(int $geschaeftsstelle_id) {
+        $arr = $this->sDao->getRequestLast12MonthsByRegion([
+            'geschaeftsstelle_id' => $geschaeftsstelle_id
+        ]);
+        $begin = count($arr) - 13;
+        $subArray = array_slice($arr, $begin, 12);
+        return $subArray;
+    }
 
-        $now = new \DateTime();
-        $begin = new \DateTime();
-        $begin->modify('-4 week');
-
-        $result = [];
-
-        for ($i = 0; $i < 12; $i++) {
-
-            if($i>0){
-                $now->modify('-4 week');
-                $begin->modify('-4 week');
-            }
-
-            $temp = $this->objectRequestPeriod($geschaeftsstelle_id, $begin, $now);
-            $result[] = $temp;
-             
-        }
-
-        return $result;
+    public function objectRequestLast12MonthsByRegion1And2() {
+        $arr = $this->sDao->getRequestLast12MonthsByRegion1And2();
+        $begin = count($arr) - 13;
+        $subArray = array_slice($arr, $begin, 12);
+        return $subArray;
     }
 
     public function getRegionName(int $geschaeftsstelle_id) {
@@ -306,30 +266,36 @@ class StatisticService
 
     public function objectRequestLineData(int $geschaeftsstelle_id) {
         $sum = [];
-        // $total = $this->objectRequest12Period(6);
+
         $total = $this->tempFileHandler->getTempoContent();
 
         if($geschaeftsstelle_id == 6){
-            for ($i = 0; $i < 12; $i++) {
+            foreach($total as $item) {
                 $temp = [
-                    'day' => $total[$i]['now'],
-                    'gesamt' => $total[$i]['req_anzahl']
+                    'day' => $item['time_span'],
+                    'gesamt' => $item['req_az']
                 ];
                 $sum[] = $temp;
             }
-
         } else {
-            $region = $this->objectRequest12Period($geschaeftsstelle_id);
+
+            if ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
+                $region = $this->objectRequestLast12MonthsByRegion1And2();
+            } else {
+                $region = $this->objectRequestLast12MonthsByRegion($geschaeftsstelle_id);
+            }
+
             $geschaeftsstelle_name = $this->getRegionName($geschaeftsstelle_id);
 
             for ($i = 0; $i < 12; $i++) {
                 $temp = [
-                    'day' => $total[$i]['now'],
-                    'gesamt' => $total[$i]['req_anzahl'],
-                    $geschaeftsstelle_name => $region[$i]['req_anzahl']
+                    'day' => $total[$i]['time_span'],
+                    'gesamt' => $total[$i]['req_az'],
+                    $geschaeftsstelle_name => $region[$i]['req_az']
                 ];
                 $sum[] = $temp;
             }
+
         }
         
         return $sum;
@@ -337,7 +303,7 @@ class StatisticService
 
     public function getLineDataData(int $geschaeftsstelle_id) {
         // get total array
-        $total = $this->objectRequest12Period(6);
+        $total = $this->objectRequestLast12Months();
         // store in tempore
         $this->tempFileHandler->setTempoContent($total);  
 
@@ -346,11 +312,6 @@ class StatisticService
     }
 
     public function getLineDataData2(int $geschaeftsstelle_id) {
-        // get total array
-        // $total = $this->objectRequest12Period(6);
-        // store in tempore
-        // $this->tempFileHandler->setTempoContent($total);  
-
         $lineData = $this->objectRequestLineData($geschaeftsstelle_id);
         return $lineData;
     }

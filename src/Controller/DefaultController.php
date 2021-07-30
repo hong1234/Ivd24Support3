@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 //use App\Service\StringFormat;
 //use App\Service\SendQueue;
-use App\Service\MaklerService;
+// use App\Service\MaklerService;
 use App\Service\StatisticService;
 
 /**
@@ -40,9 +40,9 @@ class DefaultController extends AbstractController
      */
     public function testPage(StatisticService $stService)
     {
-        $state = $stService->getLineDataData(1);
+        $rs = $stService->objectRequestLast12Months();
 
-        var_dump($state); exit;
+        var_dump($rs); exit;
         // return $this->render('default/test.html.twig', [
         //     'bildpfad' => $bildpfad,
         //     'ftppfad' => $ftppfad,

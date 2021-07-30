@@ -66,7 +66,7 @@ class StatisticController extends AbstractController
         $boxs      = $this->sService->statisticMakler($geschaeftsstelle_id);
         $donutData = $this->sService->getDonutData($geschaeftsstelle_id);
         $areaData  = $this->sService->getAreaData($geschaeftsstelle_id);
-        $lineData  = $this->sService->getLineDataData($geschaeftsstelle_id);
+        $lineData  = $this->sService->getLineDataData($geschaeftsstelle_id);///////
 
         $geschaeftsstelle_name = $this->sService->getRegionName($geschaeftsstelle_id);
         
