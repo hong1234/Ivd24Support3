@@ -31,9 +31,9 @@ class StatisticController extends AbstractController
         $geschaeftsstelle_id = $regid;
         
         $boxs      = $this->sService->statisticMakler($geschaeftsstelle_id);
-        $donutData = $this->sService->getDonutData($geschaeftsstelle_id);
-        $areaData  = $this->sService->getAreaData($geschaeftsstelle_id);
-        $lineData  = $this->sService->getLineDataData2($geschaeftsstelle_id);
+        $donutData = $this->sService->statisticObjectDonut($geschaeftsstelle_id);
+        $areaData  = $this->sService->statisticObjectArea($geschaeftsstelle_id);
+        $lineData  = $this->sService->statisticRequestLine2($geschaeftsstelle_id);
 
         $geschaeftsstelle_name = $this->sService->getRegionName($geschaeftsstelle_id);
         
@@ -64,9 +64,9 @@ class StatisticController extends AbstractController
         $geschaeftsstelle_id = $this->sService->geschaeftsstelleId($user_id);
 
         $boxs      = $this->sService->statisticMakler($geschaeftsstelle_id);
-        $donutData = $this->sService->getDonutData($geschaeftsstelle_id);
-        $areaData  = $this->sService->getAreaData($geschaeftsstelle_id);
-        $lineData  = $this->sService->getLineDataData($geschaeftsstelle_id);///////
+        $donutData = $this->sService->statisticObjectDonut($geschaeftsstelle_id);
+        $areaData  = $this->sService->statisticObjectArea($geschaeftsstelle_id);
+        $lineData  = $this->sService->statisticRequestLine($geschaeftsstelle_id);///////
 
         $geschaeftsstelle_name = $this->sService->getRegionName($geschaeftsstelle_id);
         

@@ -19,7 +19,7 @@ class ObjectDao extends BaseDao {
     }
 
     //-----------
-    public function getObjectTotal2(iterable $values=[]) {
+    public function getObjectTotalByRegion(iterable $values=[]) {
         $sql = "SELECT COUNT(objekt_id) AS Anzah_Gesamtl_Objekte 
                 FROM objekt_master
                 LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id
@@ -27,15 +27,7 @@ class ObjectDao extends BaseDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
-    public function getObjectTotal12(iterable $values=[]) {
-        $sql = "SELECT COUNT(objekt_id) AS Anzah_Gesamtl_Objekte 
-                FROM objekt_master
-                LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id
-                WHERE user_makler.geschaeftsstelle_id = :geschaeftsstelle_id1 OR user_makler.geschaeftsstelle_id = :geschaeftsstelle_id2";
-        return $this->doQuery($sql, $values)->fetch();
-    }
-
-    public function getObjectActiv2(iterable $values=[]) {
+    public function getObjectActivByRegion(iterable $values=[]) {
         $sql = "SELECT COUNT(objekt_id) AS Anzahl_freigegeben_Objekte 
                 FROM objekt_master
                 LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id 
@@ -43,15 +35,7 @@ class ObjectDao extends BaseDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
-    public function getObjectActiv12(iterable $values=[]) {
-        $sql = "SELECT COUNT(objekt_id) AS Anzahl_freigegeben_Objekte 
-                FROM objekt_master
-                LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id 
-                WHERE objekt_master.freigabe = 'J' AND (user_makler.geschaeftsstelle_id = :geschaeftsstelle_id1 OR user_makler.geschaeftsstelle_id = :geschaeftsstelle_id2)";
-        return $this->doQuery($sql, $values)->fetch();
-    }
-
-    public function getObjectInActiv2(iterable $values=[]) {
+    public function getObjectInActivByRegion(iterable $values=[]) {
         $sql = "SELECT COUNT(objekt_id) AS Anzahl_nicht_freigegeben_Objekte 
                 FROM objekt_master
                 LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id 
@@ -59,11 +43,27 @@ class ObjectDao extends BaseDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
-    public function getObjectInActiv12(iterable $values=[]) {
+    public function getObjectTotalByRegion1And2(iterable $values=[]) {
+        $sql = "SELECT COUNT(objekt_id) AS Anzah_Gesamtl_Objekte 
+                FROM objekt_master
+                LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id
+                WHERE user_makler.geschaeftsstelle_id = 1 OR user_makler.geschaeftsstelle_id = 2";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getObjectActivByRegion1And2(iterable $values=[]) {
+        $sql = "SELECT COUNT(objekt_id) AS Anzahl_freigegeben_Objekte 
+                FROM objekt_master
+                LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id 
+                WHERE objekt_master.freigabe = 'J' AND (user_makler.geschaeftsstelle_id = 1 OR user_makler.geschaeftsstelle_id = 2)";
+        return $this->doQuery($sql, $values)->fetch();
+    }
+
+    public function getObjectInActivByRegion1And2(iterable $values=[]) {
         $sql = "SELECT COUNT(objekt_id) AS Anzahl_nicht_freigegeben_Objekte 
                 FROM objekt_master
                 LEFT JOIN user_makler ON user_makler.user_id = objekt_master.user_id 
-                WHERE freigabe = 'N' AND (user_makler.geschaeftsstelle_id = :geschaeftsstelle_id1 OR user_makler.geschaeftsstelle_id = :geschaeftsstelle_id2)";
+                WHERE freigabe = 'N' AND (user_makler.geschaeftsstelle_id = 1 OR user_makler.geschaeftsstelle_id = 2)";
         return $this->doQuery($sql, $values)->fetch();
     }
 

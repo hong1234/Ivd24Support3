@@ -50,13 +50,12 @@ class StatisticService
 
         } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
 
-            $reg1 = $this->sDao->getMaklerOnRegion(['geschaeftsstelle_id' => 1]);
-            $reg2 = $this->sDao->getMaklerOnRegion(['geschaeftsstelle_id' => 2]);
-
+            $reg1 = $this->sDao->getMaklerOnRegion1And2();
+            
             $row = [
                 'name' => 'IVD Süd',
                 'geschaeftsstelle_id' => $geschaeftsstelle_id,
-                'count_makler_on_regional_office' => $reg1['count_makler_on_regional_office'] + $reg2['count_makler_on_regional_office']
+                'count_makler_on_regional_office' => $reg1['count_makler_on_regional_office']
             ];
 
             $rows1[] = $row;
@@ -89,12 +88,7 @@ class StatisticService
 
         } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
 
-            $params = [
-                'geschaeftsstelle_id1' => 1,
-                'geschaeftsstelle_id2' => 2
-            ];
-
-            $reg1 = $this->sDao->getMaklerHaveObjectOnRegion12($params);
+            $reg1 = $this->sDao->getMaklerHaveObjectOnRegion1And2();
            
             $row = [
                 'name' => 'IVD-Süd',
@@ -144,28 +138,22 @@ class StatisticService
 
         } elseif ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2){
 
-            $params = [
-                'geschaeftsstelle_id1' => 1,
-                'geschaeftsstelle_id2' => 2
-            ];
-            $total = $this->oDao->getObjectTotal12($params)['Anzah_Gesamtl_Objekte'];
-            $activ = $this->oDao->getObjectActiv12($params)['Anzahl_freigegeben_Objekte'];
-            $inact = $this->oDao->getObjectInActiv12($params)['Anzahl_nicht_freigegeben_Objekte'];
+            $total = $this->oDao->getObjectTotalByRegion1And2()['Anzah_Gesamtl_Objekte'];
+            $activ = $this->oDao->getObjectActivByRegion1And2()['Anzahl_freigegeben_Objekte'];
+            $inact = $this->oDao->getObjectInActivByRegion1And2()['Anzahl_nicht_freigegeben_Objekte'];
 
         } else {
 
-            $pars = [
-                'geschaeftsstelle_id' => $geschaeftsstelle_id
-            ];
-            $total = $this->oDao->getObjectTotal2($pars)['Anzah_Gesamtl_Objekte'];
-            $activ = $this->oDao->getObjectActiv2($pars)['Anzahl_freigegeben_Objekte'];
-            $inact = $this->oDao->getObjectInActiv2($pars)['Anzahl_nicht_freigegeben_Objekte'];
+            $pars = ['geschaeftsstelle_id' => $geschaeftsstelle_id];
+            $total = $this->oDao->getObjectTotalByRegion($pars)['Anzah_Gesamtl_Objekte'];
+            $activ = $this->oDao->getObjectActivByRegion($pars)['Anzahl_freigegeben_Objekte'];
+            $inact = $this->oDao->getObjectInActivByRegion($pars)['Anzahl_nicht_freigegeben_Objekte'];
         }
 
         return ['total'=>$total, 'activ'=>$activ, 'inact'=>$inact];
     }
 
-    public function getDonutData(int $geschaeftsstelle_id) {
+    public function statisticObjectDonut(int $geschaeftsstelle_id) {
 
         $rs = $this->statisticObject($geschaeftsstelle_id);
 
@@ -187,7 +175,7 @@ class StatisticService
         return $donutData;
     }
 
-    public function getAreaData(int $geschaeftsstelle_id) {
+    public function statisticObjectArea(int $geschaeftsstelle_id) {
 
         $rs = $this->statisticObject($geschaeftsstelle_id);
 
@@ -301,7 +289,7 @@ class StatisticService
         return $sum;
     }
 
-    public function getLineDataData(int $geschaeftsstelle_id) {
+    public function statisticRequestLine(int $geschaeftsstelle_id) {
         // get total array
         $total = $this->objectRequestLast12Months();
         // store in tempore
@@ -311,7 +299,7 @@ class StatisticService
         return $lineData;
     }
 
-    public function getLineDataData2(int $geschaeftsstelle_id) {
+    public function statisticRequestLine2(int $geschaeftsstelle_id) {
         $lineData = $this->objectRequestLineData($geschaeftsstelle_id);
         return $lineData;
     }
