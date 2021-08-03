@@ -89,13 +89,7 @@ class StatisticController extends AbstractController
         $geschaeftsstelle_id = $gsid;
 
         if ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
-            $rows1 = $this->sDao->getActivMakler([
-                'geschaeftsstelle_id' => 1
-            ]);
-            $rows2 = $this->sDao->getActivMakler([
-                'geschaeftsstelle_id' => 2
-            ]);
-            $rows = array_merge($rows1, $rows2);
+            $rows = $this->sDao->getActivMakler2();
         } else {
             $rows = $this->sDao->getActivMakler([
                 'geschaeftsstelle_id' => $geschaeftsstelle_id
@@ -126,13 +120,7 @@ class StatisticController extends AbstractController
         $geschaeftsstelle_id = $gsid;
 
         if ($geschaeftsstelle_id == 1 || $geschaeftsstelle_id == 2) {
-            $rows1 = $this->sDao->getInActivMakler([
-                'geschaeftsstelle_id' => 1
-            ]);
-            $rows2 = $this->sDao->getInActivMakler([
-                'geschaeftsstelle_id' => 2
-            ]);
-            $rows = array_merge($rows1, $rows2);
+            $rows = $this->sDao->getInActivMakler2();
         } else {
             $rows = $this->sDao->getInActivMakler([
                 'geschaeftsstelle_id' => $geschaeftsstelle_id

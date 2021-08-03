@@ -89,8 +89,16 @@ class StatisticDao extends UserDao {
     public function getActivMakler(iterable $values=[]){
         $sql = "SELECT makler.user_id, makler.vorname, makler.name, makler.firma, makler.strasse, makler.plz, makler.ort, makler.email, makler.telefon
                 FROM user_makler makler
-                LEFT JOIN (SELECT * FROM objekt_master GROUP BY user_id) AS ob ON makler.user_id = ob.user_id
-                WHERE ob.user_id IS NOT NULL AND makler.geschaeftsstelle_id=:geschaeftsstelle_id";
+                INNER JOIN (SELECT * FROM objekt_master GROUP BY user_id) AS ob ON makler.user_id = ob.user_id
+                WHERE makler.geschaeftsstelle_id=:geschaeftsstelle_id";
+        return $this->doQuery($sql, $values)->fetchAll();
+    }
+
+    public function getActivMakler2(iterable $values=[]){
+        $sql = "SELECT makler.user_id, makler.vorname, makler.name, makler.firma, makler.strasse, makler.plz, makler.ort, makler.email, makler.telefon
+                FROM user_makler makler
+                INNER JOIN (SELECT * FROM objekt_master GROUP BY user_id) AS ob ON makler.user_id = ob.user_id
+                WHERE makler.geschaeftsstelle_id=1 OR makler.geschaeftsstelle_id=2";
         return $this->doQuery($sql, $values)->fetchAll();
     }
 
@@ -99,6 +107,14 @@ class StatisticDao extends UserDao {
                 FROM user_makler makler
                 LEFT JOIN (SELECT * FROM objekt_master GROUP BY user_id) AS ob ON makler.user_id = ob.user_id
                 WHERE ob.user_id IS NULL AND makler.geschaeftsstelle_id=:geschaeftsstelle_id";
+        return $this->doQuery($sql, $values)->fetchAll();
+    }
+
+    public function getInActivMakler2(iterable $values=[]){
+        $sql = "SELECT makler.user_id, makler.vorname, makler.name, makler.firma, makler.strasse, makler.plz, makler.ort, makler.email, makler.telefon
+                FROM user_makler makler
+                LEFT JOIN (SELECT * FROM objekt_master GROUP BY user_id) AS ob ON makler.user_id = ob.user_id
+                WHERE ob.user_id IS NULL AND (makler.geschaeftsstelle_id=1 OR makler.geschaeftsstelle_id=2)";
         return $this->doQuery($sql, $values)->fetchAll();
     }
 
