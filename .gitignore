@@ -9,6 +9,7 @@
 /public/bundles/
 /var/
 /vendor/
+/zipfiles/temp.json
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
