@@ -79,19 +79,6 @@
 
                         {% if is_granted("ROLE_SUPPORT") %}
 
-                        <li class="treeview {% if route_name in ["makler_new", "makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit", "makler_delete_list", "makler_delete"] %}active{% endif %}">
-                            <a href="#">
-                                <i class="fa fa-edit"></i> 
-                                <span>Maklerverwaltung</span>
-                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li {% if route_name == "makler_new" %} class="active"{% endif %}><a href="{{ path('makler_new') }}"><i class="fa fa-circle-o"></i>Makler hinzufügen</a></li>
-		                        <li {% if route_name in ["makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit"]  %} class="active"{% endif %}><a href="{{ path('makler_list') }}"><i class="fa fa-circle-o"></i>Makler bearbeiten</a></li>
-		                        <li {% if route_name in ["makler_delete_list", "makler_delete"]  %} class="active"{% endif %}><a href="{{ path('makler_delete_list') }}"><i class="fa fa-circle-o"></i>Makler löschen</a></li>
-                            </ul>
-                        </li>
-
                         <li class="treeview {% if route_name in ["interessent_list", "interessent_edit", "interessent_pw_edit", "interessent_delete_list", "interessent_delete"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-edit"></i> 
@@ -104,6 +91,19 @@
                             </ul>
                         </li>
 
+                        <li class="treeview {% if route_name in ["makler_new", "makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit", "makler_delete_list", "makler_delete"] %}active{% endif %}">
+                            <a href="#">
+                                <i class="fa fa-edit"></i> 
+                                <span>Maklerverwaltung</span>
+                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if route_name == "makler_new" %} class="active"{% endif %}><a href="{{ path('makler_new') }}"><i class="fa fa-circle-o"></i>Makler anlegen</a></li>
+		                        <li {% if route_name in ["makler_list", "makler_edit", "makler_ftp_edit", "makler_pw_edit"]  %} class="active"{% endif %}><a href="{{ path('makler_list') }}"><i class="fa fa-circle-o"></i>Makler bearbeiten</a></li>
+		                        <li {% if route_name in ["makler_delete_list", "makler_delete"]  %} class="active"{% endif %}><a href="{{ path('makler_delete_list') }}"><i class="fa fa-circle-o"></i>Makler löschen</a></li>
+                            </ul>
+                        </li>
+
                         <li class="treeview {% if route_name in ["bcuser_list", "bcuser_edit", "bcuser_delete_list", "bcuser_delete", "notbcuser_list"] %}active{% endif %}">
                             <a href="#">
                                 <i class="fa fa-edit"></i> 
@@ -113,7 +113,7 @@
                             <ul class="treeview-menu">
                                 <li {% if route_name in ["bcuser_list", "bcuser_edit"] %} class="active"{% endif %}><a href="{{ path('bcuser_list') }}"><i class="fa fa-circle-o"></i>BcUser bearbeiten</a></li>
                                 <li {% if route_name in ["bcuser_delete_list", "bcuser_delete"] %} class="active"{% endif %}><a href="{{ path('bcuser_delete_list') }}"><i class="fa fa-circle-o"></i>BcUser löschen</a></li>
-                                <li {% if route_name in ["notbcuser_list"] %} class="active"{% endif %}><a href="{{ path('notbcuser_list') }}"><i class="fa fa-circle-o"></i>Nicht-BcUser List</a></li>
+                                <li {% if route_name in ["notbcuser_list"] %} class="active"{% endif %}><a href="{{ path('notbcuser_list') }}"><i class="fa fa-circle-o"></i>Nicht-BcUser Liste</a></li>
                             </ul>
                         </li>
 
@@ -137,9 +137,9 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li {% if route_name in ["stock_statistic"] %} class="active"{% endif %}><a href="{{ path('stock_statistic') }}"><i class="fa fa-circle-o"></i>Statistic</a></li>
-                                <li {% if route_name in ["stock_shareholders"] %} class="active"{% endif %}><a href="{{ path('stock_shareholders') }}"><i class="fa fa-circle-o"></i>Aktionäre List</a></li>
+                                <li {% if route_name in ["stock_shareholders"] %} class="active"{% endif %}><a href="{{ path('stock_shareholders') }}"><i class="fa fa-circle-o"></i>Aktionäre Liste</a></li>
                                 <li {% if route_name in ["stock_notverified", "stock_verify"] %} class="active"{% endif %}><a href="{{ path('stock_notverified') }}"><i class="fa fa-circle-o"></i>Aktienkäufe verifizieren</a></li>
-                                <li {% if route_name in ["stock_notshareholders"] %} class="active"{% endif %}><a href="{{ path('stock_notshareholders') }}"><i class="fa fa-circle-o"></i>Nicht-Aktionäre List</a></li>
+                                <li {% if route_name in ["stock_notshareholders"] %} class="active"{% endif %}><a href="{{ path('stock_notshareholders') }}"><i class="fa fa-circle-o"></i>Nicht-Aktionäre Liste</a></li>
                                 <li {% if route_name in ["stock_generalmeeting"] %} class="active"{% endif %}><a href="{{ path('stock_generalmeeting') }}"><i class="fa fa-circle-o"></i>Hauptversammlung</a></li>
                             </ul>
                         </li>
@@ -150,13 +150,13 @@
                         <li class="treeview {% if route_name in ["supporter_new", "supporter_list", "supporter_edit", "supporter_delete", "statisticuser_new", "statisticuser_list", "statisticuser_edit", "statisticuser_delete"] %}active{% endif %}">
                             <a href="#">
                             <i class="fa fa-edit"></i>
-                            <span>Admin Elements</span>
+                            <span>Admin Elemente</span>
                             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if route_name == "supporter_new" %} class="active"{% endif %}><a href="{{ path('supporter_new') }}"><i class="fa fa-circle-o"></i>Supporter hinzufügen</a></li>
+                                <li {% if route_name == "supporter_new" %} class="active"{% endif %}><a href="{{ path('supporter_new') }}"><i class="fa fa-circle-o"></i>Supporter anlegen</a></li>
                                 <li {% if route_name in ["supporter_list", "supporter_edit", "supporter_delete"] %} class="active"{% endif %}><a href="{{ path('supporter_list') }}"><i class="fa fa-circle-o"></i>Supporter bearbeiten</a></li>
-                                <li {% if route_name == "statisticuser_new" %} class="active"{% endif %}><a href="{{ path('statisticuser_new') }}"><i class="fa fa-circle-o"></i>StatisticUser hinzufügen</a></li>
+                                <li {% if route_name == "statisticuser_new" %} class="active"{% endif %}><a href="{{ path('statisticuser_new') }}"><i class="fa fa-circle-o"></i>StatisticUser anlegen</a></li>
                                 <li {% if route_name in ["statisticuser_list", "statisticuser_edit", "statisticuser_delete"] %} class="active"{% endif %}><a href="{{ path('statisticuser_list') }}"><i class="fa fa-circle-o"></i>StatisticUser bearbeiten</a></li>
                             </ul>
                         </li>
