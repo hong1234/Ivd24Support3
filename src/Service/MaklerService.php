@@ -343,20 +343,20 @@ class MaklerService
             $row2[] = $row['reg_date'];
             $row2[] = $row['last_login'];
             
-            $links = "<a id='".$row['userId']."' onclick='moreInfo(this, ".$row['userId'].")'>Weitere Infos</a><br>------------------------<br>";
-            $links = $links."<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</a><br>------------------------<br>";
-            $links = $links."<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br>------------------------<br>";
-            $links = $links."<a href=".$this->router->generate('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br>------------------------<br>";
+            $links = "<a class='m-link-button' id='".$row['userId']."' onclick='moreInfo(this, ".$row['userId'].")'>Weitere Infos</a><br><br>";
+            $links = $links."<a class='m-link-button' href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Daten bearbeiten</a><br><br>";
+            $links = $links."<a class='m-link-button' href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">FTP-Passwort bearbeiten</a><br><br>";
+            $links = $links."<a class='m-link-button' href=".$this->router->generate('makler_pw_edit', array('uid' => $row['userId'])).">Passwort bearbeiten</a><br><br>";
             if($row['gesperrt'] == 1){
-                $links = $links."<a href=".$this->router->generate('makler_unlock', array('uid' => $row['userId'])).">Account entsperren</a><br>------------------------<br>";
+                $links = $links."<a class='m-link-button' href=".$this->router->generate('makler_unlock', array('uid' => $row['userId'])).">Account entsperren</a><br><br>";
             } else {
-                $links = $links."<a href=".$this->router->generate('makler_lock', array('uid' => $row['userId'])).">Account sperren</a><br>------------------------<br>";
+                $links = $links."<a class='m-link-button' href=".$this->router->generate('makler_lock', array('uid' => $row['userId'])).">Account sperren</a><br><br>";
             }
             if($row['loeschung'] == 0){
-                $links = $links."<a class='into_delete-list' href=".$this->router->generate('makler_into_delete', array('uid' => $row['userId'])).">In Delete-List schieben</a><br>------------------------<br>";
+                $links = $links."<a class='m-link-button' class='into_delete-list' href=".$this->router->generate('makler_into_delete', array('uid' => $row['userId'])).">In Delete-List schieben</a><br><br>";
             }
 
-            $links = $links."<a href='https://ivd24immobilien.de/wp-admin/admin.php?page=ivd24Admin_show&id=".$row['userId']."&art=5' target='_blank'>Login als Makler</a><br>";
+            $links = $links."<a class='m-link-button' href='https://ivd24immobilien.de/wp-admin/admin.php?page=ivd24Admin_show&id=".$row['userId']."&art=5' target='_blank'>Login als Makler</a><br>";
             
             $row2[] = $links;
 
