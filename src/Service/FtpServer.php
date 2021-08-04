@@ -80,26 +80,26 @@ class FtpServer
         return $rows;
     }
 
-    public function linksToFilesOnFTP($user_id)
-    {
+    public function linksToFilesOnFTP($user_id){
         $links  = "";
         $links2 = "";
         $file_list = $this->getFilesOnFTP($user_id);
         
         if($file_list !=null && count($file_list)>0){
+            $links  = "Download-links:<br>";
+            $links2 = "Delete-links:<br>";
             $co = 0;
             foreach($file_list as $item) {
                 $co++;
                 if($co > 30) break;
-                $links = $links."<a style='color:blue;' href=".$this->router->generate('server_download_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">Download- $item</a><br>";
-                $links2 = $links2."<a style='color:red;' onclick='showConfirm(event)' href=".$this->router->generate('server_delete_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">Delete- $item</a><br>";
+                $links = $links."<a style='color:blue;' href=".$this->router->generate('server_download_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">$item</a><br>";
+                $links2 = $links2."<a style='color:red;' onclick='showConfirm(event)' href=".$this->router->generate('server_delete_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">$item</a><br>";
             }
         } 
         return [$links, $links2];
     }
 
-    public function getFilesOnFTP($user_id)
-    {
+    public function getFilesOnFTP($user_id){
         $file_list = [];
         $conn_id = $this->getConnectToFtpServer($user_id);
         if(!$conn_id){
@@ -151,9 +151,9 @@ class FtpServer
             'user_id' => $user_id
         ]);
 
-        $ftp_server     = $makler_server['hostname'];        // 'hostname' =>  'ftp001.ivd24immobilien.de' 
-        $ftp_user_name  = $makler_server['ftp_benutzer'];    // 'ftp_benutzer' =>  'f00210071'  => /home/ftpuser/f00210071 = zip-files depot von user "f00210071"
-        $ftp_user_pass  = $makler_server['ftp_passwort'];
+        $ftp_server    = $makler_server['hostname'];        // 'hostname' =>  'ftp001.ivd24immobilien.de' 
+        $ftp_user_name = $makler_server['ftp_benutzer'];    // 'ftp_benutzer' =>  'f00210071'  => /home/ftpuser/f00210071 = zip-files depot von user "f00210071"
+        $ftp_user_pass = $makler_server['ftp_passwort'];
 
         $conn_id = false;
 
