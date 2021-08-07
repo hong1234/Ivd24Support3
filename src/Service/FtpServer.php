@@ -92,8 +92,8 @@ class FtpServer
             foreach($file_list as $item) {
                 $co++;
                 if($co > 30) break;
-                $links = $links."<a style='color:blue;' href=".$this->router->generate('server_download_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">$item</a><br>";
-                $links2 = $links2."<a style='color:red;' onclick='showConfirm(event)' href=".$this->router->generate('server_delete_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">$item</a><br>";
+                $links = $links."<a class='small' style='color:blue;' href=".$this->router->generate('server_download_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">$item</a><br>";
+                $links2 = $links2."<a class='small' style='color:red;' onclick='showConfirm(event)' href=".$this->router->generate('server_delete_file', array('uid' => $user_id, 'file' => str_replace(".","HH1z2Z7",$item))).">$item</a><br>";
             }
         } 
         return [$links, $links2];
