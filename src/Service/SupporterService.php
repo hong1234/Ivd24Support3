@@ -28,8 +28,8 @@ class SupporterService
         $passwort = $safePost->get('passwort');
         $roles    = ['ROLE_SUPPORT'];
 
-        $em = $this->uDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->uDao->dbConnection();
+        $conn->beginTransaction();
         try {    
             $this->uDao->insertAccountForSupporter([
                 'art_id'          => '4',
@@ -45,7 +45,7 @@ class SupporterService
                 'newsletter'      => 'N'   
             ]);
     
-            $user_id = $em->getConnection()->lastInsertId();
+            $user_id = $conn->lastInsertId();
             
             $this->loginDao->addLoginUser($email, $passwort, $roles, $user_id);
             
@@ -55,9 +55,9 @@ class SupporterService
                 'passwort'  => $passwort
             ]);
 
-            $em->getConnection()->commit();   
+            $conn->commit();   
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
         
@@ -70,8 +70,8 @@ class SupporterService
         $passwort = $safePost->get('passwort');
         $roles = ['ROLE_SUPPORT'];
             
-        $em = $this->uDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->uDao->dbConnection();
+        $conn->beginTransaction();
         try {
             $this->uDao->updateSupportUser([
                 'username' => $username,
@@ -88,17 +88,17 @@ class SupporterService
                 'passwort' => $passwort
             ]);
 
-            $em->getConnection()->commit();   
+            $conn->commit();   
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
     }
 
     public function deleteSupporter($user_id) {
 
-        $em = $this->uDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->uDao->dbConnection();
+        $conn->beginTransaction();
         try {
             $this->uDao->deleteSupporter([
                 'user_id' => $user_id
@@ -106,9 +106,9 @@ class SupporterService
 
             $this->loginDao->deleteLoginUser($user_id);
              
-            $em->getConnection()->commit();   
+            $conn->commit();   
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
     }

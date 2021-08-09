@@ -1,19 +1,49 @@
 <?php
 namespace App\Dao;
 
-use Doctrine\ORM\EntityManagerInterface;
+// use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Driver\Connection;
 //use App\Location\Entity\Result;
 
 class BaseDao {
     
-    public $em;// $em->getConnection() => Doctrine\DBAL\Connection
+    // public $em;// $em->getConnection() => Doctrine\DBAL\Connection
 
-    public function __construct(EntityManagerInterface $em) {
-        $this->em = $em;
+    // public function __construct(EntityManagerInterface $em) {
+    //     $this->em = $em;
+    // }
+
+    // public function doQuery($sql, $values){
+    //     $stmt = $this->em->getConnection()->prepare($sql);  // Doctrine\DBAL\Statement
+    //     if(!$stmt->execute($values)) {
+    //         //throw new \Exception("DoQuery faild!"); 
+    //     }  
+    //     return $stmt;
+    //     //return $stmt->fetchAll(); $stmt->fetch();
+    // }
+
+    // public function doSQL($sql, $values){
+    //     $stmt = $this->em->getConnection()->prepare($sql);
+    //     if(!$stmt->execute($values)){
+    //         //throw new \Exception("DoSQL faild!");
+    //     } 
+    //     return true;
+    // }
+
+    // public function getEm(){
+    //     return $this->em;
+    // }
+
+    //---------------
+
+    private $connection;
+
+    public function __construct(Connection $connection) {
+        $this->connection = $connection;
     }
 
     public function doQuery($sql, $values){
-        $stmt = $this->em->getConnection()->prepare($sql);  // Doctrine\DBAL\Statement
+        $stmt = $this->connection->prepare($sql);  // Doctrine\DBAL\Statement
         if(!$stmt->execute($values)) {
             //throw new \Exception("DoQuery faild!"); 
         }  
@@ -22,15 +52,15 @@ class BaseDao {
     }
 
     public function doSQL($sql, $values){
-        $stmt = $this->em->getConnection()->prepare($sql);
+        $stmt = $this->connection->prepare($sql);
         if(!$stmt->execute($values)){
             //throw new \Exception("DoSQL faild!");
         } 
         return true;
     }
 
-    public function getEm(){
-        return $this->em;
+    public function dbConnection(){
+        return $this->connection;
     }
 
     //---------------

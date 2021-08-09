@@ -37,8 +37,8 @@ class StatisticUserService
         $geschaeftsstelle = $this->geschaeftsstelleName($gs_id);
         $roles = ['ROLE_STATISTIC'];
 
-        $em = $this->uDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->uDao->dbConnection();
+        $conn->beginTransaction();
         try {
             $this->uDao->insertAccountForStatisticUser([
                 'art_id'               =>  '4',
@@ -54,7 +54,7 @@ class StatisticUserService
                 'newsletter'           =>  'N'             // newsletter = 'N'
             ]);  
 
-            $user_id = $em->getConnection()->lastInsertId();
+            $user_id = $conn->lastInsertId();
             
             $this->loginDao->addLoginUser($email, $passwort, $roles, $user_id);
     
@@ -65,9 +65,9 @@ class StatisticUserService
                 'geschaeftsstelle' => $geschaeftsstelle
             ]);
     
-            $em->getConnection()->commit();   
+            $conn->commit();   
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
                 throw $e;
         }
     }
@@ -81,8 +81,8 @@ class StatisticUserService
         $geschaeftsstelle = $this->geschaeftsstelleName($gs_id);
         $roles = ['ROLE_STATISTIC'];
 
-        $em = $this->uDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->uDao->dbConnection();
+        $conn->beginTransaction();
         try {
             $this->uDao->updateStatisticUser([
                 'username'             => $username,
@@ -101,17 +101,17 @@ class StatisticUserService
                 'geschaeftsstelle' => $geschaeftsstelle
             ]);
              
-            $em->getConnection()->commit();   
+            $conn->commit();   
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
     }
 
     public function deleteStatisticUser($user_id) {
 
-        $em = $this->uDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->uDao->dbConnection();
+        $conn->beginTransaction();
         try {
             $this->uDao->deleteStatisticUser([
                 'user_id' => $user_id
@@ -119,9 +119,9 @@ class StatisticUserService
 
             $this->loginDao->deleteLoginUser($user_id);
              
-            $em->getConnection()->commit();   
+            $conn->commit();   
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
     }

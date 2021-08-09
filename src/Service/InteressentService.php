@@ -39,8 +39,8 @@ class InteressentService
         $homepage    = $safePost->get('homepage');
 		$mobil       = $safePost->get('mobil');
 
-        $em = $this->iDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->iDao->dbConnection();
+        $conn->beginTransaction();
         try {
 
             $this->iDao->updateUserAccountEmail([
@@ -66,25 +66,25 @@ class InteressentService
                 'user_id'     => $user_id
             ]);
 
-            $em->getConnection()->commit();     
+            $conn->commit();     
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
     }
 
     public function interessentDelete($user_id){
 
-        $em = $this->iDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->iDao->dbConnection();
+        $conn->beginTransaction();
         try {
 		    $this->iDao->deleteInteressent([
 			    'user_id' => $user_id
 		    ]);
 
-		    $em->getConnection()->commit();     
+		    $conn->commit();     
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
     }

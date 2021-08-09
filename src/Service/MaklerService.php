@@ -85,8 +85,8 @@ class MaklerService
         //---------
         $ftppasswortcrypt = $this->fmService->getPwCrypt($ftppasswort);
 
-        $em = $this->mDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->mDao->dbConnection();
+        $conn->beginTransaction();
         try {
 
             $this->mDao->insertAccountForMakler([
@@ -97,7 +97,7 @@ class MaklerService
                 //'passwort' => $passwort
             ]);
 
-            $user_id = $em->getConnection()->lastInsertId();
+            $user_id = $conn->lastInsertId();
 
             $userMaklerConfig = $this->userMaklerConfig($geschaeftsstelle_id, $user_id);
     
@@ -150,9 +150,9 @@ class MaklerService
                 'passwort' => $passwort
             ]);
             
-            $em->getConnection()->commit();     
+            $conn->commit();     
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
 
@@ -178,8 +178,8 @@ class MaklerService
         $homepage = $safePost->get('homepage');
         $mobil    = $safePost->get('mobil');
         
-        $em = $this->mDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->mDao->dbConnection();
+        $conn->beginTransaction();
         try {
 
             $this->mDao->updateUserAccountEmail([
@@ -205,9 +205,9 @@ class MaklerService
                 'user_id'  => $user_id
             ]);
          
-            $em->getConnection()->commit();     
+            $conn->commit();     
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
     }
@@ -224,8 +224,8 @@ class MaklerService
         $ftppasswort  = $safePost->get('ftppasswort');
         $crypt_ftppasswort = $this->fmService->getPwCrypt($ftppasswort);
 
-        $em = $this->mDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->mDao->dbConnection();
+        $conn->beginTransaction();
         try {
 
             $this->mDao->updateUserMaklerConfig([
@@ -243,9 +243,9 @@ class MaklerService
                 'passwort' => $ftppasswort
             ]);
 
-            $em->getConnection()->commit();
+            $conn->commit();
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
     }
@@ -259,8 +259,8 @@ class MaklerService
 
         $passwort = $safePost->get('passwort');
 
-        $em = $this->mDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->mDao->dbConnection();
+        $conn->beginTransaction();
         try {
 
             $this->mDao->updateUserAccountPW([
@@ -273,9 +273,9 @@ class MaklerService
                 'passwort' => $passwort
             ]);
 
-            $em->getConnection()->commit();
+            $conn->commit();
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         }
     }
@@ -303,8 +303,8 @@ class MaklerService
     public function deleteMakler($user_id) {
 
         $stmt = $this->mDao->getObjectsByUserId(['user_id' => $user_id]);
-        $em = $this->mDao->getEm();
-        $em->getConnection()->beginTransaction();
+        $conn = $this->mDao->dbConnection();
+        $conn->beginTransaction();
         try {
             //$this->insertUserDelete($user_id);
 
@@ -315,9 +315,9 @@ class MaklerService
 
             $this->mDao->deleteAllByUserId(['user_id' => $user_id]);
          
-            $em->getConnection()->commit();     
+            $conn->commit();     
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
+            $conn->rollBack();
             throw $e;
         } 
     }
