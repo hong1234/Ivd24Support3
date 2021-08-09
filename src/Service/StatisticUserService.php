@@ -43,7 +43,7 @@ class StatisticUserService
             $this->uDao->insertAccountForStatisticUser([
                 'art_id'               =>  '4',
                 'recht_id'             =>  '8',
-                'geschaeftsstellen_id' =>  $gs_id,         //Geschaeftsstellen_id 
+                'geschaeftsstellen_id' =>  $gs_id,        
                 'kennwort'             =>  md5($passwort), 
                 'username'             =>  $username,      
                 'email'                =>  $email,         
