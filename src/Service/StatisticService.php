@@ -108,11 +108,12 @@ class StatisticService
         
         $rows = array();
         $i = 0;
-        $az1 = count($rows1);
-        while ($i < $az1) {
+        $az = count($rows1);
+        while ($i < $az) {
             
             $a = $rows1[$i];
-            $b = $rows2[$i];
+            // $b = $rows2[$i];
+            $b = isset($rows2[$i]) ? $rows2[$i] : ['count_makler_with_aktive_objectdata' => 0];
 
             $row = [
                 'name' => $a['name'],
@@ -277,10 +278,12 @@ class StatisticService
             $geschaeftsstelle_name = $this->getRegionName($geschaeftsstelle_id);
             $az2 = count($total);
             for ($i = 0; $i < $az2; $i++) {
+                $req_az = isset($region[$i]) ? $region[$i]['req_az'] : 0;
                 $temp = [
                     'day' => $total[$i]['time_span'],
                     'gesamt' => $total[$i]['req_az'],
-                    $geschaeftsstelle_name => $region[$i]['req_az']
+                    // $geschaeftsstelle_name => $region[$i]['req_az']
+                    $geschaeftsstelle_name => $req_az
                 ];
                 $sum[] = $temp;
             }
