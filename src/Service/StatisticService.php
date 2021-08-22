@@ -250,6 +250,10 @@ class StatisticService
             $geschaeftsstelle_name = 'Ivd-West';
         } elseif($geschaeftsstelle_id==8){
             $geschaeftsstelle_name = 'Ivd-Mitte';
+        } elseif($geschaeftsstelle_id==9){
+            $geschaeftsstelle_name = 'Sonstige';
+        } elseif($geschaeftsstelle_id==10){
+            $geschaeftsstelle_name = 'Ivd-Bund';
         }
         return $geschaeftsstelle_name;
     }
