@@ -27,7 +27,7 @@
         {% for row in rows %}
           {% if row.geschaeftsstelle_id != 6 and row.geschaeftsstelle_id != 9 %}
             <div class="col-lg-3 col-xs-6">
-	            <div class="small-box {{CssArray[loop.index % 6]}}">
+	            <div class="small-box {{CssArray[loop.index % 4]}}">
                 <div class="inner">
                   <h3>{{ row.count_makler_on_regional_office|e }}</h3>
                   <h5>Mitglieder <b>{{ row.name|e }}</b></h5>

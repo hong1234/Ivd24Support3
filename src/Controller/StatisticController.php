@@ -77,7 +77,7 @@ class StatisticController extends AbstractController
             'lineData'  => $lineData,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
             'geschaeftsstelle_name' => $geschaeftsstelle_name,
-            'CssArray'  => ["bg-aqua", "bg-green", "bg-yellow", "bg-red", "bg-blue"]
+            'CssArray'  => ["bg-purple", "bg-green", "bg-yellow", "bg-aqua"]
         ]);
     }
 
