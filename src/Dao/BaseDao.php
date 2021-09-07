@@ -3,7 +3,7 @@ namespace App\Dao;
 
 // use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Driver\Connection;
-//use App\Location\Entity\Result;
+use App\Entity\Result;
 
 class BaseDao {
     
@@ -48,7 +48,21 @@ class BaseDao {
             //throw new \Exception("DoQuery faild!"); 
         }  
         return $stmt;
-        //return $stmt->fetchAll(); $stmt->fetch();
+        // $stmt->fetch();
+        // return $stmt->fetchAll(); 
+    }
+
+    public function doQueryObj($sql, $values){
+        $stmt = $this->connection->prepare($sql);
+        if(!$stmt->execute($values)){
+            // throw new \Exception("Query faild!");
+        } 
+
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, Result::class);
+        
+        return $stmt;
+        //return $stmt->fetch(); 
+        //return $stmt->fetchAll();
     }
 
     public function doSQL($sql, $values){

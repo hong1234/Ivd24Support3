@@ -10,6 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 // use App\Service\MaklerService;
 use App\Service\StatisticService;
 
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Knp\Snappy\Pdf;
+
+use App\Dao\GeoDao;
+
+
 /**
  *
  * @Route(path="")
@@ -43,6 +49,60 @@ class DefaultController extends AbstractController
         $rs = $stService->objectRequestLast12Months();
 
         var_dump($rs); exit;
+        // return $this->render('default/test.html.twig', [
+        //     'bildpfad' => $bildpfad,
+        //     'ftppfad' => $ftppfad,
+        //     'bildserver' => $bildserver,
+        //     'ftpserver' => $ftpserver
+        // ]);
+    }
+
+    /**
+     * @Route("/geo", name="default_geo")
+     */
+    public function geoTest(GeoDao $geoDao)
+    {
+        $rs = $geoDao->getBundeslandByPLZobj([
+            'plz' => 80636
+        ]);
+
+        var_dump($rs); 
+        exit;
+        // return $this->render('default/test.html.twig', [
+        //     'bildpfad' => $bildpfad,
+        //     'ftppfad' => $ftppfad,
+        //     'bildserver' => $bildserver,
+        //     'ftpserver' => $ftpserver
+        // ]);
+    }
+
+    /**
+     * @Route("/pdf", name="default_pdf")
+     */
+    public function pdfAction(Pdf $knpSnappyPdf)
+    {
+        $html = $this->renderView('default/test2.html.twig', array(
+            'random'  => 1234
+        ));
+
+        return new PdfResponse(
+            $knpSnappyPdf->getOutputFromHtml($html),
+            'file.pdf'
+        );
+    }
+
+    /**
+     * @Route("/distance", name="default_distance")
+     */
+    public function distanceTest(GeoDao $geoDao)
+    {
+        $rs = $geoDao->getMaklerByDistanceKm([
+            'latitude' => '48.145067',
+            'longitude' => '11.5605772'
+        ]);
+
+        var_dump($rs); 
+        exit;
         // return $this->render('default/test.html.twig', [
         //     'bildpfad' => $bildpfad,
         //     'ftppfad' => $ftppfad,
