@@ -226,7 +226,7 @@ class StockService
         ]);
 
         while ($row = $stmt->fetch()) {
-            $this->addToSendQueue($betreff, $hauptversammlung_id,  $template_id, $row);
+            $this->doInvite($betreff, $hauptversammlung_id,  $template_id, $row);
         }
 
         $stmt = $this->stockDao->getAktionaerToInvite2([
@@ -235,12 +235,12 @@ class StockService
         ]);
 
         while ($row = $stmt->fetch()) {
-            $this->addToSendQueue2($betreff, $hauptversammlung_id, $template_id, $row);
+            $this->doInvite2($betreff, $hauptversammlung_id, $template_id, $row);
         }
 
     }
 
-    public function addToSendQueue($betreff, $hauptversammlung_id, $template_id, $row){
+    public function doInvite($betreff, $hauptversammlung_id, $template_id, $row){
 
         $user_id = $row->user_id;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
@@ -262,7 +262,7 @@ class StockService
         ]);
     }
 
-    public function addToSendQueue2($betreff, $hauptversammlung_id, $template_id, $row){
+    public function doInvite2($betreff, $hauptversammlung_id, $template_id, $row){
         // $user_id = NULL;
         // $region = $row->region;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
