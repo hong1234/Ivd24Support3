@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New StatisticUser{% endblock %}
+{% block title %}Email an Aktionär{% endblock %}
 
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <section class="content-header">
-        <h1>Einladung an Aktionäre versenden</h1>
+        <h1>Email(z.B Einladung) an Aktionäre versenden</h1>
         {% if error|length %}
           <div class="alert alert-danger" role="alert">
             {{error}}
@@ -43,7 +43,7 @@
                         History:<br>
                     </div>
                 </div>
-			    <div class="box-footer">
+			          <div class="box-footer">
                     <button type="submit" class="btn btn-primary" name="savebutton" value="true">Einladung versenden</button>
                 </div>
                 <!-- /.box-body -->
