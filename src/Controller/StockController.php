@@ -4,11 +4,11 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-// use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 use App\Service\StockService;
 
 use App\Dao\StockDao;
+use App\Dao\UserDao;
 
 /**
  *
@@ -18,9 +18,11 @@ class StockController extends AbstractController
 {
     private $stockService;
     private $stockDao;
+    private $uDao;
    
-    public function __construct(StockDao $stockDao, StockService $stockService)
+    public function __construct(UserDao $uDao, StockDao $stockDao, StockService $stockService)
     {
+        $this->uDao = $uDao;
         $this->stockService = $stockService;
         $this->stockDao = $stockDao;
     }
@@ -62,17 +64,6 @@ class StockController extends AbstractController
     }
 
     /**
-     * @Route("/stock/generalmeeting", name="stock_generalmeeting")
-     */
-    public function generalMeeting()
-    {
-        // $rows = $this->stockService->shareholderList();
-        return $this->render('stock/generalmeeting.html.twig', [
-            'message' => "Opps, derzeit eine Baustelle !"
-        ]);
-    }
-
-    /**
      * @Route("/stock/notverified", name="stock_notverified")
      */
     public function notVerifiedList()
@@ -106,6 +97,74 @@ class StockController extends AbstractController
             'makler' => $makler,
             'aktien' => $aktien,
             'docs' => $docs
+        ]);
+    }
+
+    /**
+     * @Route("/stock/allmeeting", name="stock_allmeeting")
+     */
+    public function allMeeting()
+    {
+        // $rows = $this->stockService->shareholderList();
+        return $this->render('stock/allmeeting.html.twig', [
+            'message' => "Opps, all meeting !"
+        ]);
+    }
+
+    /**
+     * @Route("/stock/meeting", name="stock_meeting")
+     */
+    public function showMeeting()
+    {
+        return $this->render('stock/meeting.html.twig', [
+            'message' => "Opps, show meeting !"
+        ]);
+    }
+
+    /**
+     * @Route("/stock/meetinginvite/{hauptversammlung_id}", name="stock_meetinginvite", requirements={"hauptversammlung_id"="\d+"})
+     */
+    public function meetingInvite(int $hauptversammlung_id, Request $request)
+    {
+        $error = '';
+        $temps = $this->stockDao->getTemplatesForGeneralMeeting();
+
+        if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+            
+            //post parameters
+            $safePost = $request->request;
+
+            // var_dump( $safePost); exit;
+
+            //validation
+            // $error = $validator->isValidStatisticUserInput($safePost);
+            // $error = 'abc';
+            
+            if ($error == '') {
+
+                $this->stockService->inviteToMeeting($hauptversammlung_id, $safePost);
+
+                // return $this->redirectToRoute('stock_meetinginvite', [
+                //  'paramName' => 'value'
+                // ]);
+            } 
+
+            $betreff = $safePost->get('betreff');
+            $tempId  = $safePost->get('template');
+        }
+
+        if ($request->isMethod('GET')) {
+            $betreff = "Ladung zu Sammlung";
+            $tempId  = $temps[0]->mail_template_id;
+            $error   = '';
+        }
+
+        return $this->render('stock/meetinginvite.html.twig', [
+            'hauptversammlung_id' => $hauptversammlung_id,
+            'tempId'  => $tempId,
+            'betreff' => $betreff,
+            'temps'   => $temps,
+            'error'   => $error
         ]);
     }
 

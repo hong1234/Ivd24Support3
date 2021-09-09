@@ -4,6 +4,7 @@ knp_snappy:
         binary:     '%env(WKHTMLTOPDF_PATH)%'
         #options:    []
         options:
+            images: true
             no-outline: true
             page-size: A4
             encoding: UTF-8

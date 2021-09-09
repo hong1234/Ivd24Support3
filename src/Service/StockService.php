@@ -8,10 +8,12 @@ class StockService
 {
     private $stockDao;
     private $router;
+    private $sqService;
 
-    function __construct(StockDao $stockDao, UrlGeneratorInterface $router) {
+    function __construct(StockDao $stockDao, SendQueue $sqService, UrlGeneratorInterface $router) {
         $this->stockDao = $stockDao;
         $this->router = $router;
+        $this->sqService = $sqService;
     }
 
     public function getStockNumber() {
@@ -205,6 +207,80 @@ class StockService
             'user_id' => $user_id
         ]);
         return $rs;
+    }
+
+    //--------------
+
+    public function inviteToMeeting($hauptversammlung_id, $safePost){
+
+        $betreff     = $safePost->get('betreff');    // 'betreff' => string 'Ladung zu Sammlung' (length=18)
+        $template_id = $safePost->get('template');   // 'template' => string 'temp1' (length=5)
+        // $radioChoice = $safePost->get('radioChoice');  // 'radioChoice' => string 'yes' (length=3)
+
+        // parameters
+        // hauptversammlung_id = ? AND send_mail_template_id = ?
+
+        $stmt = $this->stockDao->getAktionaerToInvite([
+            'hauptversammlung_id' => $hauptversammlung_id,
+            'mail_template_id'    => $template_id
+        ]);
+
+        while ($row = $stmt->fetch()) {
+            $this->addToSendQueue($betreff, $hauptversammlung_id,  $template_id, $row);
+        }
+
+        $stmt = $this->stockDao->getAktionaerToInvite2([
+            'hauptversammlung_id' => $hauptversammlung_id,
+            'mail_template_id'    => $template_id
+        ]);
+
+        while ($row = $stmt->fetch()) {
+            $this->addToSendQueue2($betreff, $hauptversammlung_id, $template_id, $row);
+        }
+
+    }
+
+    public function addToSendQueue($betreff, $hauptversammlung_id, $template_id, $row){
+
+        $user_id = $row->user_id;
+        $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
+        $email = $row->email;
+        $name = $row->name;
+
+        $this->sqService->addToSendQueue2('mode1', [
+            'betreff'     => $betreff,
+            'email'       => $email,
+            'template_id' => $template_id,
+            'name'        => $name
+        ]);
+
+        $this->stockDao->insertHauptversammlungEmailCommunication([
+            'hauptversammlung_id' => $hauptversammlung_id,
+            'user_id'             => $user_id,
+            'geschaeftsstelle_id' => $geschaeftsstelle_id,
+            'mail_template_id'    => $template_id
+        ]);
+    }
+
+    public function addToSendQueue2($betreff, $hauptversammlung_id, $template_id, $row){
+        // $user_id = NULL;
+        // $region = $row->region;
+        $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
+        $email = $row->email;
+        $name  = $row->name;
+
+        $this->sqService->addToSendQueue2('mode2', [
+            'betreff'     => $betreff,
+            'email'       => $email,
+            'template_id' => $template_id,
+            'name'        => $name
+        ]);
+
+        $this->stockDao->insertHauptversammlungEmailCommunication2([
+            'hauptversammlung_id' => $hauptversammlung_id,
+            'geschaeftsstelle_id' => $geschaeftsstelle_id,
+            'mail_template_id'    => $template_id
+        ]);
     }
 
 }

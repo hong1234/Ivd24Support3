@@ -151,4 +151,63 @@ class SendQueue
 
     }
 
+    public function addToSendQueue2($mode, $data=[]) {
+
+        $username = '';
+        $email = '';
+        $betreff = '';
+        $template_id = '';
+        #$geschaeftsstelle = '';
+
+        if(isset($data['name'])){
+            $username = $data['name'];
+        }
+
+        if(isset($data['email'])){
+            $email = $data['email'];
+        }
+
+        if(isset($data['betreff'])){
+            $betreff = $data['betreff'];
+        }
+
+        if(isset($data['mail_template_id'])){
+            $template_id = $data['mail_template_id'];
+        }
+
+        $sendername      = 'IVD24Immobilien';
+        $absender_mail   = 'noreply@ivd24immobilien.de';
+        $reply_mail      = 'noreply@ivd24immobilien.de';
+        $empfaenger_name = $username;
+        $empfaenger_mail = $email;
+
+        $nachricht_plain = '';
+
+        $row = $this->bDao->getRowInTableByIdentifier('send_mail_templates', [
+            'mail_template_id' => $template_id
+        ]);
+        $nachricht_html  = $row['nachricht'];
+
+        if($mode == 'mode1'){
+            //
+        }
+
+        if($mode == 'mode2'){
+            //
+        }
+
+        $this->bDao->insertSendQueue([
+            'sendername'      => $sendername, 
+            'absender_mail'   => $absender_mail,
+            'reply_mail'      => $reply_mail,
+            'empfaenger_name' => $empfaenger_name,
+            'empfaenger_mail' => $empfaenger_mail,
+            'betreff'         => $betreff,
+            'nachricht_html'  => $nachricht_html,
+            'nachricht_plain' => $nachricht_plain,
+            'insertdate'      => time()
+        ]);
+
+    }
+
 }

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New StatisticUser{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <section class="content-header">
+        <h1>Einladung an Aktionäre versenden</h1>
+        {% if error|length %}
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        {% endif %}
+      </section>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+          {# <form action="/statisticuser/new" method="POST"> #}
+          <form action="{{ path('stock_meetinginvite', {'hauptversammlung_id': hauptversammlung_id}) }}" method="POST">
+            <div class="box box-warning">
+                {# <div class="box-header with-border">
+                    <h3 class="box-title">Statistic User</h3>
+                </div> #}
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label for="Betreff">Betreff:</label>
+                        <input type="text" class="form-control" id="betreff" name="betreff" placeholder="" value="{{betreff}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Template">Mail Template</label>
+                        <select id="template" name="template" class="form-control" required>
+                        {% for temp in temps %}
+                            <option value={{ temp.mail_template_id|e }} {% if temp.mail_template_id == tempId %} selected {% endif %}>{{ temp.titel|e }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        History:<br>
+                    </div>
+                </div>
+			    <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" name="savebutton" value="true">Einladung versenden</button>
+                </div>
+                <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </form>
+  <!-- /.content-wrapper -->
+{% endblock %}

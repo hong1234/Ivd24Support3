@@ -129,7 +129,7 @@
                             </ul>
                         </li>
 
-                        <li class="treeview {% if route_name in ["stock_statistic", "stock_shareholders", "stock_notverified", "stock_verify", "stock_notshareholders", "stock_generalmeeting"] %}active{% endif %}">
+                        <li class="treeview {% if route_name in ["stock_statistic", "stock_shareholders", "stock_notverified", "stock_verify", "stock_notshareholders", "stock_allmeeting"] %}active{% endif %}">
                             <a href="#">
                             <i class="fa fa-edit"></i>
                             <span>Aktienverwaltung</span>
@@ -140,7 +140,7 @@
                                 <li {% if route_name in ["stock_shareholders"] %} class="active"{% endif %}><a href="{{ path('stock_shareholders') }}"><i class="fa fa-circle-o"></i>Aktionäre Liste</a></li>
                                 <li {% if route_name in ["stock_notverified", "stock_verify"] %} class="active"{% endif %}><a href="{{ path('stock_notverified') }}"><i class="fa fa-circle-o"></i>Aktienkäufe verifizieren</a></li>
                                 <li {% if route_name in ["stock_notshareholders"] %} class="active"{% endif %}><a href="{{ path('stock_notshareholders') }}"><i class="fa fa-circle-o"></i>Nicht-Aktionäre Liste</a></li>
-                                <li {% if route_name in ["stock_generalmeeting"] %} class="active"{% endif %}><a href="{{ path('stock_generalmeeting') }}"><i class="fa fa-circle-o"></i>Hauptversammlung</a></li>
+                                <li {% if route_name in ["stock_allmeeting"] %} class="active"{% endif %}><a href="{{ path('stock_allmeeting') }}"><i class="fa fa-circle-o"></i>Hauptversammlung</a></li>
                             </ul>
                         </li>
 

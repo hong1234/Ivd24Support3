@@ -80,8 +80,7 @@ class BaseDao {
     //---------------
 
     public function insertSendQueue(iterable $values=[]){
-        $sql = "INSERT INTO send_queue 
-                SET 
+        $sql = "INSERT INTO send_queue SET 
                 sendername      = :sendername,
                 absender_mail   = :absender_mail,
                 reply_mail      = :reply_mail,

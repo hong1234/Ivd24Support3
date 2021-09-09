@@ -145,4 +145,70 @@ class StockDao extends BaseDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
+    //----------------------------------------------------------
+
+    public function getTemplatesForGeneralMeeting(iterable $values=[]){
+        $sql = "SELECT * FROM send_mail_templates WHERE kategorie_id = 2";
+        return $this->doQueryObj($sql, $values)->fetchAll();
+    }
+
+    // public function getAktionaerToInvite(iterable $values=[]){ // good
+    //     $sql = "SELECT aktien.user_id, aktien.user_geschaeftsstelle_id, user_makler.email
+    //             FROM aktien
+    //             LEFT JOIN user_makler ON user_makler.user_id = aktien.user_id 
+    //             WHERE aktien.user_id IS NOT NULL AND aktien.user_geschaeftsstelle_id IS NOT NULL AND aktien.purchase_verified = 1 
+    //             AND aktien.user_id NOT IN (SELECT hauptversammlung_email_communication.user_id FROM hauptversammlung_email_communication WHERE hauptversammlung_id = 1 AND send_mail_template_id = 12)
+    //             GROUP BY aktien.user_id";
+    //     return $this->doQueryObj($sql, $values);
+    // }
+
+    // public function getAktionaerToInvite2(iterable $values=[]){
+    //     $sql = "SELECT aktien.user_geschaeftsstelle_id,  user_geschaeftsstelle.region, user_geschaeftsstelle.email
+    //             FROM aktien 
+    //             LEFT JOIN user_geschaeftsstelle ON user_geschaeftsstelle.geschaeftsstelle_id = aktien.user_geschaeftsstelle_id
+    //             WHERE aktien.user_id IS NULL AND aktien.user_geschaeftsstelle_id IS NOT NULL AND aktien.purchase_verified = 1 
+    //             AND aktien.user_geschaeftsstelle_id NOT IN (SELECT hauptversammlung_email_communication.geschaeftsstelle_id FROM hauptversammlung_email_communication WHERE hauptversammlung_email_communication.user_id IS NULL AND hauptversammlung_id = 1 AND send_mail_template_id = 12)
+    //             GROUP BY aktien.user_geschaeftsstelle_id";
+    //     return $this->doQueryObj($sql, $values);
+    // }
+
+    public function getAktionaerToInvite(iterable $values=[]){ // good
+        $sql = "SELECT aktien.user_id, aktien.user_geschaeftsstelle_id, user_makler.email, user_makler.vorname, user_makler.name, user_makler.firma
+                FROM aktien
+                LEFT JOIN user_makler ON user_makler.user_id = aktien.user_id 
+                WHERE aktien.user_id IS NOT NULL AND aktien.user_geschaeftsstelle_id IS NOT NULL AND aktien.purchase_verified = 1 
+                AND aktien.user_id NOT IN (SELECT hauptversammlung_email_communication.user_id FROM hauptversammlung_email_communication WHERE hauptversammlung_id = :hauptversammlung_id AND send_mail_template_id = :mail_template_id)
+                GROUP BY aktien.user_id";
+        return $this->doQueryObj($sql, $values);
+    }
+
+    public function getAktionaerToInvite2(iterable $values=[]){
+        $sql = "SELECT aktien.user_geschaeftsstelle_id,  user_geschaeftsstelle.region, user_geschaeftsstelle.email, user_geschaeftsstelle.name
+                FROM aktien 
+                LEFT JOIN user_geschaeftsstelle ON user_geschaeftsstelle.geschaeftsstelle_id = aktien.user_geschaeftsstelle_id
+                WHERE aktien.user_id IS NULL AND aktien.user_geschaeftsstelle_id IS NOT NULL AND aktien.purchase_verified = 1 
+                AND aktien.user_geschaeftsstelle_id NOT IN (SELECT hauptversammlung_email_communication.geschaeftsstelle_id FROM hauptversammlung_email_communication WHERE hauptversammlung_email_communication.user_id IS NULL AND hauptversammlung_id = :hauptversammlung_id AND send_mail_template_id = :mail_template_id)
+                GROUP BY aktien.user_geschaeftsstelle_id";
+        return $this->doQueryObj($sql, $values);
+    }
+
+    public function insertHauptversammlungEmailCommunication(iterable $values=[]){
+        $sql = "INSERT INTO hauptversammlung_email_communication SET 
+                    hauptversammlung_id = :hauptversammlung_id,
+                    user_id = :user_id,
+                    geschaeftsstelle_id = :geschaeftsstelle_id,
+                    send_mail_template_id = :mail_template_id, 
+                    insert_date = NOW()";
+        return $this->doSQL($sql, $values);
+    }
+
+    public function insertHauptversammlungEmailCommunication2(iterable $values=[]){
+        $sql = "INSERT INTO hauptversammlung_email_communication SET 
+                    hauptversammlung_id = :hauptversammlung_id,
+                    geschaeftsstelle_id = :geschaeftsstelle_id,
+                    send_mail_template_id = :mail_template_id, 
+                    insert_date = NOW()";
+        return $this->doSQL($sql, $values);
+    }
+
 }
