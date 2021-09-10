@@ -10,11 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 // use App\Service\MaklerService;
 use App\Service\StatisticService;
 
-use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
-use Knp\Bundle\SnappyBundle\Snappy\Response\JpegResponse;
-use Knp\Snappy\Pdf;
-use Knp\Snappy\Image;
-
 use App\Dao\GeoDao;
 
 
@@ -78,47 +73,7 @@ class DefaultController extends AbstractController
         // ]);
     }
 
-    /**
-     * @Route("/pdf", name="default_pdf")
-     */
-    public function pdfAction(Pdf $knpSnappyPdf)
-    {
-        // $html = $this->renderView('default/test2.html.twig', array(
-        //     'random'  => 'Müller'
-        // ));
-
-        // echo $html; 
-        $knpSnappyPdf->generate('http://localhost:8000/abc', 'file.pdf');
-        exit;
-
-        return new PdfResponse(
-            $knpSnappyPdf->getOutputFromHtml($html, array(
-                //'page-size' => 'Letter',
-                'images' => true,
-                //'enable-javascript' => true,
-                //'javascript-delay' => 5000
-            )),
-            'file.pdf'
-        );
-    }
-
-    /**
-     * @Route("/image", name="default_image")
-     */
-    public function imageAction(Image $knpSnappyImage)
-    {
-        $html = $this->renderView('default/test2.html.twig', array(
-            'random'  => 'Müller'
-        ));
-
-        // echo $html; exit;
-
-        return new JpegResponse(
-            $knpSnappyImage->getOutputFromHtml($html),
-            'image.jpg'
-        );
-    }
-
+    
     /**
      * @Route("/distance", name="default_distance")
      */
@@ -139,14 +94,6 @@ class DefaultController extends AbstractController
         // ]);
     }
 
-    /**
-     * @Route("/abc", name="default_abc")
-     */
-    public function abcAction(Pdf $knpSnappyPdf)
-    {
-        return $this->render('default/test2.html.twig', [
-            'random'  => 1234
-        ]);
-    }
+    
 
 }
