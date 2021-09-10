@@ -6,13 +6,7 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <section class="content-header">
-
         <h1>Hauptversammlung vom {{meeting.date|date("d.m.Y")}}</h1>
-        {% if error|length %}
-          <div class="alert alert-danger" role="alert">
-            {{error}}
-          </div>
-        {% endif %}
       </section>
       <!-- Main content -->
       <section class="content">
@@ -21,6 +15,8 @@
           
           <!-- left column -->
           <div class="col-md-6">
+          {# <form action="/supporter/new" method="POST"> #}
+          
             <div class="box box-warning">
                 {# <div class="box-header with-border">
                     <h3 class="box-title">Supporter anlegen</h3>
@@ -29,41 +25,24 @@
                 <div class="box-body">
                     <!-- text input -->
                     Status: <b>{{status}}</b><br><br>
-                    
+
                     angelegt am: {{meeting.insert_date|date("d.m.Y")}}<br>
                     zuletzt bearbeitet am: {{meeting.update_date|date("d.m.Y")}}<br><br>
                     Anzahl stimmberechtigte Aktionäre bei Hauptversammlung: <br>
                     Anzahl ausgegebenen Aktien bei Hauptversammlung: <br>
                     Anzahl Anmeldungen von Aktionären zur Hauptversammlung: <br>
                     Protokoll: <br><br>
-
                     <div class="form-group">
-                      <a href="{{ path('stock_meetinginvite', {'hauptversammlung_id': hauptversammlung_id}) }}"><button class="btn btn-primary">Mail an Aktionäre versenden</button></a>
-                    </div>
-                  
-                    <form action="{{ path('stock_meeting', {'hauptversammlung_id': hauptversammlung_id}) }}" method="POST">
-
-                    <div class="form-group">
-                        <label for="username">Textfeld Hauptversammlung Protokoll</label>
-                        {# <input type="username" class="form-control" id="username" name="username" placeholder="" value="{{username}}" required> #}
-                        <textarea class="form-control" id="protokoll" name="protokoll" type="text" rows="10" required>{{meeting.protocol_general_meeting}}</textarea>
+                        
                     </div>
                     
                 </div>
-			          <div class="box-footer">
-                    <button type="submit" class="btn btn-primary" name="savebutton" value="true">Speichern</button>
-                </div>
+			
                 <!-- /.box-body -->
-                </form>
             </div>
           </div>
         </div>
       </section>
     </div>
-  
   <!-- /.content-wrapper -->
 {% endblock %}
-
-{# {% block footer %}
-    {{ parent() }}
-{% endblock %} #}

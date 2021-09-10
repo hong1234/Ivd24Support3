@@ -6,7 +6,7 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <section class="content-header">
-        <h1>Email(z.B Einladung) an Aktionäre versenden</h1>
+        <h1>Email an Aktionäre versenden</h1>
         {% if error|length %}
           <div class="alert alert-danger" role="alert">
             {{error}}
@@ -41,6 +41,9 @@
                     </div>
                     <div class="form-group">
                         History:<br>
+                        {% for story in stories %}
+                            {{story.insert_date|date("d.m.Y")}} E-Mail Template "{{story.titel}}" an Aktionäre verschickt
+                        {% endfor %}
                     </div>
                 </div>
 			          <div class="box-footer">

@@ -146,6 +146,31 @@ class StockDao extends BaseDao {
     }
 
     //----------------------------------------------------------
+    // public function getSendMailTempleteStory(iterable $values=[]) {
+    //     $sql = "SELECT hauptversammlung_email_communication.insert_date, send_mail_templates.titel FROM hauptversammlung_email_communication 
+    //             LEFT JOIN send_mail_templates ON send_mail_templates.mail_template_id = hauptversammlung_email_communication.send_mail_template_id
+    //             GROUP BY hauptversammlung_email_communication.send_mail_template_id, hauptversammlung_email_communication.insert_date 
+    //             ORDER BY hauptversammlung_email_communication.insert_date DESC";
+    //     return $this->doQueryObj($sql, $values)->fetchAll();
+    // }
+
+    public function getSendMailTempleteStory(iterable $values=[]) {
+        $sql = "SELECT hauptversammlung_email_communication.insert_date, send_mail_templates.titel FROM hauptversammlung_email_communication 
+                LEFT JOIN send_mail_templates ON send_mail_templates.mail_template_id = hauptversammlung_email_communication.send_mail_template_id
+                GROUP BY hauptversammlung_email_communication.send_mail_template_id 
+                ORDER BY hauptversammlung_email_communication.insert_date DESC";
+        return $this->doQueryObj($sql, $values)->fetchAll();
+    }
+
+    public function getAllMeetings() {
+        $sql = "SELECT * FROM hauptversammlung ORDER BY id DESC";
+        return $this->doQueryObj($sql, [])->fetchAll();
+    }
+
+    public function updateProtokoll(iterable $values=[]){
+        $sql  = "UPDATE hauptversammlung SET protocol_general_meeting = :meeting_protocol WHERE id = :meeting_id";
+        return $this->doSQL($sql, $values);
+    }
 
     public function getTemplatesForGeneralMeeting(iterable $values=[]){
         $sql = "SELECT * FROM send_mail_templates WHERE kategorie_id = 2";
@@ -197,7 +222,8 @@ class StockDao extends BaseDao {
                     hauptversammlung_id = :hauptversammlung_id,
                     user_id = :user_id,
                     geschaeftsstelle_id = :geschaeftsstelle_id,
-                    send_mail_template_id = :mail_template_id, 
+                    send_mail_template_id = :mail_template_id,
+                    registration_link = 'abc', 
                     insert_date = NOW()";
         return $this->doSQL($sql, $values);
     }
@@ -206,7 +232,8 @@ class StockDao extends BaseDao {
         $sql = "INSERT INTO hauptversammlung_email_communication SET 
                     hauptversammlung_id = :hauptversammlung_id,
                     geschaeftsstelle_id = :geschaeftsstelle_id,
-                    send_mail_template_id = :mail_template_id, 
+                    send_mail_template_id = :mail_template_id,
+                    registration_link = 'abc',  
                     insert_date = NOW()";
         return $this->doSQL($sql, $values);
     }

@@ -242,17 +242,17 @@ class StockService
 
     public function doInvite($betreff, $hauptversammlung_id, $template_id, $row){
 
-        $user_id = $row->user_id;
+        $user_id = (int)$row->user_id;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
         $email = $row->email;
         $name = $row->name;
 
-        $this->sqService->addToSendQueue2('mode1', [
-            'betreff'     => $betreff,
-            'email'       => $email,
-            'template_id' => $template_id,
-            'name'        => $name
-        ]);
+        // $this->sqService->addToSendQueue2('mode1', [
+        //     'betreff'     => $betreff,
+        //     'email'       => $email,
+        //     'template_id' => $template_id,
+        //     'name'        => $name
+        // ]);
 
         $this->stockDao->insertHauptversammlungEmailCommunication([
             'hauptversammlung_id' => $hauptversammlung_id,
@@ -269,12 +269,12 @@ class StockService
         $email = $row->email;
         $name  = $row->name;
 
-        $this->sqService->addToSendQueue2('mode2', [
-            'betreff'     => $betreff,
-            'email'       => $email,
-            'template_id' => $template_id,
-            'name'        => $name
-        ]);
+        // $this->sqService->addToSendQueue2('mode2', [
+        //     'betreff'     => $betreff,
+        //     'email'       => $email,
+        //     'template_id' => $template_id,
+        //     'name'        => $name
+        // ]);
 
         $this->stockDao->insertHauptversammlungEmailCommunication2([
             'hauptversammlung_id' => $hauptversammlung_id,

@@ -172,7 +172,7 @@ class SendQueue
         }
 
         if(isset($data['mail_template_id'])){
-            $template_id = $data['mail_template_id'];
+            $template_id = (int)$data['mail_template_id'];
         }
 
         $sendername      = 'IVD24Immobilien';
@@ -186,7 +186,7 @@ class SendQueue
         $row = $this->bDao->getRowInTableByIdentifier('send_mail_templates', [
             'mail_template_id' => $template_id
         ]);
-        $nachricht_html  = $row['nachricht'];
+        $nachricht_html = $row['nachricht'];
 
         if($mode == 'mode1'){
             //

@@ -99,6 +99,11 @@ class BaseDao {
         return $this->doQuery($sql, [])->fetchAll();
     }
 
+    public function getAllRowsInTable2(string $tabName) {
+        $sql = "SELECT * FROM ".$tabName;
+        return $this->doQueryObj($sql, [])->fetchAll();
+    }
+
     public function getRowsInTableByPropeties(string $tabName, iterable $values=[]) {
         $index = 0;
         $sql = "SELECT * FROM $tabName WHERE ";
@@ -120,6 +125,14 @@ class BaseDao {
             $sql = $sql."$key = '$value'";
         }
         return $this->doQuery($sql, $values)->fetch(); 
+    }
+
+    public function getRowInTableByIdentifier2(string $tabName, iterable $values=[]) {
+        $sql = "SELECT * FROM $tabName WHERE ";
+        foreach($values as $key => $value) {
+            $sql = $sql."$key = '$value'";
+        }
+        return $this->doQueryObj($sql, $values)->fetch(); 
     }
 
 }

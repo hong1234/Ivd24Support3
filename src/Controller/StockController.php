@@ -100,25 +100,83 @@ class StockController extends AbstractController
         ]);
     }
 
+    //-----------
+
     /**
      * @Route("/stock/allmeeting", name="stock_allmeeting")
      */
     public function allMeeting()
     {
-        // $rows = $this->stockService->shareholderList();
+        $meetings = $this->stockDao->getAllMeetings();
+
         return $this->render('stock/allmeeting.html.twig', [
-            'message' => "Opps, all meeting !"
+            'meetings' => $meetings
         ]);
     }
 
     /**
-     * @Route("/stock/meeting", name="stock_meeting")
+     * @Route("/stock/meeting/{hauptversammlung_id}", name="stock_meeting", requirements={"hauptversammlung_id"="\d+"})
      */
-    public function showMeeting()
+    public function meetingInfo(int $hauptversammlung_id, Request $request)
     {
-        return $this->render('stock/meeting.html.twig', [
-            'message' => "Opps, show meeting !"
+        $meeting = $this->stockDao->getRowInTableByIdentifier2('hauptversammlung', [
+            'id' => $hauptversammlung_id
         ]);
+
+        $closed = $meeting->closed;
+
+        $error = '';
+
+        if($closed == 0){
+
+            if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+            
+                //post parameters
+                $safePost = $request->request;
+    
+                // var_dump( $safePost); exit;
+    
+                //validation
+                // $error = $validator->isValidStatisticUserInput($safePost);
+                // $error = 'abc';
+                
+                if ($error == '') {
+
+                    $this->stockDao->updateProtokoll([
+                        'meeting_id' => $hauptversammlung_id,
+                        'meeting_protocol' => $safePost->get('protokoll')
+                    ]);
+    
+                    // return $this->redirectToRoute('stock_meetinginvite', [
+                    //  'paramName' => 'value'
+                    // ]);
+                } 
+    
+                $meeting->protocol_general_meeting = $safePost->get('protokoll');
+                
+            }
+
+            // if ($request->isMethod('GET')) {
+                
+            // }
+
+            return $this->render('stock/meeting.html.twig', [
+                'hauptversammlung_id' => $hauptversammlung_id,
+                'meeting' => $meeting,
+                'status' => 'aktiv',
+                'error'   => $error
+            ]);
+
+        }
+
+        if($closed == 1){
+
+            return $this->render('stock/closedmeeting.html.twig', [
+                'meeting' => $meeting,
+                'status' => 'geschlossen'
+            ]);
+        }
+
     }
 
     /**
@@ -128,6 +186,7 @@ class StockController extends AbstractController
     {
         $error = '';
         $temps = $this->stockDao->getTemplatesForGeneralMeeting();
+        $stories = $this->stockDao->getSendMailTempleteStory();
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             
@@ -144,9 +203,9 @@ class StockController extends AbstractController
 
                 $this->stockService->inviteToMeeting($hauptversammlung_id, $safePost);
 
-                // return $this->redirectToRoute('stock_meetinginvite', [
-                //  'paramName' => 'value'
-                // ]);
+                return $this->redirectToRoute('stock_allmeeting', [
+                    //  'paramName' => 'value'
+                ]);
             } 
 
             $betreff = $safePost->get('betreff');
@@ -164,6 +223,7 @@ class StockController extends AbstractController
             'tempId'  => $tempId,
             'betreff' => $betreff,
             'temps'   => $temps,
+            'stories' => $stories,
             'error'   => $error
         ]);
     }
