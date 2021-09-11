@@ -155,7 +155,8 @@ class StockDao extends BaseDao {
     // }
 
     public function getSendMailTempleteStory(iterable $values=[]) {
-        $sql = "SELECT DATE_FORMAT(hauptversammlung_email_communication.insert_date, '%Y.%m.%d') AS send_date, send_mail_templates.titel AS send_template FROM hauptversammlung_email_communication 
+        $sql = "SELECT DATE_FORMAT(hauptversammlung_email_communication.insert_date, '%Y.%m.%d') AS send_date, send_mail_templates.titel AS send_template 
+                FROM hauptversammlung_email_communication 
                 LEFT JOIN send_mail_templates ON send_mail_templates.mail_template_id = hauptversammlung_email_communication.send_mail_template_id
                 GROUP BY send_date, hauptversammlung_email_communication.send_mail_template_id 
                 ORDER BY hauptversammlung_email_communication.insert_date DESC";

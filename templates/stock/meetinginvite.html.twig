@@ -42,7 +42,7 @@
                     <div class="form-group">
                         History:<br>
                         {% for story in stories %}
-                            {{story.send_date|date("d.m.Y")}} E-Mail Template "{{story.send_template}}" an Aktionäre verschickt<br>
+                            {{story.send_date}} E-Mail Template "{{story.send_template}}" an Aktionäre verschickt<br>
                         {% endfor %}
                     </div>
                 </div>
