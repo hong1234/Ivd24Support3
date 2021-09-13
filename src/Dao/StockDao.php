@@ -203,7 +203,7 @@ class StockDao extends BaseDao {
                 FROM aktien
                 LEFT JOIN user_makler ON user_makler.user_id = aktien.user_id 
                 WHERE aktien.user_id IS NOT NULL AND aktien.user_geschaeftsstelle_id IS NOT NULL AND aktien.purchase_verified = 1 
-                AND aktien.user_id NOT IN (SELECT hauptversammlung_email_communication.user_id FROM hauptversammlung_email_communication WHERE hauptversammlung_id = :hauptversammlung_id AND send_mail_template_id = :mail_template_id)
+                AND aktien.user_id NOT IN (SELECT com.user_id FROM hauptversammlung_email_communication com WHERE com.hauptversammlung_id = :hauptversammlung_id AND com.send_mail_template_id = :mail_template_id AND com.user_id IS NOT NULL)
                 GROUP BY aktien.user_id";
         return $this->doQueryObj($sql, $values);
     }
@@ -213,7 +213,7 @@ class StockDao extends BaseDao {
                 FROM aktien 
                 LEFT JOIN user_geschaeftsstelle ON user_geschaeftsstelle.geschaeftsstelle_id = aktien.user_geschaeftsstelle_id
                 WHERE aktien.user_id IS NULL AND aktien.user_geschaeftsstelle_id IS NOT NULL AND aktien.purchase_verified = 1 
-                AND aktien.user_geschaeftsstelle_id NOT IN (SELECT hauptversammlung_email_communication.geschaeftsstelle_id FROM hauptversammlung_email_communication WHERE hauptversammlung_email_communication.user_id IS NULL AND hauptversammlung_id = :hauptversammlung_id AND send_mail_template_id = :mail_template_id)
+                AND aktien.user_geschaeftsstelle_id NOT IN (SELECT com.geschaeftsstelle_id FROM hauptversammlung_email_communication com WHERE com.hauptversammlung_id = :hauptversammlung_id AND com.send_mail_template_id = :mail_template_id AND com.user_id IS NULL)
                 GROUP BY aktien.user_geschaeftsstelle_id";
         return $this->doQueryObj($sql, $values);
     }
