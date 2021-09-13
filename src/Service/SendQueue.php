@@ -171,8 +171,8 @@ class SendQueue
             $betreff = $data['betreff'];
         }
 
-        if(isset($data['mail_template_id'])){
-            $template_id = (int)$data['mail_template_id'];
+        if(isset($data['template_id'])){
+            $template_id = (int)$data['template_id'];
         }
 
         $sendername      = 'IVD24Immobilien';

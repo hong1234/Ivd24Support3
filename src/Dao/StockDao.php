@@ -178,26 +178,6 @@ class StockDao extends BaseDao {
         return $this->doQueryObj($sql, $values)->fetchAll();
     }
 
-    // public function getAktionaerToInvite(iterable $values=[]){ // good
-    //     $sql = "SELECT aktien.user_id, aktien.user_geschaeftsstelle_id, user_makler.email
-    //             FROM aktien
-    //             LEFT JOIN user_makler ON user_makler.user_id = aktien.user_id 
-    //             WHERE aktien.user_id IS NOT NULL AND aktien.user_geschaeftsstelle_id IS NOT NULL AND aktien.purchase_verified = 1 
-    //             AND aktien.user_id NOT IN (SELECT hauptversammlung_email_communication.user_id FROM hauptversammlung_email_communication WHERE hauptversammlung_id = 1 AND send_mail_template_id = 12)
-    //             GROUP BY aktien.user_id";
-    //     return $this->doQueryObj($sql, $values);
-    // }
-
-    // public function getAktionaerToInvite2(iterable $values=[]){
-    //     $sql = "SELECT aktien.user_geschaeftsstelle_id,  user_geschaeftsstelle.region, user_geschaeftsstelle.email
-    //             FROM aktien 
-    //             LEFT JOIN user_geschaeftsstelle ON user_geschaeftsstelle.geschaeftsstelle_id = aktien.user_geschaeftsstelle_id
-    //             WHERE aktien.user_id IS NULL AND aktien.user_geschaeftsstelle_id IS NOT NULL AND aktien.purchase_verified = 1 
-    //             AND aktien.user_geschaeftsstelle_id NOT IN (SELECT hauptversammlung_email_communication.geschaeftsstelle_id FROM hauptversammlung_email_communication WHERE hauptversammlung_email_communication.user_id IS NULL AND hauptversammlung_id = 1 AND send_mail_template_id = 12)
-    //             GROUP BY aktien.user_geschaeftsstelle_id";
-    //     return $this->doQueryObj($sql, $values);
-    // }
-
     public function getAktionaerToInvite(iterable $values=[]){ // good
         $sql = "SELECT aktien.user_id, aktien.user_geschaeftsstelle_id, user_makler.email, user_makler.vorname, user_makler.name, user_makler.firma
                 FROM aktien

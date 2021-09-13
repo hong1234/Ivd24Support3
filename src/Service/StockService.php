@@ -215,10 +215,6 @@ class StockService
 
         $betreff     = $safePost->get('betreff');    // 'betreff' => string 'Ladung zu Sammlung' (length=18)
         $template_id = $safePost->get('template');   // 'template' => string 'temp1' (length=5)
-        // $radioChoice = $safePost->get('radioChoice');  // 'radioChoice' => string 'yes' (length=3)
-
-        // parameters
-        // hauptversammlung_id = ? AND send_mail_template_id = ?
 
         $stmt = $this->stockDao->getAktionaerToInvite([
             'hauptversammlung_id' => $hauptversammlung_id,
@@ -244,15 +240,8 @@ class StockService
 
         $user_id = (int)$row->user_id;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
-        $email = $row->email;
+        $email = 'technik@ivd24.de'; //$row->email;
         $name = $row->name;
-
-        // $this->sqService->addToSendQueue2('mode1', [
-        //     'betreff'     => $betreff,
-        //     'email'       => $email,
-        //     'template_id' => $template_id,
-        //     'name'        => $name
-        // ]);
 
         $this->stockDao->insertHauptversammlungEmailCommunication([
             'hauptversammlung_id' => $hauptversammlung_id,
@@ -260,26 +249,33 @@ class StockService
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
             'mail_template_id'    => $template_id
         ]);
+
+        $this->sqService->addToSendQueue2('mode1', [
+            'betreff'     => $betreff,
+            'email'       => $email,
+            'template_id' => $template_id,
+            'name'        => $name
+        ]);
     }
 
     public function doInvite2($betreff, $hauptversammlung_id, $template_id, $row){
         // $user_id = NULL;
         // $region = $row->region;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
-        $email = $row->email;
+        $email = 'technik@ivd24.de'; //$row->email;
         $name  = $row->name;
-
-        // $this->sqService->addToSendQueue2('mode2', [
-        //     'betreff'     => $betreff,
-        //     'email'       => $email,
-        //     'template_id' => $template_id,
-        //     'name'        => $name
-        // ]);
 
         $this->stockDao->insertHauptversammlungEmailCommunication2([
             'hauptversammlung_id' => $hauptversammlung_id,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
             'mail_template_id'    => $template_id
+        ]);
+
+        $this->sqService->addToSendQueue2('mode2', [
+            'betreff'     => $betreff,
+            'email'       => $email,
+            'template_id' => $template_id,
+            'name'        => $name
         ]);
     }
 
