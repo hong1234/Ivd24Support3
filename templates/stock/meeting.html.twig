@@ -2,6 +2,12 @@
 
 {% block title %}Hauptversammlung Details{% endblock %}
 
+{% block head %}
+  <style>
+    .tox-notification { display: none !important }
+</style>
+{% endblock %}
+
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -45,8 +51,7 @@
 
                     <div class="form-group">
                         <label for="username">Textfeld Hauptversammlung Protokoll</label>
-                        {# <input type="username" class="form-control" id="username" name="username" placeholder="" value="{{username}}" required> #}
-                        <textarea class="form-control" id="protokoll" name="protokoll" type="text" rows="10" required>{{meeting.protocol_general_meeting}}</textarea>
+                        <textarea class="form-control" id="protokoll" name="protokoll" type="text" rows="12" required>{{meeting.protocol_general_meeting}}</textarea>
                     </div>
                     
                 </div>
@@ -62,4 +67,24 @@
     </div>
   
   <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block zusatz %}
+
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/jquery.tinymce.min.js" referrerpolicy="origin"></script>
+
+  <script>
+      $('textarea#protokoll').tinymce({
+        height: 400,
+        menubar: false,
+        plugins: [
+          'advlist autolink lists link image charmap print preview anchor',
+          'searchreplace visualblocks code fullscreen',
+          'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+      });
+  </script>
+    
 {% endblock %}
