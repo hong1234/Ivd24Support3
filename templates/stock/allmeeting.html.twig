@@ -20,7 +20,7 @@
                     <!-- text input -->
                     <div class="form-group">
                       {% for meeting in meetings %}
-                        <a href="{{ path('stock_meeting', {'hauptversammlung_id': meeting.id}) }}"><button class="btn btn-primary">Hauptversammlung am {{meeting.date|date("d.m.Y")}}</button></a><br>
+                        <a href="{{ path('stock_meeting', {'hauptversammlung_id': meeting.id}) }}"><button class="btn btn-primary">Hauptversammlung am {{meeting.meeting_date|date("d.m.Y")}}</button></a><br><br>
                       {% endfor %}
                     </div>
             </div>

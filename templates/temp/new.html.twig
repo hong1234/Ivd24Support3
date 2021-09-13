@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hauptversammlung Details{% endblock %}
+{% block title %}Template anlegen{% endblock %}
 
 {% block head %}
   <style>
@@ -13,7 +13,7 @@
     <div class="content-wrapper">
       <section class="content-header">
 
-        <h1>Hauptversammlung vom {{meeting.meeting_date|date("d.m.Y")}}</h1>
+        <h1>Template anlegen</h1>
         {% if error|length %}
           <div class="alert alert-danger" role="alert">
             {{error}}
@@ -34,24 +34,44 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <!-- text input -->
-                    Status: <b>{{status}}</b><br><br>
+                    {# Status: <b>{{status}}</b><br><br>
                     
                     angelegt am: {{meeting.insert_date|date("d.m.Y")}}<br>
                     zuletzt bearbeitet am: {{meeting.update_date|date("d.m.Y")}}<br><br>
                     Anzahl stimmberechtigte Aktionäre bei Hauptversammlung: <br>
                     Anzahl ausgegebenen Aktien bei Hauptversammlung: <br>
                     Anzahl Anmeldungen von Aktionären zur Hauptversammlung: <br>
-                    Protokoll: <br><br>
+                    Protokoll: <br><br> #}
 
-                    <div class="form-group">
+                    {# <div class="form-group">
                       <a href="{{ path('stock_meetinginvite', {'hauptversammlung_id': hauptversammlung_id}) }}"><button class="btn btn-primary">Mail an Aktionäre versenden</button></a>
-                    </div>
-                  
-                    <form action="{{ path('stock_meeting', {'hauptversammlung_id': hauptversammlung_id}) }}" method="POST">
+                    </div> #}
 
-                    <div class="form-group">
+                    <b>Platzhalter im Email-Template:</b><br>
+                    {{briefanrede}}<br>
+                    {{anrede}}<br>
+                    {{vorname}}<br>
+                    {{nachname}}<br>
+                    {{user_id}}<br><br>
+                  
+                    <form action="{{path('template_new')}}" method="POST">
+
+                    {# <div class="form-group">
                         <label for="username">Textfeld Hauptversammlung Protokoll</label>
                         <textarea class="form-control" id="protokoll" name="protokoll" type="text" rows="12" required>{{meeting.protocol_general_meeting}}</textarea>
+                    </div> #}
+
+                    <div class="form-group">
+                        <label for="Templatename">Templatename</label>
+                        <input type="text" class="form-control" id="templatename" name="templatename" placeholder="" value="{{templatename}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Dokument">Dokument</label>
+                        <input type="text" class="form-control" id="dokument" name="dokument" placeholder="" value="{{dokument}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="EmailText">Email-Template</label>
+                        <textarea class="form-control" type="text" id="template" name="template" rows="12">{{template}}</textarea>
                     </div>
                     
                 </div>
@@ -75,7 +95,7 @@
   <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/jquery.tinymce.min.js" referrerpolicy="origin"></script>
 
   <script>
-      $('textarea#protokoll').tinymce({
+      $('textarea#template').tinymce({
         height: 400,
         menubar: false,
         plugins: [

@@ -1,0 +1,113 @@
+<?php
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+
+// use App\Service\MaklerService;
+// use App\Service\StringFormat;
+// use App\Validator\UserAccount;
+use App\Dao\TemplateDao;
+
+/**
+ *
+ * @Route(path="/support")
+ */
+class MailTemplateController extends AbstractController
+{
+    private $tempDao;
+    
+    public function __construct(TemplateDao $tempDao)
+    {
+        $this->tempDao = $tempDao;
+    }
+
+    /**
+     * @Route("/template/list", name="template_list")
+     */
+    public function templateList()
+    {
+        $rows = $this->tempDao->templatesByCategory2();
+        return $this->render('temp/list.html.twig', [
+            'dataSet' => $rows
+        ]);
+    }
+
+    /**
+     * @Route("/template/new", name="template_new")
+     */
+    public function templateNew(Request $request)
+    {
+        $templatename = '';
+        $template = '';
+        $dokument = '';
+
+        $error = '';
+
+        if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+            
+            //post parameters
+            $safePost = $request->request;
+
+            // var_dump( $safePost); exit;
+
+            $templatename = $safePost->get('templatename');
+            $template  = $safePost->get('template');
+            $dokument  = $safePost->get('dokument');
+
+             //validation
+            // $error = $validator->isValidStatisticUserInput($safePost);
+            if(preg_replace('/\s+/', '', $templatename) == ''){
+                $error = $error."Feld 'templatename' darf nicht leer sein ---";
+            }
+
+            if(preg_replace('/\s+/', '', $template) == ''){
+                $error = $error."Feld 'template' darf nicht leer sein ---";
+            }
+            
+            if ($error == '') {
+                $this->tempDao->insertTemplate($templatename, $template, $dokument);
+                
+                return $this->redirectToRoute('template_list', [
+                    //  'paramName' => 'value'
+                ]);
+            } 
+
+        }
+
+        return $this->render('temp/new.html.twig', [
+            'templatename' => $templatename,
+            'template'     => $template,
+            'dokument'     => $dokument,
+            'error'        => $error,
+            'briefanrede'  => '{{briefanrede}}',
+            'anrede'       => '{{anrede}}',
+            'vorname'      => '{{vorname}}',
+            'nachname'     => '{{nachname}}',
+            'user_id'      => '{{user_id}}'
+        ]);
+    }
+
+     /**
+     * @Route("/template/{tempid}/edit", name="template_edit", requirements={"tempid"="\d+"})
+     */
+    public function templateEdit($tempid)
+    {
+        $rows = $this->tempDao->templatesByCategory2();
+        return $this->render('temp/edit.html.twig', [
+            'dataSet' => $rows
+        ]);
+    }
+
+    /**
+     * @Route("/template/{tempid}/delete", name="template_delete", requirements={"tempid"="\d+"})
+     */
+    public function templateDelete($tempid)
+    {
+        $rows = $this->tempDao->templatesByCategory2();
+        return $this->render('temp/delete.html.twig', [
+            'dataSet' => $rows
+        ]);
+    }
+}

@@ -1,0 +1,41 @@
+{% extends 'baseList.html.twig' %}
+
+{% block title %}Template Liste{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Template Liste</h1>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Übersicht</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example1" class="table table-bordered table-striped" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th style='width: 10%;'>TemplateId</th>
+                                        <th style='width: 10%;'>Kategorie</th>
+                                        <th style='width: 30%;'>TemplateName</th>
+                                        <th style='width: 10%;'>Dokumente</th>
+                                        <th style='width: 10%;'>Datum</th>
+                                        <th style='width: 30%;'>Links</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+  <!-- /.content-wrapper -->
+{% endblock %}

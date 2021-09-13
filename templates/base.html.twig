@@ -144,6 +144,18 @@
                             </ul>
                         </li>
 
+                        <li class="treeview {% if route_name in ["template_list", "template_new", "template_edit", "template_delete"] %}active{% endif %}">
+                            <a href="#">
+                                <i class="fa fa-edit"></i> 
+                                <span>TemplateManager</span>
+                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if route_name in ["template_list", "template_edit", "template_delete"] %} class="active"{% endif %}><a href="{{ path('template_list') }}"><i class="fa fa-circle-o"></i>Template Liste</a></li>
+		                        <li {% if route_name in ["template_new"] %} class="active"{% endif %}><a href="{{ path('template_new') }}"><i class="fa fa-circle-o"></i>Template anlegen</a></li>
+                            </ul>
+                        </li>
+
                         {% endif %}
                         
                         {% if is_granted("ROLE_ADMIN") %}

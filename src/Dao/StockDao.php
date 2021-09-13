@@ -164,7 +164,7 @@ class StockDao extends BaseDao {
     }
 
     public function getAllMeetings() {
-        $sql = "SELECT * FROM hauptversammlung ORDER BY id DESC";
+        $sql = "SELECT * FROM hauptversammlung ORDER BY meeting_date DESC";
         return $this->doQueryObj($sql, [])->fetchAll();
     }
 
