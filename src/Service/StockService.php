@@ -240,7 +240,7 @@ class StockService
 
         $user_id = $row->user_id;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
-        $email = 'vuanhde@yahoo.de'; //'technik@ivd24.de'; //$row->email;
+        $email = 'technik@ivd24.de'; // 'vuanhde@yahoo.de'; //$row->email;
         $anrede  = $row->anrede;
         $vorname = $row->vorname;
         $name    = $row->name;
@@ -267,7 +267,7 @@ class StockService
         // $user_id = NULL;
         // $region = $row->region;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
-        $email = 'vuanhde@yahoo.de'; //'technik@ivd24.de'; //$row->email;
+        $email = 'technik@ivd24.de'; // 'vuanhde@yahoo.de'; //$row->email;
         $name  = $row->name;
 
         $this->stockDao->insertHauptversammlungEmailCommunication2([
