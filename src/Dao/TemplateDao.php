@@ -13,50 +13,30 @@ class TemplateDao extends BaseDao {
         return $this->doQueryObj($sql, $values);
     }
 
-    public function insert1Template(iterable $values=[]){
+    public function insertTemplate(iterable $values=[]){
         $sql = "INSERT INTO send_mail_templates SET
                 kategorie_id  = 2, 
                 titel         = :templatename,
                 nachricht     = :template,
                 document_path = :document_path,
-                insert_date   = CURDATE()
+                insert_date   = :insert_date
                 ";
         return $this->doSQL($sql, $values);
     }
 
-    public function templatesByCategory2(){
-
-        // $stmt = $this->getTemplateByCategory([
-        //     'kategorie_id' => '2'
-        // ]);
-
-        $stmt = $this->getAllTemplate();
-
-        $rows = array();
-        while ($row = $stmt->fetch()) {
-
-            $row2 = array();
-            $row2[] = (int)$row->mail_template_id;
-            $row2[] = (int)$row->kategorie_id;
-            $row2[] = $row->titel;
-            if(strlen($row->document_path)){
-                $row2[] = 'Ja';
-            } else {
-                $row2[] = 'Nein';
-            }
-            $row2[] = $row->insert_date;
-            $row2[] = 'links';
-            $rows[] = $row2;
-        }
-
-        return $rows;
+    public function updateTemplate(iterable $values=[]){
+        $sql = "UPDATE send_mail_templates SET
+                titel         = :templatename,
+                nachricht     = :template,
+                document_path = :document_path
+                WHERE mail_template_id = :template_id
+                ";
+        return $this->doSQL($sql, $values);
     }
 
-    public function insertTemplate($templatename, $template, $dokument){
-        $this->insert1Template([
-            'templatename'  => $templatename,
-            'template'      => $template,
-            'document_path' => $dokument
-        ]);
+    public function deleteTemplate(iterable $values=[]){
+        $sql = "DELETE FROM send_mail_templates WHERE mail_template_id = :template_id";
+        $this->doSQL($sql, $values);
     }
+
 }

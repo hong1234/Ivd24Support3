@@ -5,9 +5,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-// use App\Service\MaklerService;
+
 // use App\Service\StringFormat;
 // use App\Validator\UserAccount;
+use App\Service\TemplateService;
 use App\Dao\TemplateDao;
 
 /**
@@ -17,10 +18,12 @@ use App\Dao\TemplateDao;
 class MailTemplateController extends AbstractController
 {
     private $tempDao;
+    private $templateService;
     
-    public function __construct(TemplateDao $tempDao)
+    public function __construct(TemplateDao $tempDao, TemplateService $templateService)
     {
         $this->tempDao = $tempDao;
+        $this->templateService = $templateService;
     }
 
     /**
@@ -28,7 +31,7 @@ class MailTemplateController extends AbstractController
      */
     public function templateList()
     {
-        $rows = $this->tempDao->templatesByCategory2();
+        $rows = $this->templateService->templatesByCategory2();
         return $this->render('temp/list.html.twig', [
             'dataSet' => $rows
         ]);
@@ -53,10 +56,10 @@ class MailTemplateController extends AbstractController
             // var_dump( $safePost); exit;
 
             $templatename = $safePost->get('templatename');
-            $template  = $safePost->get('template');
-            $dokument  = $safePost->get('dokument');
+            $template = $safePost->get('template');
+            $dokument = $safePost->get('dokument');
 
-             //validation
+            //validation
             // $error = $validator->isValidStatisticUserInput($safePost);
             if(preg_replace('/\s+/', '', $templatename) == ''){
                 $error = $error."Feld 'templatename' darf nicht leer sein ---";
@@ -67,8 +70,7 @@ class MailTemplateController extends AbstractController
             }
             
             if ($error == '') {
-                $this->tempDao->insertTemplate($templatename, $template, $dokument);
-                
+                $this->templateService->insertTemplate($templatename, $template, $dokument);
                 return $this->redirectToRoute('template_list', [
                     //  'paramName' => 'value'
                 ]);
@@ -92,11 +94,50 @@ class MailTemplateController extends AbstractController
      /**
      * @Route("/template/{tempid}/edit", name="template_edit", requirements={"tempid"="\d+"})
      */
-    public function templateEdit($tempid)
+    public function templateEdit($tempid, Request $request)
     {
-        $rows = $this->tempDao->templatesByCategory2();
+        $error = '';
+
+        if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+            //post parameters
+            $safePost = $request->request;
+
+            // var_dump( $safePost); exit;
+
+            $templatename = $safePost->get('templatename');
+            $template = $safePost->get('template');
+            $dokument = $safePost->get('dokument');
+
+            //validation
+            // $error = $validator->isValidStatisticUserInput($safePost);
+            if(preg_replace('/\s+/', '', $templatename) == ''){
+                $error = $error."Feld 'templatename' darf nicht leer sein ---";
+            }
+
+            if(preg_replace('/\s+/', '', $template) == ''){
+                $error = $error."Feld 'template' darf nicht leer sein ---";
+            }
+
+            if ($error == '') {
+                $this->templateService->updateTemplate($tempid, $templatename, $template, $dokument);
+                return $this->redirectToRoute('template_list', [
+                    //  'paramName' => 'value'
+                ]);
+            }
+        }
+
+        if ($request->isMethod('GET')) {
+            $temp = $this->templateService->getTemplateById($tempid);
+        }
+
         return $this->render('temp/edit.html.twig', [
-            'dataSet' => $rows
+            'template'    => $temp,
+            'error'       => $error,
+            'briefanrede' => '{{briefanrede}}',
+            'anrede'      => '{{anrede}}',
+            'vorname'     => '{{vorname}}',
+            'nachname'    => '{{nachname}}',
+            'user_id'     => '{{user_id}}'
         ]);
     }
 
@@ -105,9 +146,17 @@ class MailTemplateController extends AbstractController
      */
     public function templateDelete($tempid)
     {
-        $rows = $this->tempDao->templatesByCategory2();
-        return $this->render('temp/delete.html.twig', [
-            'dataSet' => $rows
+        $this->tempDao->deleteTemplate([
+            'template_id' => $tempid
         ]);
+
+        return $this->redirectToRoute('template_list', [
+            //  'paramName' => 'value'
+        ]);
+
+        // $temp = $this->templateService->getTemplateById($tempid);
+        // return $this->render('temp/delete.html.twig', [
+        //     'temp' => $temp
+        // ]);
     }
 }

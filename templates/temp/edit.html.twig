@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Template bearbeiten{% endblock %}
+
+{% block head %}
+  <style>
+    .tox-notification { display: none !important }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <section class="content-header">
+
+        <h1>Template bearbeiten</h1>
+        {% if error|length %}
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        {% endif %}
+      </section>
+      <!-- Main content -->
+      <section class="content">
+        
+        <div class="row">
+          
+          <!-- left column -->
+          <div class="col-md-6">
+            <div class="box box-warning">
+                {# <div class="box-header with-border">
+                    <h3 class="box-title">Supporter anlegen</h3>
+                </div> #}
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <!-- text input -->
+                    {# Status: <b>{{status}}</b><br><br>
+                    
+                    angelegt am: {{meeting.insert_date|date("d.m.Y")}}<br>
+                    zuletzt bearbeitet am: {{meeting.update_date|date("d.m.Y")}}<br><br>
+                    Anzahl stimmberechtigte Aktionäre bei Hauptversammlung: <br>
+                    Anzahl ausgegebenen Aktien bei Hauptversammlung: <br>
+                    Anzahl Anmeldungen von Aktionären zur Hauptversammlung: <br>
+                    Protokoll: <br><br> #}
+
+                    {# <div class="form-group">
+                      <a href="{{ path('stock_meetinginvite', {'hauptversammlung_id': hauptversammlung_id}) }}"><button class="btn btn-primary">Mail an Aktionäre versenden</button></a>
+                    </div> #}
+
+                    <b>Platzhalter im Email-Template:</b><br>
+                    {{briefanrede}}<br>
+                    {{anrede}}<br>
+                    {{vorname}}<br>
+                    {{nachname}}<br>
+                    {{user_id}}<br><br>
+                  
+                    <form action="{{path('template_edit', {'tempid': template.mail_template_id})}}" method="POST">
+
+                    {# <div class="form-group">
+                        <label for="username">Textfeld Hauptversammlung Protokoll</label>
+                        <textarea class="form-control" id="protokoll" name="protokoll" type="text" rows="12" required>{{meeting.protocol_general_meeting}}</textarea>
+                    </div> #}
+
+                    <div class="form-group">
+                        <label for="Templatename">Templatename</label>
+                        <input type="text" class="form-control" id="templatename" name="templatename" placeholder="" value="{{template.titel}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Dokument">Dokument</label>
+                        <input type="text" class="form-control" id="dokument" name="dokument" placeholder="" value="{{template.document_path}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="EmailText">Email-Template</label>
+                        <textarea class="form-control" type="text" id="template" name="template" rows="12">{{template.nachricht}}</textarea>
+                    </div>
+                    
+                </div>
+			          <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" name="savebutton" value="true">Speichern</button>
+                </div>
+                <!-- /.box-body -->
+                </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block zusatz %}
+
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/jquery.tinymce.min.js" referrerpolicy="origin"></script>
+
+  <script>
+      $('textarea#template').tinymce({
+        height: 400,
+        menubar: false,
+        plugins: [
+          'advlist autolink lists link image charmap print preview anchor',
+          'searchreplace visualblocks code fullscreen',
+          'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+      });
+  </script>
+    
+{% endblock %}

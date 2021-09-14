@@ -39,3 +39,16 @@
     </div>
   <!-- /.content-wrapper -->
 {% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+
+    <script>
+        function showConfirm(event){
+            var answer = window.confirm("Wollen Sie diese Template wirklich löschen?");
+            if (answer==false) {
+                event.preventDefault();
+            }
+        }
+    </script>
+{% endblock %}
