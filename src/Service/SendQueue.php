@@ -153,15 +153,16 @@ class SendQueue
 
     public function addToSendQueue2($mode, $data=[]) {
 
-        $name = '';
-        $email = '';
-        $betreff = '';
         $template_id = '';
         $user_id = '0';
 
+        $email = '';
+        $betreff = '';
+        
+        $briefanrede = '';
         $anrede  = '';
         $vorname = '';
-
+        $name = '';
 
         if(isset($data['template_id'])){
             $template_id = (int)$data['template_id'];
@@ -190,6 +191,14 @@ class SendQueue
         if(isset($data['user_id'])){
             $user_id = $data['user_id'];
         }
+
+        if (trim($anrede) == 'Frau'){
+            $briefanrede = "Sehr geehrte Frau $name,";
+        } elseif (trim($anrede) == 'Herr'){
+            $briefanrede = "Sehr geehrter Herr $name,";
+        } else {
+            $briefanrede = "Sehr geehrte/r Divers $name,";
+        }
         
         $sendername      = 'IVD24Immobilien';
         $absender_mail   = 'noreply@ivd24immobilien.de';
@@ -205,8 +214,8 @@ class SendQueue
         $nachricht_html = $row['nachricht'];
 
         $nachricht_html = str_replace(
-            ["{{anrede}}", "{{vorname}}", "{{nachname}}", "{{user_id}}"], 
-            [$anrede, $vorname, $name, $user_id], 
+            ["{{briefanrede}}", "{{anrede}}", "{{vorname}}", "{{nachname}}", "{{user_id}}"], 
+            [$briefanrede, $anrede, $vorname, $name, $user_id], 
             $nachricht_html
         );
 
