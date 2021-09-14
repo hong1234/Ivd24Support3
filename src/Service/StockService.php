@@ -238,10 +238,14 @@ class StockService
 
     public function doInvite($betreff, $hauptversammlung_id, $template_id, $row){
 
-        $user_id = (int)$row->user_id;
+        $user_id = $row->user_id;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
         $email = 'technik@ivd24.de'; //$row->email;
-        $name = $row->name;
+        $anrede  = $row->anrede;
+        $vorname = $row->vorname;
+        $name    = $row->name;
+        
+        
 
         $this->stockDao->insertHauptversammlungEmailCommunication([
             'hauptversammlung_id' => $hauptversammlung_id,
@@ -251,10 +255,13 @@ class StockService
         ]);
 
         $this->sqService->addToSendQueue2('mode1', [
+            'template_id' => $template_id,
             'betreff'     => $betreff,
             'email'       => $email,
-            'template_id' => $template_id,
-            'name'        => $name
+            'anrede'      => $anrede,
+            'vorname'     => $vorname,
+            'name'        => $name,
+            'user_id'     => $user_id
         ]);
     }
 

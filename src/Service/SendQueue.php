@@ -157,28 +157,45 @@ class SendQueue
         $email = '';
         $betreff = '';
         $template_id = '';
-        #$geschaeftsstelle = '';
+        $user_id = '0';
 
-        if(isset($data['name'])){
-            $username = $data['name'];
-        }
+        $anrede  = '';
+        $vorname = '';
 
-        if(isset($data['email'])){
-            $email = $data['email'];
+
+        if(isset($data['template_id'])){
+            $template_id = (int)$data['template_id'];
         }
 
         if(isset($data['betreff'])){
             $betreff = $data['betreff'];
         }
 
-        if(isset($data['template_id'])){
-            $template_id = (int)$data['template_id'];
+        if(isset($data['email'])){
+            $email = $data['email'];
         }
+
+        if(isset($data['anrede'])){
+            $anrede = $data['anrede'];
+        }
+
+        if(isset($data['vorname'])){
+            $vorname = $data['vorname'];
+        }
+
+        if(isset($data['name'])){
+            $name = $data['name'];
+        }
+
+        if(isset($data['user_id'])){
+            $user_id = $data['user_id'];
+        }
+        
 
         $sendername      = 'IVD24Immobilien';
         $absender_mail   = 'noreply@ivd24immobilien.de';
         $reply_mail      = 'noreply@ivd24immobilien.de';
-        $empfaenger_name = $username;
+        $empfaenger_name = $name;
         $empfaenger_mail = $email;
 
         $nachricht_plain = '';
@@ -187,6 +204,12 @@ class SendQueue
             'mail_template_id' => $template_id
         ]);
         $nachricht_html = $row['nachricht'];
+
+        $nachricht_html = str_replace(
+            ["{{anrede}}", "{{vorname}}", "{{nachname}}", "{{user_id}}"], 
+            [$anrede, $vorname, $name, $user_id], 
+            $nachricht_html
+        );
 
         if($mode == 'mode1'){
             //

@@ -179,7 +179,7 @@ class StockDao extends BaseDao {
     }
 
     public function getAktionaerToInvite(iterable $values=[]){ // good
-        $sql = "SELECT aktien.user_id, aktien.user_geschaeftsstelle_id, user_makler.email, user_makler.vorname, user_makler.name, user_makler.firma
+        $sql = "SELECT aktien.user_id, aktien.user_geschaeftsstelle_id, user_makler.email, user_makler.anrede, user_makler.vorname, user_makler.name, user_makler.firma
                 FROM aktien
                 LEFT JOIN user_makler ON user_makler.user_id = aktien.user_id 
                 WHERE aktien.user_id IS NOT NULL AND aktien.user_geschaeftsstelle_id IS NOT NULL AND aktien.purchase_verified = 1 
