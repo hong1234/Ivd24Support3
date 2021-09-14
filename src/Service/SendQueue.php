@@ -153,7 +153,7 @@ class SendQueue
 
     public function addToSendQueue2($mode, $data=[]) {
 
-        $username = '';
+        $name = '';
         $email = '';
         $betreff = '';
         $template_id = '';
@@ -191,7 +191,6 @@ class SendQueue
             $user_id = $data['user_id'];
         }
         
-
         $sendername      = 'IVD24Immobilien';
         $absender_mail   = 'noreply@ivd24immobilien.de';
         $reply_mail      = 'noreply@ivd24immobilien.de';
