@@ -57,7 +57,6 @@ class MailTemplateController extends AbstractController
 
             $templatename = $safePost->get('templatename');
             $template = $safePost->get('template');
-            $dokument = $safePost->get('dokument');
 
             //validation
             // $error = $validator->isValidStatisticUserInput($safePost);
@@ -67,6 +66,19 @@ class MailTemplateController extends AbstractController
 
             if(preg_replace('/\s+/', '', $template) == ''){
                 $error = $error."Feld 'template' darf nicht leer sein ---";
+            }
+
+            if ($error == '') {
+                if ($_FILES['dokument']['error'] == 0) {
+                    // $path = "uploads/" . basename( $_FILES['uploaded_file']['name']);
+                    $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename( $_FILES['dokument']['name']);
+    
+                    if(move_uploaded_file($_FILES['dokument']['tmp_name'], $path)) {
+                        $dokument = '/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                    } else{
+                        $error = $error."There was an error uploading the file ---";
+                    }
+                }
             }
             
             if ($error == '') {
@@ -78,10 +90,10 @@ class MailTemplateController extends AbstractController
 
         }
 
-        return $this->render('temp/new.html.twig', [
+        return $this->render('temp/new.html.twig', [ 
             'templatename' => $templatename,
             'template'     => $template,
-            'dokument'     => $dokument,
+            // 'dokument'     => $dokument,
             'error'        => $error,
             'briefanrede'  => '{{briefanrede}}',
             'anrede'       => '{{anrede}}',
@@ -89,6 +101,7 @@ class MailTemplateController extends AbstractController
             'nachname'     => '{{nachname}}',
             'user_id'      => '{{user_id}}'
         ]);
+
     }
 
      /**

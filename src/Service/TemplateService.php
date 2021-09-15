@@ -58,8 +58,7 @@ class TemplateService
         $this->templateDao->insertTemplate([
             'templatename'  => $templatename,
             'template'      => $template,
-            'document_path' => $dokument,
-            'insert_date'   => time()
+            'document_path' => $dokument
         ]);
     }
 

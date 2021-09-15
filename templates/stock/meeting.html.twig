@@ -40,9 +40,9 @@
                     
                     angelegt am: {{meeting.insert_date|date("d.m.Y")}}<br>
                     zuletzt bearbeitet am: {{meeting.update_date|date("d.m.Y")}}<br><br>
-                    Anzahl stimmberechtigte Aktionäre bei Hauptversammlung: <br>
-                    Anzahl ausgegebenen Aktien bei Hauptversammlung: <br>
-                    Anzahl Anmeldungen von Aktionären zur Hauptversammlung: <br>
+                    Anzahl stimmberechtigte Aktionäre bei Hauptversammlung: {{meeting.number_of_people_entitled_to_vote}}<br>
+                    Anzahl ausgegebenen Aktien bei Hauptversammlung: {{meeting.number_of_shares_issued}}<br>
+                    Anzahl Anmeldungen von Aktionären zur Hauptversammlung: {{meeting.registration_of_shareholders}}<br>
                     Protokoll: <br><br>
 
                     <div class="form-group">

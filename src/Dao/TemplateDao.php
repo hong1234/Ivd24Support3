@@ -19,7 +19,7 @@ class TemplateDao extends BaseDao {
                 titel         = :templatename,
                 nachricht     = :template,
                 document_path = :document_path,
-                insert_date   = :insert_date
+                insert_date   = NOW()
                 ";
         return $this->doSQL($sql, $values);
     }
