@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Service\StockService;
 
 use App\Dao\StockDao;
-use App\Dao\UserDao;
 
 /**
  *
@@ -18,11 +17,9 @@ class StockController extends AbstractController
 {
     private $stockService;
     private $stockDao;
-    private $uDao;
    
-    public function __construct(UserDao $uDao, StockDao $stockDao, StockService $stockService)
+    public function __construct(StockDao $stockDao, StockService $stockService)
     {
-        $this->uDao = $uDao;
         $this->stockService = $stockService;
         $this->stockDao = $stockDao;
     }
@@ -225,6 +222,20 @@ class StockController extends AbstractController
             'temps'   => $temps,
             'stories' => $stories,
             'error'   => $error
+        ]);
+    }
+
+    /**
+     * @Route("/stock/meeting/{hauptversammlung_id}/close", name="stock_meetingclose", requirements={"hauptversammlung_id"="\d+"})
+     */
+    public function meetingClose(int $hauptversammlung_id)
+    {
+        $this->stockDao->updateClosed([
+            'meeting_id' => $hauptversammlung_id
+        ]);
+
+        return $this->redirectToRoute('stock_meeting', [
+            'hauptversammlung_id' => $hauptversammlung_id
         ]);
     }
 

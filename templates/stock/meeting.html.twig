@@ -34,7 +34,9 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <!-- text input -->
-                    Status: <b>{{status}}</b><br><br>
+                    Status: <b>{{status}}</b> 
+                    <a onclick="showConfirm(event)" href="{{ path('stock_meetingclose', {'hauptversammlung_id': hauptversammlung_id}) }}"><button class="btn btn-primary btn-sm">HV abschließen</button></a>
+                    <br><br>
                     
                     angelegt am: {{meeting.insert_date|date("d.m.Y")}}<br>
                     zuletzt bearbeitet am: {{meeting.update_date|date("d.m.Y")}}<br><br>
@@ -44,7 +46,7 @@
                     Protokoll: <br><br>
 
                     <div class="form-group">
-                      <a href="{{ path('stock_meetinginvite', {'hauptversammlung_id': hauptversammlung_id}) }}"><button class="btn btn-primary">Mail an Aktionäre versenden</button></a>
+                      <a href="{{ path('stock_meetinginvite', {'hauptversammlung_id': hauptversammlung_id}) }}"><button class="btn btn-primary">Email an Aktionäre versenden</button></a>
                     </div>
                   
                     <form action="{{ path('stock_meeting', {'hauptversammlung_id': hauptversammlung_id}) }}" method="POST">
@@ -86,5 +88,14 @@
         toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
       });
   </script>
+
+  <script>
+        function showConfirm(event){
+            var answer = window.confirm("Wollen Sie diese HV wirklich abschließen ?");
+            if (answer==false) {
+                event.preventDefault();
+            }
+        }
+    </script>
     
 {% endblock %}

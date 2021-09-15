@@ -173,6 +173,11 @@ class StockDao extends BaseDao {
         return $this->doSQL($sql, $values);
     }
 
+    public function updateClosed(iterable $values=[]){
+        $sql  = "UPDATE hauptversammlung SET closed = 1 WHERE id = :meeting_id";
+        return $this->doSQL($sql, $values);
+    }
+
     public function getTemplatesForGeneralMeeting(iterable $values=[]){
         $sql = "SELECT * FROM send_mail_templates WHERE kategorie_id = 2";
         return $this->doQueryObj($sql, $values)->fetchAll();

@@ -37,7 +37,7 @@ class TemplateService
             $row2[] = $row->insert_date;
 
             $links = "<a class='' href=".$this->router->generate('template_edit', array('tempid' => $row->mail_template_id)).">Template bearbeiten</a><br>";
-            $links = $links."<a style='color:red;' onclick='showConfirm(event)' href=".$this->router->generate('template_delete', array('tempid' => $row->mail_template_id)).">Template delete</a><br>";
+            $links = $links."<a onclick='showConfirm(event)' href=".$this->router->generate('template_delete', array('tempid' => $row->mail_template_id)).">Template delete</a><br>";
             
             $row2[] = $links;
 
