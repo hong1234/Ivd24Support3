@@ -201,10 +201,5 @@ class MailTemplateController extends AbstractController
         return $this->redirectToRoute('template_list', [
             //  'paramName' => 'value'
         ]);
-
-        // $temp = $this->templateService->getTemplateById($tempid);
-        // return $this->render('temp/delete.html.twig', [
-        //     'temp' => $temp
-        // ]);
     }
 }

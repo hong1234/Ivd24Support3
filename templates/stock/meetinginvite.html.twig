@@ -47,7 +47,7 @@
                     </div>
                 </div>
 			          <div class="box-footer">
-                    <button type="submit" class="btn btn-primary" name="savebutton" value="true">Email versenden</button>
+                    <button onclick='showConfirm(event)' type="submit" class="btn btn-primary" name="savebutton" value="true">Email versenden</button>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -57,4 +57,17 @@
     </div>
   </form>
   <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+
+    <script>
+        function showConfirm(event){
+            var answer = window.confirm("Wollen Sie wirklich Email an Aktionäre versenden ?");
+            if (answer==false) {
+                event.preventDefault();
+            }
+        }
+    </script>
 {% endblock %}
