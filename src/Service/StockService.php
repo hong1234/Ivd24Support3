@@ -211,10 +211,12 @@ class StockService
 
     //--------------
 
-    public function inviteToMeeting($hauptversammlung_id, $safePost){
+    public function inviteToMeeting($hauptversammlung_id, $safePost, $mode){
 
         $betreff     = $safePost->get('betreff');    // 'betreff' => string 'Ladung zu Sammlung' (length=18)
         $template_id = $safePost->get('template');   // 'template' => string 'temp1' (length=5)
+
+        //----------
 
         $stmt = $this->stockDao->getAktionaerToInvite([
             'hauptversammlung_id' => $hauptversammlung_id,
@@ -222,8 +224,10 @@ class StockService
         ]);
 
         while ($row = $stmt->fetch()) {
-            $this->doInvite($betreff, $hauptversammlung_id,  $template_id, $row);
+            $this->doInvite($betreff, $hauptversammlung_id,  $template_id, $row, $mode);
         }
+
+        //----------
 
         $stmt = $this->stockDao->getAktionaerToInvite2([
             'hauptversammlung_id' => $hauptversammlung_id,
@@ -231,19 +235,25 @@ class StockService
         ]);
 
         while ($row = $stmt->fetch()) {
-            $this->doInvite2($betreff, $hauptversammlung_id, $template_id, $row);
+            $this->doInvite2($betreff, $hauptversammlung_id, $template_id, $row, $mode);
         }
 
     }
 
-    public function doInvite($betreff, $hauptversammlung_id, $template_id, $row){
+    public function doInvite($betreff, $hauptversammlung_id, $template_id, $row, $mode){
 
         $user_id = $row->user_id;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
-        $email = 'technik@ivd24.de'; // 'vuanhde@yahoo.de'; //$row->email;
+
         $anrede  = $row->anrede;
         $vorname = $row->vorname;
         $name    = $row->name;
+
+        $email = $row->email;
+        if($mode == 'test'){
+            $email = 'technik@ivd24.de'; 
+            // $email = 'vuanhde@yahoo.de';
+        }
         
         $this->stockDao->insertHauptversammlungEmailCommunication([
             'hauptversammlung_id' => $hauptversammlung_id,
@@ -263,12 +273,18 @@ class StockService
         ]);
     }
 
-    public function doInvite2($betreff, $hauptversammlung_id, $template_id, $row){
+    public function doInvite2($betreff, $hauptversammlung_id, $template_id, $row, $mode){
         // $user_id = NULL;
         // $region = $row->region;
         $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
-        $email = 'technik@ivd24.de'; // 'vuanhde@yahoo.de'; //$row->email;
+
         $name  = $row->name;
+
+        $email = $row->email;
+        if($mode == 'test'){
+            $email = 'technik@ivd24.de'; 
+            // $email = 'vuanhde@yahoo.de';
+        }
 
         $this->stockDao->insertHauptversammlungEmailCommunication2([
             'hauptversammlung_id' => $hauptversammlung_id,

@@ -40,6 +40,12 @@
                         </select>
                     </div>
                     <div class="form-group">
+                      <p id="testmailBox">
+                        <input type="checkbox" name="test_mail" id="test_mail" value="test-mode" checked>
+                        <label for="test_mail">test_mode (alle mails gehen zu 'technik@ivd24.de')</label>
+                      </p>
+                    </div>
+                    <div class="form-group">
                         History:<br>
                         {% for story in stories %}
                             {{story.send_date}} E-Mail Template "{{story.send_template}}" an Aktionäre verschickt<br>

@@ -190,6 +190,12 @@ class StockController extends AbstractController
             //post parameters
             $safePost = $request->request;
 
+            $mode = 'normal';
+            if($safePost->get('test_mail') !== null){
+                $mode = 'test';
+            } 
+            // echo $mode; exit;
+
             // var_dump( $safePost); exit;
 
             //validation
@@ -198,7 +204,7 @@ class StockController extends AbstractController
             
             if ($error == '') {
 
-                $this->stockService->inviteToMeeting($hauptversammlung_id, $safePost);
+                $this->stockService->inviteToMeeting($hauptversammlung_id, $safePost, $mode);
 
                 return $this->redirectToRoute('stock_allmeeting', [
                     //  'paramName' => 'value'
