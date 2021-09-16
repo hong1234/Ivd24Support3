@@ -111,6 +111,9 @@ class MailTemplateController extends AbstractController
      */
     public function templateEdit($tempid, Request $request)
     {
+        $templatename = '';
+        $template = '';
+        $dokument = '';
         $error = '';
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
@@ -139,14 +142,21 @@ class MailTemplateController extends AbstractController
                     //  'paramName' => 'value'
                 ]);
             }
+            
         }
 
         if ($request->isMethod('GET')) {
             $temp = $this->templateService->getTemplateById($tempid);
+            $templatename = $temp->titel;
+            $template = $temp->nachricht;
+            $dokument = $temp->document_path;
         }
 
         return $this->render('temp/edit.html.twig', [
-            'template'    => $temp,
+            'template_id' => $tempid,
+            'templatename' => $templatename,
+            'template'    => $template,
+            'dokument'    => $dokument,
             'error'       => $error,
             'briefanrede' => '{{briefanrede}}',
             'anrede'      => '{{anrede}}',

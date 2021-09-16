@@ -54,7 +54,7 @@
                     {{nachname}}<br>
                     {{user_id}}<br><br>
                   
-                    <form action="{{path('template_edit', {'tempid': template.mail_template_id})}}" method="POST">
+                    <form action="{{path('template_edit', {'tempid': template_id})}}" method="POST">
 
                     {# <div class="form-group">
                         <label for="username">Textfeld Hauptversammlung Protokoll</label>
@@ -63,15 +63,15 @@
 
                     <div class="form-group">
                         <label for="Templatename">Templatename</label>
-                        <input type="text" class="form-control" id="templatename" name="templatename" placeholder="" value="{{template.titel}}" required>
+                        <input type="text" class="form-control" id="templatename" name="templatename" placeholder="" value="{{templatename}}" required>
                     </div>
                     <div class="form-group">
                         <label for="Dokument">Dokument</label>
-                        <input type="text" class="form-control" id="dokument" name="dokument" placeholder="" value="{{template.document_path}}" readonly>
+                        <input type="text" class="form-control" id="dokument" name="dokument" placeholder="" value="{{dokument}}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="EmailText">Email-Template</label>
-                        <textarea class="form-control" type="text" id="template" name="template" rows="12">{{template.nachricht}}</textarea>
+                        <textarea class="form-control" type="text" id="template" name="template" rows="12">{{template}}</textarea>
                     </div>
                     
                 </div>
