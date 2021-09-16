@@ -224,18 +224,25 @@ class StockService
         ]);
 
         while ($row = $stmt->fetch()) {
+            if ($mode == 'test' && (int)$row->user_id != 19003) {
+                continue;
+            }
             $this->doInvite($betreff, $hauptversammlung_id,  $template_id, $row, $mode);
         }
 
         //----------
 
-        $stmt = $this->stockDao->getAktionaerToInvite2([
-            'hauptversammlung_id' => $hauptversammlung_id,
-            'mail_template_id'    => $template_id
-        ]);
+        if($mode == 'normal'){
 
-        while ($row = $stmt->fetch()) {
-            $this->doInvite2($betreff, $hauptversammlung_id, $template_id, $row, $mode);
+            $stmt = $this->stockDao->getAktionaerToInvite2([
+                'hauptversammlung_id' => $hauptversammlung_id,
+                'mail_template_id'    => $template_id
+            ]);
+    
+            while ($row = $stmt->fetch()) {
+                $this->doInvite2($betreff, $hauptversammlung_id, $template_id, $row, $mode);
+            }
+            
         }
 
     }
