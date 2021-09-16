@@ -54,7 +54,7 @@
                     {{nachname}}<br>
                     {{user_id}}<br><br>
                   
-                    <form action="{{path('template_edit', {'tempid': template_id})}}" method="POST">
+                    <form action="{{path('template_edit', {'tempid': template_id})}}" method="POST" enctype="multipart/form-data">
 
                     {# <div class="form-group">
                         <label for="username">Textfeld Hauptversammlung Protokoll</label>
@@ -66,8 +66,22 @@
                         <input type="text" class="form-control" id="templatename" name="templatename" placeholder="" value="{{templatename}}">
                     </div>
                     <div class="form-group">
-                        <label for="Dokument">Dokument</label>
-                        <input type="text" class="form-control" id="dokument" name="dokument" placeholder="" value="{{dokument}}" readonly>
+
+                        <p id="doc_field1">
+                          <label for="Dokument">Dokument</label>
+                          <input type="text" class="form-control" id="dokument1" name="dokument1" placeholder="" value="{{dokument1}}" readonly>
+                        </p>
+
+                        <p id="doc_field2">
+                          {# <label for="image">Dokument ändern (nicht wählen == aktuelles Dokument entfernen)</label>
+                          <input class="form-control" type="file" name="dokument" id="dokument"> #}
+                        </p>
+                        
+                        <p id="allowUpload">
+                          <input type="checkbox" name="upload_new" id="upload_new">
+                          <label for="upload_new">Dokument ändern</label>
+                        </p>
+                        
                     </div>
                     <div class="form-group">
                         <label for="EmailText">Email-Template</label>
@@ -105,6 +119,31 @@
         ],
         toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
       });
+  </script>
+
+  <script>
+    var cbox = document.getElementById('allowUpload');
+    cbox.style.display = 'block';
+    var uploadImage = document.getElementById('upload_new');
+    uploadImage.onclick = function () {
+      //var image_id = document.getElementById('image_id');
+      //var image = document.getElementById('image');
+      //var sel = uploadImage.checked;
+      //image_id.disabled = sel;
+      //image.parentNode.style.display = sel ? 'block' : 'none';
+      //caption.parentNode.style.display = sel ? 'block' : 'none';
+      //image.disabled = !sel;
+      //caption.disabled = !sel;
+
+      var doc_field2 = document.getElementById('doc_field2');
+      //doc_field.querySelectorAll('*').forEach(n => n.remove());
+
+      //var label_node = document.createElement("<label for='Dokument'>Dokument:</label>");
+      //doc_field.appendChild(label_node);
+      doc_field2.innerHTML = '<label for="Dokument">Dokument ändern (nicht wählen == aktuelles Dokument entfernen)</label><input class="form-control" type="file" name="dokument" id="dokument">';
+
+      cbox.remove();
+    }
   </script>
     
 {% endblock %}

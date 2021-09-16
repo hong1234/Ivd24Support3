@@ -5,9 +5,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-
-// use App\Service\StringFormat;
-// use App\Validator\UserAccount;
 use App\Service\TemplateService;
 use App\Dao\TemplateDao;
 
@@ -69,16 +66,18 @@ class MailTemplateController extends AbstractController
             }
 
             if ($error == '') {
-                if ($_FILES['dokument']['error'] == 0) {
-                    // $path = "uploads/" . basename( $_FILES['uploaded_file']['name']);
-                    // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename( $_FILES['dokument']['name']);
-                    $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename( $_FILES['dokument']['name']);
-    
-                    if(move_uploaded_file($_FILES['dokument']['tmp_name'], $path)) {
-                        // $dokument = '/public/dokumente/'.basename( $_FILES['dokument']['name']);
-                        $dokument = $path;
-                    } else{
-                        $error = $error."There was an error uploading the file ---";
+                if(isset($_FILES['dokument'])) {
+                    if ($_FILES['dokument']['error'] == 0) {
+                        // $path = "uploads/" . basename( $_FILES['uploaded_file']['name']);
+                        $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                        // $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename( $_FILES['dokument']['name']);
+        
+                        if(move_uploaded_file($_FILES['dokument']['tmp_name'], $path)) {
+                            // $dokument = '/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                            $dokument = $path;
+                        } else{
+                            $error = $error."There was an error uploading the file ---";
+                        }
                     }
                 }
             }
@@ -113,7 +112,7 @@ class MailTemplateController extends AbstractController
     {
         $templatename = '';
         $template = '';
-        $dokument = '';
+        $dokument1 = '';
         $error = '';
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
@@ -123,8 +122,8 @@ class MailTemplateController extends AbstractController
             // var_dump( $safePost); exit;
 
             $templatename = $safePost->get('templatename');
-            $template = $safePost->get('template');
-            $dokument = $safePost->get('dokument');
+            $template  = $safePost->get('template');
+            $dokument1 = $safePost->get('dokument1');
 
             //validation
             // $error = $validator->isValidStatisticUserInput($safePost);
@@ -137,26 +136,50 @@ class MailTemplateController extends AbstractController
             }
 
             if ($error == '') {
-                $this->templateService->updateTemplate($tempid, $templatename, $template, $dokument);
+                // var_dump($_FILES['dokument']); exit;
+                if(isset($_FILES['dokument'])) {
+                    if ($_FILES['dokument']['error'] == 0) {
+                        $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                        // $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename( $_FILES['dokument']['name']);
+        
+                        if(move_uploaded_file($_FILES['dokument']['tmp_name'], $path)) {
+                            if(strlen($dokument1)>0){
+                                unlink($dokument1);
+                            }
+                            $dokument1 = $path;
+                        } else{
+                            $error = $error."There was an error uploading the file ---";
+                        }
+                    } else {
+                        if(strlen($dokument1)>0){
+                            unlink($dokument1);
+                        }
+                        $dokument1 = '';
+                    }
+                } 
+            }
+
+            if ($error == '') {
+                $this->templateService->updateTemplate($tempid, $templatename, $template, $dokument1);
                 return $this->redirectToRoute('template_list', [
                     //  'paramName' => 'value'
                 ]);
             }
-            
+
         }
 
         if ($request->isMethod('GET')) {
             $temp = $this->templateService->getTemplateById($tempid);
             $templatename = $temp->titel;
             $template = $temp->nachricht;
-            $dokument = $temp->document_path;
+            $dokument1 = $temp->document_path;
         }
 
         return $this->render('temp/edit.html.twig', [
             'template_id' => $tempid,
-            'templatename' => $templatename,
+            'templatename'=> $templatename,
             'template'    => $template,
-            'dokument'    => $dokument,
+            'dokument1'   => $dokument1,
             'error'       => $error,
             'briefanrede' => '{{briefanrede}}',
             'anrede'      => '{{anrede}}',
