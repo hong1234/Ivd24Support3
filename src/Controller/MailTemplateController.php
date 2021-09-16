@@ -71,10 +71,12 @@ class MailTemplateController extends AbstractController
             if ($error == '') {
                 if ($_FILES['dokument']['error'] == 0) {
                     // $path = "uploads/" . basename( $_FILES['uploaded_file']['name']);
-                    $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                    // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                    $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename( $_FILES['dokument']['name']);
     
                     if(move_uploaded_file($_FILES['dokument']['tmp_name'], $path)) {
-                        $dokument = '/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                        // $dokument = '/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                        $dokument = $path;
                     } else{
                         $error = $error."There was an error uploading the file ---";
                     }
