@@ -49,7 +49,7 @@ class MailTemplateController extends AbstractController
             
             //post parameters
             $safePost = $request->request;
-            var_dump($safePost); var_dump($_FILES['dokument']); exit;
+            // var_dump($safePost); var_dump($_FILES['dokument']); exit;
 
             $templatename = $safePost->get('templatename');
             $template = $safePost->get('template');
@@ -117,7 +117,6 @@ class MailTemplateController extends AbstractController
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
             //post parameters
             $safePost = $request->request;
-
             // var_dump( $safePost); exit;
 
             $templatename = $safePost->get('templatename');
@@ -202,5 +201,5 @@ class MailTemplateController extends AbstractController
             //  'paramName' => 'value'
         ]);
     }
-    
+
 }
