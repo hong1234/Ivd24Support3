@@ -50,6 +50,7 @@ class SendQueue
 
         if($modus=='makler_new'){
             $betreff  = "Sie sind registriert as Makler!";
+
             $nachricht_plain = "Liebes Mitglied, 
             wir freuen uns, Sie beim verbandseigenen Immobilienportal ivd24 begrüßen zu dürfen! Bevor es losgeht, möchten wir Ihnen hier unsere Services noch einmal kurz vorstellen.
             Neben der klassischen Angebotsplattform zur Vermarktung Ihrer Immobilien, profitieren Sie bei ivd24 von vielen weiteren Mehrwerten:
@@ -73,6 +74,7 @@ class SendQueue
             Bei Fragen oder Anregungen können Sie uns gerne anrufen. Sie erreichen uns montags bis freitags von 9:00 bis 16:30 Uhr unter der 089 / 290 820 50. Den technischen Support erreichen Sie montags bis freitags von 9:00 bis 16:30 Uhr unter der 089 / 290 820 55 oder per E-Mail unter support@ivd24.de. Wir wünschen Ihnen gute Geschäfte und hoffen einen kleinen Beitrag mit ivd24.de leisten zu können.
             Mit freundlichen Grüßen
             Ihr ivd24 Team";
+            
             $nachricht_html = $this->twig->render('email/new.makler.html.twig', [
                 'username' => $username,
                 'passwort' => $passwort

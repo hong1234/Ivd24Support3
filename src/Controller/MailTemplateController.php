@@ -49,8 +49,7 @@ class MailTemplateController extends AbstractController
             
             //post parameters
             $safePost = $request->request;
-
-            // var_dump( $safePost); exit;
+            var_dump($safePost); var_dump($_FILES['dokument']); exit;
 
             $templatename = $safePost->get('templatename');
             $template = $safePost->get('template');
@@ -68,13 +67,13 @@ class MailTemplateController extends AbstractController
             if ($error == '') {
                 if(isset($_FILES['dokument'])) {
                     if ($_FILES['dokument']['error'] == 0) {
-                        // $path = "uploads/" . basename( $_FILES['uploaded_file']['name']);
-                        $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename( $_FILES['dokument']['name']);
-                        // $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                        // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename($_FILES['dokument']['name']);
+                        // $path = '/var/www/html/ivd24SupportTool/public/dokumente/'.basename($_FILES['dokument']['name']);
+                        $path = '/var/www/html/dokumente/ivd24/'.basename($_FILES['dokument']['name']);
         
                         if(move_uploaded_file($_FILES['dokument']['tmp_name'], $path)) {
-                            // $dokument = '/public/dokumente/'.basename( $_FILES['dokument']['name']);
-                            $dokument = $path;
+                            // $dokument = $path;
+                            $dokument = basename($_FILES['dokument']['name']);
                         } else{
                             $error = $error."There was an error uploading the file ---";
                         }
@@ -136,23 +135,24 @@ class MailTemplateController extends AbstractController
             }
 
             if ($error == '') {
-                // var_dump($_FILES['dokument']); exit;
                 if(isset($_FILES['dokument'])) {
                     if ($_FILES['dokument']['error'] == 0) {
-                        $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename( $_FILES['dokument']['name']);
-                        // $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename( $_FILES['dokument']['name']);
+                        // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename($_FILES['dokument']['name']);
+                        // $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename($_FILES['dokument']['name']);
+                        $path = '/var/www/html/dokumente/ivd24/'.basename($_FILES['dokument']['name']);
         
                         if(move_uploaded_file($_FILES['dokument']['tmp_name'], $path)) {
                             if(strlen($dokument1)>0){
-                                unlink($dokument1);
+                                unlink('/var/www/html/dokumente/ivd24/'.$dokument1);
                             }
-                            $dokument1 = $path;
+                            // $dokument1 = $path;
+                            $dokument1 = basename($_FILES['dokument']['name']);
                         } else{
                             $error = $error."There was an error uploading the file ---";
                         }
                     } else {
                         if(strlen($dokument1)>0){
-                            unlink($dokument1);
+                            unlink('/var/www/html/dokumente/ivd24/'.$dokument1);
                         }
                         $dokument1 = '';
                     }
@@ -202,4 +202,5 @@ class MailTemplateController extends AbstractController
             //  'paramName' => 'value'
         ]);
     }
+    
 }
