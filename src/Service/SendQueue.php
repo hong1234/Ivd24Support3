@@ -212,7 +212,7 @@ class SendQueue
         if(strlen($anhang_datei) > 0){
 
             $anhang_datei_jn = 'J';
-            $anhang_datei_data = 'relevante Infos';
+            $anhang_datei_data = '/var/www/html/dokumente/ivd24';
 
             $this->bDao->insertSendQueue2([
                 'sendername'      => $sendername, 
