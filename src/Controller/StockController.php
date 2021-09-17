@@ -182,6 +182,10 @@ class StockController extends AbstractController
     public function meetingInvite(int $hauptversammlung_id, Request $request)
     {
         $error = '';
+        $template_id = 0;
+        $betreff = '';
+        $mode = 'normal';
+
         $temps = $this->stockDao->getTemplatesForGeneralMeeting();
         $stories = $this->stockDao->getSendMailTempleteStory();
 
@@ -189,42 +193,39 @@ class StockController extends AbstractController
             
             //post parameters
             $safePost = $request->request;
+            // var_dump( $safePost); exit;
 
-            $mode = 'normal';
+            $betreff = $safePost->get('betreff');
+            $template_id = $safePost->get('template');
+
             if($safePost->get('test_mail') !== null){
                 $mode = 'test';
             } 
-            // echo $mode; exit;
-
-            // var_dump( $safePost); exit;
 
             //validation
             // $error = $validator->isValidStatisticUserInput($safePost);
             // $error = 'abc';
-            
+
             if ($error == '') {
 
-                $this->stockService->inviteToMeeting($hauptversammlung_id, $safePost, $mode);
+                $this->stockService->inviteToMeeting($hauptversammlung_id, $betreff, $template_id, $mode);
 
                 return $this->redirectToRoute('stock_allmeeting', [
                     //  'paramName' => 'value'
                 ]);
             } 
 
-            $betreff = $safePost->get('betreff');
-            $tempId  = $safePost->get('template');
         }
 
         if ($request->isMethod('GET')) {
             $betreff = "Ladung zu Sammlung";
-            $tempId  = $temps[0]->mail_template_id;
-            $error   = '';
+            $template_id = $temps[0]->mail_template_id;
         }
 
         return $this->render('stock/meetinginvite.html.twig', [
             'hauptversammlung_id' => $hauptversammlung_id,
-            'tempId'  => $tempId,
             'betreff' => $betreff,
+            'tempId'  => $template_id,
             'temps'   => $temps,
             'stories' => $stories,
             'error'   => $error

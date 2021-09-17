@@ -211,12 +211,7 @@ class StockService
 
     //--------------
 
-    public function inviteToMeeting($hauptversammlung_id, $safePost, $mode){
-
-        $betreff     = $safePost->get('betreff'); 
-        $template_id = $safePost->get('template'); 
-
-        //----------
+    public function inviteToMeeting($hauptversammlung_id, $betreff, $template_id, $mode){ 
 
         $stmt = $this->stockDao->getAktionaerToInvite([
             'hauptversammlung_id' => $hauptversammlung_id,

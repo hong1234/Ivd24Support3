@@ -153,9 +153,9 @@ class SendQueue
 
     public function addToSendQueue2($data=[]) {
 
-        $email = '';
-        $betreff = '';
-        $template_id = '';
+        $email = $data['email'];
+        $betreff = $data['betreff'];
+        $template_id = $data['template_id'];
         
         $briefanrede = '';
         $anrede  = '';
@@ -163,17 +163,9 @@ class SendQueue
         $name = '';
         $user_id = '0';
 
-        if(isset($data['email'])){
-            $email = $data['email'];
-        }
-
-        if(isset($data['betreff'])){
-            $betreff = $data['betreff'];
-        }
-
-        if(isset($data['template_id'])){
-            $template_id = (int)$data['template_id'];
-        }
+        $anhang_datei = '';
+        $anhang_datei_jn = 'N';
+        $anhang_datei_data = '';
         
         if(isset($data['anrede'])){
             $anrede = $data['anrede'];
@@ -199,36 +191,61 @@ class SendQueue
             $user_id = $data['user_id'];
         }
 
+        $template = $this->bDao->getRowInTableByIdentifier('send_mail_templates', [
+            'mail_template_id' => $template_id
+        ]);
+
+        $nachricht_html = $template['nachricht'];
+        $anhang_datei = (string)$template['document_path'];
+
         $sendername      = 'IVD24Immobilien';
         $absender_mail   = 'noreply@ivd24immobilien.de';
         $reply_mail      = 'noreply@ivd24immobilien.de';
         $empfaenger_name = $name;
         $empfaenger_mail = $email;
 
-        $nachricht_plain = '';
+        $nachricht_plain = 'see html text';
+        $nachricht_html  = $this->substitutePlaceholder($briefanrede, $anrede, $vorname, $name, $user_id, $nachricht_html);
 
-        $nachricht_html = $this->getHtmlContent2($template_id, $briefanrede, $anrede, $vorname, $name, $user_id);
+        if(strlen($anhang_datei) > 0){
 
-        $this->bDao->insertSendQueue([
-            'sendername'      => $sendername, 
-            'absender_mail'   => $absender_mail,
-            'reply_mail'      => $reply_mail,
-            'empfaenger_name' => $empfaenger_name,
-            'empfaenger_mail' => $empfaenger_mail,
-            'betreff'         => $betreff,
-            'nachricht_html'  => $nachricht_html,
-            'nachricht_plain' => $nachricht_plain,
-            'insertdate'      => time()
-        ]);
+            $anhang_datei_jn = 'J';
+            $anhang_datei_data = 'relevante Infos';
+
+            $this->bDao->insertSendQueue2([
+                'sendername'      => $sendername, 
+                'absender_mail'   => $absender_mail,
+                'reply_mail'      => $reply_mail,
+                'empfaenger_name' => $empfaenger_name,
+                'empfaenger_mail' => $empfaenger_mail,
+                'betreff'         => $betreff,
+                'nachricht_html'  => $nachricht_html,
+                'nachricht_plain' => $nachricht_plain,
+                'anhang_datei_jn' => $anhang_datei_jn,
+                'anhang_datei'    => $anhang_datei,
+                'anhang_datei_data' => $anhang_datei_data,
+                'insertdate'      => time()
+            ]);
+
+        } else {
+
+            $this->bDao->insertSendQueue([
+                'sendername'      => $sendername, 
+                'absender_mail'   => $absender_mail,
+                'reply_mail'      => $reply_mail,
+                'empfaenger_name' => $empfaenger_name,
+                'empfaenger_mail' => $empfaenger_mail,
+                'betreff'         => $betreff,
+                'nachricht_html'  => $nachricht_html,
+                'nachricht_plain' => $nachricht_plain,
+                'insertdate'      => time()
+            ]);
+
+        }
 
     }
 
-    public function getHtmlContent2($template_id, $briefanrede, $anrede, $vorname, $name, $user_id) {
-        $row = $this->bDao->getRowInTableByIdentifier('send_mail_templates', [
-            'mail_template_id' => $template_id
-        ]);
-        $nachricht_html = $row['nachricht'];
-
+    public function substitutePlaceholder($briefanrede, $anrede, $vorname, $name, $user_id, $nachricht_html) {
         $nachricht_html = str_replace(
             ["{{briefanrede}}", "{{anrede}}", "{{vorname}}", "{{nachname}}", "{{user_id}}"], 
             [$briefanrede, $anrede, $vorname, $name, $user_id], 

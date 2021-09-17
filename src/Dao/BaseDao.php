@@ -94,6 +94,24 @@ class BaseDao {
         return $this->doSQL($sql, $values);
     }
 
+    public function insertSendQueue2(iterable $values=[]){
+        $sql = "INSERT INTO send_queue SET 
+                sendername      = :sendername,
+                absender_mail   = :absender_mail,
+                reply_mail      = :reply_mail,
+                empfaenger_name = :empfaenger_name,
+                empfaenger_mail = :empfaenger_mail,
+                betreff         = :betreff,
+                nachricht       = :nachricht_html,
+                nachricht_plain = :nachricht_plain,
+                angang_datei_jn = :anhang_datei_jn,
+                angang_datei    = :anhang_datei,
+                anhang_datei_data = :anhang_datei_data,
+                insertdate      = :insertdate
+                ";
+        return $this->doSQL($sql, $values);
+    }
+
     public function getAllRowsInTable(string $tabName) {
         $sql = "SELECT * FROM ".$tabName;
         return $this->doQuery($sql, [])->fetchAll();
