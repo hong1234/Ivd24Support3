@@ -151,31 +151,30 @@ class SendQueue
 
     }
 
-    public function addToSendQueue2($mode, $data=[]) {
-
-        $template_id = '';
-        $user_id = '0';
+    public function addToSendQueue2($data=[]) {
 
         $email = '';
         $betreff = '';
+        $template_id = '';
         
         $briefanrede = '';
         $anrede  = '';
         $vorname = '';
         $name = '';
+        $user_id = '0';
 
-        if(isset($data['template_id'])){
-            $template_id = (int)$data['template_id'];
+        if(isset($data['email'])){
+            $email = $data['email'];
         }
 
         if(isset($data['betreff'])){
             $betreff = $data['betreff'];
         }
 
-        if(isset($data['email'])){
-            $email = $data['email'];
+        if(isset($data['template_id'])){
+            $template_id = (int)$data['template_id'];
         }
-
+        
         if(isset($data['anrede'])){
             $anrede = $data['anrede'];
         }
@@ -188,10 +187,6 @@ class SendQueue
             $name = $data['name'];
         }
 
-        if(isset($data['user_id'])){
-            $user_id = $data['user_id'];
-        }
-
         if (trim($anrede) == 'Frau'){
             $briefanrede = "Sehr geehrte Frau $name,";
         } elseif (trim($anrede) == 'Herr'){
@@ -199,7 +194,11 @@ class SendQueue
         } else {
             $briefanrede = "Sehr geehrte/r Divers $name,";
         }
-        
+
+        if(isset($data['user_id'])){
+            $user_id = $data['user_id'];
+        }
+
         $sendername      = 'IVD24Immobilien';
         $absender_mail   = 'noreply@ivd24immobilien.de';
         $reply_mail      = 'noreply@ivd24immobilien.de';
@@ -208,24 +207,7 @@ class SendQueue
 
         $nachricht_plain = '';
 
-        $row = $this->bDao->getRowInTableByIdentifier('send_mail_templates', [
-            'mail_template_id' => $template_id
-        ]);
-        $nachricht_html = $row['nachricht'];
-
-        $nachricht_html = str_replace(
-            ["{{briefanrede}}", "{{anrede}}", "{{vorname}}", "{{nachname}}", "{{user_id}}"], 
-            [$briefanrede, $anrede, $vorname, $name, $user_id], 
-            $nachricht_html
-        );
-
-        if($mode == 'mode1'){
-            //
-        }
-
-        if($mode == 'mode2'){
-            //
-        }
+        $nachricht_html = $this->getHtmlContent2($template_id, $briefanrede, $anrede, $vorname, $name, $user_id);
 
         $this->bDao->insertSendQueue([
             'sendername'      => $sendername, 
@@ -239,6 +221,21 @@ class SendQueue
             'insertdate'      => time()
         ]);
 
+    }
+
+    public function getHtmlContent2($template_id, $briefanrede, $anrede, $vorname, $name, $user_id) {
+        $row = $this->bDao->getRowInTableByIdentifier('send_mail_templates', [
+            'mail_template_id' => $template_id
+        ]);
+        $nachricht_html = $row['nachricht'];
+
+        $nachricht_html = str_replace(
+            ["{{briefanrede}}", "{{anrede}}", "{{vorname}}", "{{nachname}}", "{{user_id}}"], 
+            [$briefanrede, $anrede, $vorname, $name, $user_id], 
+            $nachricht_html
+        );
+
+        return $nachricht_html;
     }
 
 }

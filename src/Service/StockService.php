@@ -213,8 +213,8 @@ class StockService
 
     public function inviteToMeeting($hauptversammlung_id, $safePost, $mode){
 
-        $betreff     = $safePost->get('betreff');    // 'betreff' => string 'Ladung zu Sammlung' (length=18)
-        $template_id = $safePost->get('template');   // 'template' => string 'temp1' (length=5)
+        $betreff     = $safePost->get('betreff'); 
+        $template_id = $safePost->get('template'); 
 
         //----------
 
@@ -227,7 +227,7 @@ class StockService
             if ($mode == 'test' && (int)$row->user_id != 19003) {
                 continue;
             }
-            $this->doInvite($betreff, $hauptversammlung_id,  $template_id, $row, $mode);
+            $this->doInvite($hauptversammlung_id, $betreff, $template_id, $row, $mode);
         }
 
         //----------
@@ -240,28 +240,27 @@ class StockService
             ]);
     
             while ($row = $stmt->fetch()) {
-                $this->doInvite2($betreff, $hauptversammlung_id, $template_id, $row, $mode);
+                $this->doInvite2($hauptversammlung_id, $betreff, $template_id, $row, $mode);
             }
             
         }
 
     }
 
-    public function doInvite($betreff, $hauptversammlung_id, $template_id, $row, $mode){
-
-        $user_id = $row->user_id;
-        $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
-
-        $anrede  = $row->anrede;
-        $vorname = $row->vorname;
-        $name    = $row->name;
+    public function doInvite($hauptversammlung_id, $betreff, $template_id, $row, $mode){
 
         $email = $row->email;
         if($mode == 'test'){
             $email = 'technik@ivd24.de'; 
             // $email = 'vuanhde@yahoo.de';
         }
-        
+
+        $anrede  = $row->anrede;
+        $vorname = $row->vorname;
+        $name    = $row->name;
+        $user_id = $row->user_id;
+        $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
+
         $this->stockDao->insertHauptversammlungEmailCommunication([
             'hauptversammlung_id' => $hauptversammlung_id,
             'user_id'             => $user_id,
@@ -269,10 +268,10 @@ class StockService
             'mail_template_id'    => $template_id
         ]);
 
-        $this->sqService->addToSendQueue2('mode1', [
-            'template_id' => $template_id,
-            'betreff'     => $betreff,
+        $this->sqService->addToSendQueue2([
             'email'       => $email,
+            'betreff'     => $betreff,
+            'template_id' => $template_id,
             'anrede'      => $anrede,
             'vorname'     => $vorname,
             'name'        => $name,
@@ -280,12 +279,7 @@ class StockService
         ]);
     }
 
-    public function doInvite2($betreff, $hauptversammlung_id, $template_id, $row, $mode){
-        // $user_id = NULL;
-        // $region = $row->region;
-        $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
-
-        $name  = $row->name;
+    public function doInvite2($hauptversammlung_id, $betreff, $template_id, $row, $mode){
 
         $email = $row->email;
         if($mode == 'test'){
@@ -293,15 +287,20 @@ class StockService
             // $email = 'vuanhde@yahoo.de';
         }
 
+        $name  = $row->name;
+        // $user_id = NULL;
+        // $region = $row->region;
+        $geschaeftsstelle_id = $row->user_geschaeftsstelle_id;
+
         $this->stockDao->insertHauptversammlungEmailCommunication2([
             'hauptversammlung_id' => $hauptversammlung_id,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
             'mail_template_id'    => $template_id
         ]);
 
-        $this->sqService->addToSendQueue2('mode2', [
-            'betreff'     => $betreff,
+        $this->sqService->addToSendQueue2([
             'email'       => $email,
+            'betreff'     => $betreff,
             'template_id' => $template_id,
             'name'        => $name
         ]);
