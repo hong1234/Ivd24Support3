@@ -16,6 +16,8 @@ class SendQueue
 
     public function addToSendQueue($modus, $data=[]) {
 
+        $user_id = $data['user_id'];
+        
         $username = '';
         $email = '';
         $passwort = '';
@@ -140,6 +142,7 @@ class SendQueue
         }
         
         $this->bDao->insertSendQueue([
+            'user_id'         => $user_id,
             'sendername'      => $sendername, 
             'absender_mail'   => $absender_mail,
             'reply_mail'      => $reply_mail,
@@ -154,16 +157,16 @@ class SendQueue
     }
 
     public function addToSendQueue2($data=[]) {
+        $user_id = $data['user_id'];
 
         $email = $data['email'];
         $betreff = $data['betreff'];
-        $template_id = $data['template_id'];
+        $template = $data['template'];
         
         $briefanrede = '';
         $anrede  = '';
         $vorname = '';
         $name = '';
-        $user_id = '0';
 
         $anhang_datei = '';
         $anhang_datei_jn = 'N';
@@ -189,16 +192,8 @@ class SendQueue
             $briefanrede = "Sehr geehrte/r Divers $name,";
         }
 
-        if(isset($data['user_id'])){
-            $user_id = $data['user_id'];
-        }
-
-        $template = $this->bDao->getRowInTableByIdentifier('send_mail_templates', [
-            'mail_template_id' => $template_id
-        ]);
-
-        $nachricht_html = $template['nachricht'];
-        $anhang_datei = (string)$template['document_path'];
+        $nachricht_html = $template->nachricht;
+        $anhang_datei   = (string)$template->document_path;
 
         $sendername      = 'IVD24Immobilien';
         $absender_mail   = 'noreply@ivd24immobilien.de';
@@ -215,6 +210,7 @@ class SendQueue
             $anhang_datei_data = '/var/www/html/dokumente/ivd24';
 
             $this->bDao->insertSendQueue2([
+                'user_id'         => $user_id,
                 'sendername'      => $sendername,
                 'absender_mail'   => $absender_mail,
                 'reply_mail'      => $reply_mail,
@@ -232,6 +228,7 @@ class SendQueue
         } else {
 
             $this->bDao->insertSendQueue([
+                'user_id'         => $user_id,
                 'sendername'      => $sendername, 
                 'absender_mail'   => $absender_mail,
                 'reply_mail'      => $reply_mail,

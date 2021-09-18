@@ -213,6 +213,10 @@ class StockService
 
     public function inviteToMeeting($hauptversammlung_id, $betreff, $template_id, $mode){ 
 
+        $template = $this->bDao->getRowInTableByIdentifier2('send_mail_templates', [
+            'mail_template_id' => $template_id
+        ]);
+
         $stmt = $this->stockDao->getAktionaerToInvite([
             'hauptversammlung_id' => $hauptversammlung_id,
             'mail_template_id'    => $template_id
@@ -222,7 +226,7 @@ class StockService
             if ($mode == 'test' && (int)$row->user_id != 19003) {
                 continue;
             }
-            $this->doInvite($hauptversammlung_id, $betreff, $template_id, $row, $mode);
+            $this->doInvite($hauptversammlung_id, $betreff, $template, $row, $mode);
         }
 
         //----------
@@ -235,14 +239,14 @@ class StockService
             ]);
     
             while ($row = $stmt->fetch()) {
-                $this->doInvite2($hauptversammlung_id, $betreff, $template_id, $row, $mode);
+                $this->doInvite2($hauptversammlung_id, $betreff, $template, $row, $mode);
             }
             
         }
 
     }
 
-    public function doInvite($hauptversammlung_id, $betreff, $template_id, $row, $mode){
+    public function doInvite($hauptversammlung_id, $betreff, $template, $row, $mode){
 
         $email = $row->email;
         if($mode == 'test'){
@@ -260,21 +264,21 @@ class StockService
             'hauptversammlung_id' => $hauptversammlung_id,
             'user_id'             => $user_id,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
-            'mail_template_id'    => $template_id
+            'mail_template_id'    => $template->mail_template_id
         ]);
 
         $this->sqService->addToSendQueue2([
-            'email'       => $email,
-            'betreff'     => $betreff,
-            'template_id' => $template_id,
-            'anrede'      => $anrede,
-            'vorname'     => $vorname,
-            'name'        => $name,
-            'user_id'     => $user_id
+            'user_id'  => $user_id,
+            'email'    => $email,
+            'betreff'  => $betreff,
+            'template' => $template,
+            'anrede'   => $anrede,
+            'vorname'  => $vorname,
+            'name'     => $name
         ]);
     }
 
-    public function doInvite2($hauptversammlung_id, $betreff, $template_id, $row, $mode){
+    public function doInvite2($hauptversammlung_id, $betreff, $template, $row, $mode){
 
         $email = $row->email;
         if($mode == 'test'){
@@ -290,14 +294,15 @@ class StockService
         $this->stockDao->insertHauptversammlungEmailCommunication2([
             'hauptversammlung_id' => $hauptversammlung_id,
             'geschaeftsstelle_id' => $geschaeftsstelle_id,
-            'mail_template_id'    => $template_id
+            'mail_template_id'    => $template->mail_template_id
         ]);
 
         $this->sqService->addToSendQueue2([
-            'email'       => $email,
-            'betreff'     => $betreff,
-            'template_id' => $template_id,
-            'name'        => $name
+            'user_id'  => 0,
+            'email'    => $email,
+            'betreff'  => $betreff,
+            'template' => $template,
+            'name'     => $name
         ]);
     }
 

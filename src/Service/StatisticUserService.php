@@ -59,6 +59,7 @@ class StatisticUserService
             $this->loginDao->addLoginUser($email, $passwort, $roles, $user_id);
     
             $this->sqSer->addToSendQueue('statisticuser_new', [
+                'user_id'  => $user_id,
                 'username' => $username, 
                 'email' => $email, 
                 'passwort' => $passwort,
@@ -95,8 +96,9 @@ class StatisticUserService
             $this->loginDao->updateLoginUser($email, $passwort, $roles, $user_id);
 
             $this->sqSer->addToSendQueue('statisticuser_edit', [
+                'user_id'  => $user_id,
                 'username' => $username, 
-                'email' => $email, 
+                'email'    => $email, 
                 'passwort' => $passwort,
                 'geschaeftsstelle' => $geschaeftsstelle
             ]);

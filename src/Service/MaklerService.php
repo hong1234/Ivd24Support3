@@ -145,6 +145,7 @@ class MaklerService
             ]);
 
             $this->sqService->addToSendQueue('makler_new', [
+                'user_id'  => $user_id,
                 'username' => $username,
                 'email'    => $email,
                 'passwort' => $passwort
@@ -239,6 +240,7 @@ class MaklerService
             ]);
 
             $this->sqService->addToSendQueue('makler_edit_ftp_pw', [
+                'user_id'  => $user_id,
                 'email'    => $email,
                 'passwort' => $ftppasswort
             ]);
@@ -269,6 +271,7 @@ class MaklerService
             ]); 
 
             $this->sqService->addToSendQueue('makler_edit_pw', [
+                'user_id'  => $user_id,
                 'email'    => $email,
                 'passwort' => $passwort
             ]);

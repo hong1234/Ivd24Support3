@@ -50,6 +50,7 @@ class SupporterService
             $this->loginDao->addLoginUser($email, $passwort, $roles, $user_id);
             
             $this->sqSer->addToSendQueue('supporter_new', [
+                'user_id'   => $user_id,
                 'username'  => $username, 
                 'email'     => $email, 
                 'passwort'  => $passwort
@@ -83,6 +84,7 @@ class SupporterService
             $this->loginDao->updateLoginUser($email, $passwort, $roles, $user_id);
              
             $this->sqSer->addToSendQueue('supporter_edit', [
+                'user_id'  => $user_id,
                 'username' => $username, 
                 'email'    => $email, 
                 'passwort' => $passwort
