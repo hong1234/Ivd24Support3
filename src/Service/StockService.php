@@ -250,8 +250,8 @@ class StockService
 
         $email = $row->email;
         if($mode == 'test'){
-            // $email = 'technik@ivd24.de'; 
-            $email = 'vuanhde@yahoo.de';
+            $email = 'technik@ivd24.de'; 
+            // $email = 'vuanhde@yahoo.de';
         }
 
         $anrede  = $row->anrede;
@@ -282,8 +282,8 @@ class StockService
 
         $email = $row->email;
         if($mode == 'test'){
-            // $email = 'technik@ivd24.de'; 
-            $email = 'vuanhde@yahoo.de';
+            $email = 'technik@ivd24.de'; 
+            // $email = 'vuanhde@yahoo.de';
         }
 
         $name  = $row->name;
