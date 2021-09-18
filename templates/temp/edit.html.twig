@@ -33,67 +33,46 @@
                 </div> #}
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <!-- text input -->
-                    {# Status: <b>{{status}}</b><br><br>
-                    
-                    angelegt am: {{meeting.insert_date|date("d.m.Y")}}<br>
-                    zuletzt bearbeitet am: {{meeting.update_date|date("d.m.Y")}}<br><br>
-                    Anzahl stimmberechtigte Aktionäre bei Hauptversammlung: <br>
-                    Anzahl ausgegebenen Aktien bei Hauptversammlung: <br>
-                    Anzahl Anmeldungen von Aktionären zur Hauptversammlung: <br>
-                    Protokoll: <br><br> #}
-
-                    {# <div class="form-group">
-                      <a href="{{ path('stock_meetinginvite', {'hauptversammlung_id': hauptversammlung_id}) }}"><button class="btn btn-primary">Mail an Aktionäre versenden</button></a>
-                    </div> #}
-
-                    <b>Platzhalter im Email-Template:</b><br>
-                    {{briefanrede}}<br>
-                    {{anrede}}<br>
-                    {{vorname}}<br>
-                    {{nachname}}<br>
-                    {{user_id}}<br><br>
-                  
-                    <form action="{{path('template_edit', {'tempid': template_id})}}" method="POST" enctype="multipart/form-data">
-
-                    {# <div class="form-group">
-                        <label for="username">Textfeld Hauptversammlung Protokoll</label>
-                        <textarea class="form-control" id="protokoll" name="protokoll" type="text" rows="12" required>{{meeting.protocol_general_meeting}}</textarea>
-                    </div> #}
-
+                  <!-- text input -->
+                  <form action="{{path('template_edit', {'tempid': template_id})}}" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="Templatename">Templatename</label>
                         <input type="text" class="form-control" id="templatename" name="templatename" placeholder="" value="{{templatename}}">
                     </div>
                     <div class="form-group">
-
+                        <label for="EmailText">Email-Template</label>
+                        <textarea class="form-control" type="text" id="template" name="template" rows="12">{{template}}</textarea>
+                    </div>
+                    <div class="form-group">
                         <p id="doc_field1">
-                          <label for="Dokument">Dokument</label>
+                          <label for="Dokument">Anhang</label>
                           <input type="text" class="form-control" id="dokument1" name="dokument1" placeholder="" value="{{dokument1}}" readonly>
                         </p>
-
                         <p id="doc_field2">
                           {# <label for="image">Dokument ändern (nicht wählen == aktuelles Dokument entfernen)</label>
                           <input class="form-control" type="file" name="dokument" id="dokument"> #}
                         </p>
-                        
                         <p id="allowUpload">
                           <input type="checkbox" name="upload_new" id="upload_new">
-                          <label for="upload_new">Dokument wählen</label>
+                          <label for="upload_new">Anhang/anderer wählen</label>
                         </p>
-                        
                     </div>
                     <div class="form-group">
-                        <label for="EmailText">Email-Template</label>
-                        <textarea class="form-control" type="text" id="template" name="template" rows="12">{{template}}</textarea>
+                      <button type="submit" class="btn btn-primary" name="savebutton" value="true">Speichern</button>
                     </div>
+                  </form>
                     
                 </div>
 			          <div class="box-footer">
-                    <button type="submit" class="btn btn-primary" name="savebutton" value="true">Speichern</button>
+                    <b>* Platzhalter im Email-Template:</b><br>
+                    {{briefanrede}}<br>
+                    {{anrede}}<br>
+                    {{vorname}}<br>
+                    {{nachname}}<br>
+                    {{user_id}}<br><br>
+                    
                 </div>
                 <!-- /.box-body -->
-                </form>
             </div>
           </div>
         </div>
@@ -140,7 +119,7 @@
 
       //var label_node = document.createElement("<label for='Dokument'>Dokument:</label>");
       //doc_field.appendChild(label_node);
-      doc_field2.innerHTML = '<label for="Dokument">Dokument wählen (nicht wählen == nur aktuelles Dokument entfernen)</label><input class="form-control" type="file" name="dokument" id="dokument">';
+      doc_field2.innerHTML = '<label for="Dokument">Anhang/anderer wählen (nicht wählen == den aktuellen Anhang entfernen)</label><input class="form-control" type="file" name="dokument" id="dokument">';
 
       cbox.remove();
     }
