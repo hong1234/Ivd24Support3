@@ -160,7 +160,8 @@ class SendQueue
         $hauptversammlung_id = $data['versammlung_id'];
         $user_id = $data['user_id'];
         $user_id_md5 = md5($user_id);
-        $anmeldelink = "www.ivd24immobilien.de/anmelden-hv/?hvid=$hauptversammlung_id&auth=$user_id_md5";
+        // $anmeldelink = "https://www.ivd24immobilien.de/anmelden-hv/?hvid=$hauptversammlung_id&auth=$user_id_md5";
+        $anmeldelink = '<a href="https://www.ivd24immobilien.de/anmelden-hv/?hvid='.$hauptversammlung_id.'&auth='.$user_id_md5.'">Link zur Anmeldung</a>';
 
         $email = $data['email'];
         $betreff = $data['betreff'];
