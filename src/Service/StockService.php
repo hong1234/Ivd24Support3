@@ -268,6 +268,7 @@ class StockService
         ]);
 
         $this->sqService->addToSendQueue2([
+            'versammlung_id' => $hauptversammlung_id,
             'user_id'  => $user_id,
             'email'    => $email,
             'betreff'  => $betreff,
@@ -298,6 +299,7 @@ class StockService
         ]);
 
         $this->sqService->addToSendQueue2([
+            'versammlung_id' => $hauptversammlung_id,
             'user_id'  => 0,
             'email'    => $email,
             'betreff'  => $betreff,

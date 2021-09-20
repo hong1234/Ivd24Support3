@@ -27,6 +27,12 @@
                         {{makler.plz}} {{makler.ort}}<br>
                         Email: {{makler.email}}<br>
                         Telefon: {{makler.telefon}}<br><br>
+
+                        <h4>Dokumenten zum Aktienkauf</h4>
+                        {% for doc in docs %}
+                           Document: {{doc.document_name}}<br>
+                           Document-path: {{doc.document_path}}<br><br>
+                        {% endfor %}
                         
                         <h4>Anzahl Aktien: {{makler.aktien_az}}</h4>
                         {% for item in aktien %}
@@ -35,12 +41,6 @@
                            Kaufdatum der Aktie: {{item.purchase_date}}<br><br>
                         {% endfor %}
 
-                        <h4>Dokumenten zum Aktienkauf</h4>
-                        {% for doc in docs %}
-                           Document: {{doc.document_name}}<br>
-                           Document-path: {{doc.document_path}}<br><br>
-                        {% endfor %}
-                        
                      </div>
                      
 			            <div class="box-footer">

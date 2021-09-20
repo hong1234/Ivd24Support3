@@ -77,8 +77,12 @@ class ServerController extends AbstractController
      */
     public function serverFileDownload($uid, $file, FtpServer $ftp)
     {
-        $downloaded_file = $ftp->fileDownloadToApp($uid, $file);
+        $file = str_replace("HH1z2Z7", ".", $file);
+
+        $downloaded_file = $ftp->fileDownloadToApp($uid, $file); // downloaded_file from ftp-server
+
         if (file_exists($downloaded_file)) {
+
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename="'.basename($downloaded_file).'"');
@@ -99,6 +103,8 @@ class ServerController extends AbstractController
      * @Route("/server/{uid}/delete/{file}", name="server_delete_file", requirements={"uid"="\d+"})
      */
     public function serverFileDelete($uid, $file, FtpServer $ftp){
+        
+        $file = str_replace("HH1z2Z7", ".", $file);
         $ftp->deleteFileOnFtpServer($uid, $file);
         return $this->redirectToRoute('server_pause_list', [
              //'paramName' => 'value'
@@ -109,9 +115,7 @@ class ServerController extends AbstractController
      * @Route("/server/{uid}/starten", name="server_starten", requirements={"uid"="\d+"})
      */
     public function serverStarten($uid, ServerDao $sDao){
-        
         $user_id = $uid;
-
         $sDao->updateServerConfig([
             'ftp_pause' => 'N',
             'ftp_import_after_break' => '0',

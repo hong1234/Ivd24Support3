@@ -23,4 +23,27 @@ class FileService
         $dataArr = json_decode($json, true);
         return $dataArr;
     }
+
+    //----------------FTP---------------
+    public function getConnectToFtpServer($ftp_server, $ftp_user_name, $ftp_user_pass){
+
+        if($ftp_server !='' && $ftp_user_name !='' && $ftp_user_pass != ''){
+            try {
+                $conn_id = ftp_connect($ftp_server);
+                $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
+
+                if ((!$conn_id) || (!$login_result)) {
+                    // echo 'FTP connection has failed! Attempted to connect to '. $ftp_server. ' for user '.$ftp_user_name.'.';
+                } else {
+                    return $conn_id;
+                }
+            } catch (\Exception $e) {
+                //echo 'Caught exception: ',  $e->getMessage(), "\n"; exit;
+                // continue;
+            }
+        }
+
+        return false;
+    }
+    
 }

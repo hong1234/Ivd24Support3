@@ -157,7 +157,10 @@ class SendQueue
     }
 
     public function addToSendQueue2($data=[]) {
+        $hauptversammlung_id = ['versammlung_id'];
         $user_id = $data['user_id'];
+        $user_id_md5 = md5($user_id);
+        $anmeldelink = "www.ivd24immobilien.de/anmelden-hv/?hvid=$hauptversammlung_id&auth=$user_id_md5";
 
         $email = $data['email'];
         $betreff = $data['betreff'];
@@ -202,7 +205,7 @@ class SendQueue
         $empfaenger_mail = $email;
 
         $nachricht_plain = 'see html text';
-        $nachricht_html  = $this->substitutePlaceholder($briefanrede, $anrede, $vorname, $name, $user_id, $nachricht_html);
+        $nachricht_html  = $this->substitutePlaceholder($briefanrede, $anrede, $vorname, $name, $user_id, $anmeldelink, $nachricht_html);
 
         if(strlen($anhang_datei) > 0){
 
@@ -244,10 +247,10 @@ class SendQueue
 
     }
 
-    public function substitutePlaceholder($briefanrede, $anrede, $vorname, $name, $user_id, $nachricht_html) {
+    public function substitutePlaceholder($briefanrede, $anrede, $vorname, $name, $user_id, $anmeldelink, $nachricht_html) {
         $nachricht_html = str_replace(
-            ["{{briefanrede}}", "{{anrede}}", "{{vorname}}", "{{nachname}}", "{{user_id}}"], 
-            [$briefanrede, $anrede, $vorname, $name, $user_id], 
+            ["{{briefanrede}}", "{{anrede}}", "{{vorname}}", "{{nachname}}", "{{user_id}}", "{{anmeldelink}}"], 
+            [$briefanrede, $anrede, $vorname, $name, $user_id, $anmeldelink], 
             $nachricht_html
         );
 

@@ -17,44 +17,6 @@ class FtpServer
         $this->parameterBag = $parameterBag;
     }
 
-    public function FtpPauseList(){
-        $stmt = $this->sDao->getAllFtpServerPause();
-
-        $rows = array();
-        while ($row = $stmt->fetch()) {
-            $row2 = array();
-
-            $row2[] = $row['user_id'];
-            $row2[] = $row['mitgliedsnummer'];
-            $row2[] = $row['vorname'].' '.$row['name'];;
-            $row2[] = $row['firma'];
-            $row2[] = $row['email'];
-            $row2[] = $row['hostname'];      
-            $row2[] = $row['ftp_benutzer'];  
-            //$row2[] = $row['ftp_passwort']; 
-            //$row2[] = $row['ftp_pause'];                //  => string 'N' 
-            //$row2[] = $row['ftp_import_after_break'];   //  => string '0'
-            $importAfterBreak = "Nein";
-            if($row['ftp_import_after_break']=='1'){
-                $importAfterBreak = "- JA -";
-            }
-            $row2[] = $importAfterBreak;
-
-            $links = "<a href=".$this->router->generate('server_starten', array('uid' => $row['user_id'])).">FTP-Import starten</a><br>";
-            if($row['ftp_import_after_break']=='1'){
-                $rs = $this->linksToFilesOnFTP($row['user_id']);
-                if($rs[0] != ""){
-                    $links = $links."<br>$rs[0]<br>$rs[1]<br>";
-                } 
-            } 
-            $row2[] = $links;
-            
-            $rows[] = $row2;
-        }
-
-        return $rows;
-    }
-
     public function FtpList(){
 
         $stmt = $this->sDao->getAllServerConfig();
@@ -80,6 +42,47 @@ class FtpServer
         return $rows;
     }
 
+    public function FtpPauseList(){
+        $stmt = $this->sDao->getAllFtpServerPause();
+
+        $rows = array();
+        while ($row = $stmt->fetch()) {
+            $row2 = array();
+
+            $row2[] = $row['user_id'];
+            $row2[] = $row['mitgliedsnummer'];
+            $row2[] = $row['vorname'].' '.$row['name'];;
+            $row2[] = $row['firma'];
+            $row2[] = $row['email'];
+            $row2[] = $row['hostname'];      
+            $row2[] = $row['ftp_benutzer'];  
+            //$row2[] = $row['ftp_passwort']; 
+            //$row2[] = $row['ftp_pause'];                //  => string 'N' 
+            //$row2[] = $row['ftp_import_after_break'];   //  => string '0'
+            $importAfterBreak = "Nein";
+            if($row['ftp_import_after_break']=='1'){
+                $importAfterBreak = "- JA -";
+            }
+            $row2[] = $importAfterBreak;
+
+            $links = "<a href=".$this->router->generate('server_starten', array('uid' => $row['user_id'])).">FTP-Import starten</a><br>";
+
+            if($row['ftp_import_after_break']=='1'){
+
+                $rs = $this->linksToFilesOnFTP($row['user_id']);
+                if($rs[0] != ""){
+                    $links = $links."<br>$rs[0]<br>$rs[1]<br>";
+                } 
+            } 
+
+            $row2[] = $links;
+            
+            $rows[] = $row2;
+        }
+
+        return $rows;
+    }
+
     public function linksToFilesOnFTP($user_id){
         $links  = "";
         $links2 = "";
@@ -102,7 +105,9 @@ class FtpServer
     public function getFilesOnFTP($user_id){
         $file_list = [];
         $conn_id = $this->getConnectToFtpServer($user_id);
+
         if(!$conn_id){
+
         } else {
             //$newcontents = ftp_chdir($conn_id, '/');
             $file_list = ftp_nlist($conn_id, ".");  // all file(namen)
@@ -113,35 +118,39 @@ class FtpServer
     } 
 
     public function fileDownloadToApp($user_id, $file){
-        $downloaded_file = "";
+        
         $conn_id = $this->getConnectToFtpServer($user_id);
+        
         if(!$conn_id){
+
         } else {
-            $remoteFilePath = str_replace("HH1z2Z7", ".", $file);
-            //$appPath = $this->getParameter('kernel.project_dir');  
-            $appPath = $this->parameterBag->get('kernel.project_dir');// 'C:\PHPtest\IVD24\BCLUB3\Ivd24Support2'
-            $localFilePath = $appPath."/zipfiles";
+            $appPath = $this->parameterBag->get('kernel.project_dir');
+            $downloaded_file = $appPath."/zipfiles/$file"; // file-path
 
             ftp_pasv($conn_id, true);
             // do down load
-            if(ftp_get($conn_id, $localFilePath."/$remoteFilePath", $remoteFilePath, FTP_BINARY)){
-                $downloaded_file = $localFilePath."/$remoteFilePath";
+            if(ftp_get($conn_id, $downloaded_file, $file, FTP_BINARY)){
+                ftp_close($conn_id);
+                return $downloaded_file;
             }
             
             ftp_close($conn_id);
         }
-        return $downloaded_file;
+
+        return false;
     }
 
     public function deleteFileOnFtpServer($user_id, $file){
 
         $conn_id = $this->getConnectToFtpServer($user_id);
+
         if(!$conn_id){
+            
         } else {
-            $remoteFilePath = str_replace("HH1z2Z7", ".", $file);
-            ftp_delete($conn_id, $remoteFilePath);
+            ftp_delete($conn_id, $file);
             ftp_close($conn_id);
         }
+
     }
 
     
@@ -155,7 +164,12 @@ class FtpServer
         $ftp_user_name = $makler_server['ftp_benutzer'];    // 'ftp_benutzer' =>  'f00210071'  => /home/ftpuser/f00210071 = zip-files depot von user "f00210071"
         $ftp_user_pass = $makler_server['ftp_passwort'];
 
-        $conn_id = false;
+        $conn_id = $this->connectToFtpServer($ftp_server, $ftp_user_name, $ftp_user_pass);
+
+        return $conn_id;
+    }
+
+    public function connectToFtpServer($ftp_server, $ftp_user_name, $ftp_user_pass){
 
         if($ftp_server !='' && $ftp_user_name !='' && $ftp_user_pass != ''){
             try {
@@ -173,7 +187,7 @@ class FtpServer
             }
         }
 
-        return $conn_id;
+        return false;
     }
 
 }

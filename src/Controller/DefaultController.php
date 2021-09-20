@@ -34,6 +34,7 @@ class DefaultController extends AbstractController
      */
     public function homePage()
     {
+        //$appPath = $this->getParameter('kernel.project_dir'); // project dir
         return $this->render('default/home.html.twig', [
         ]);
     }
