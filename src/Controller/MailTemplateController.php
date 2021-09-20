@@ -99,7 +99,8 @@ class MailTemplateController extends AbstractController
             'anrede'       => '{{anrede}}',
             'vorname'      => '{{vorname}}',
             'nachname'     => '{{nachname}}',
-            'user_id'      => '{{user_id}}'
+            'user_id'      => '{{user_id}}',
+            'anmeldelink'  => '{{anmeldelink}}'
         ]);
 
     }
@@ -184,7 +185,8 @@ class MailTemplateController extends AbstractController
             'anrede'      => '{{anrede}}',
             'vorname'     => '{{vorname}}',
             'nachname'    => '{{nachname}}',
-            'user_id'     => '{{user_id}}'
+            'user_id'     => '{{user_id}}',
+            'anmeldelink' => '{{anmeldelink}}'
         ]);
     }
 
