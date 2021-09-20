@@ -157,7 +157,7 @@ class SendQueue
     }
 
     public function addToSendQueue2($data=[]) {
-        $hauptversammlung_id = ['versammlung_id'];
+        $hauptversammlung_id = $data['versammlung_id'];
         $user_id = $data['user_id'];
         $user_id_md5 = md5($user_id);
         $anmeldelink = "www.ivd24immobilien.de/anmelden-hv/?hvid=$hauptversammlung_id&auth=$user_id_md5";
