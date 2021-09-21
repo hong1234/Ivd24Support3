@@ -20,7 +20,7 @@ class StockController extends AbstractController
    
     public function __construct(StockDao $stockDao, StockService $stockService)
     {
-        $this->stockService = $stockService;
+        $this->stockService = $stockService; 
         $this->stockDao = $stockDao;
     }
 
@@ -132,25 +132,14 @@ class StockController extends AbstractController
         ]);
     }
 
+    //----------------
+
     /**
      * @Route("/stock/{userid}/docdelete/{docid}", name="stock_docdelete", requirements={"userid"="\d+", "docid"="\d+"})
      */
     public function docDelete(int $userid, int $docid)
     {
-        $path = $this->stockDao->getDocDirByUserId(['user_id' => $userid])->verzeichnis;
-        $dokument_name = $this->stockDao->getAktienDocByDocId(['aktien_document_id' => $docid])->document_name;
-        $target_file = $path.$dokument_name;
-
-        if (file_exists($target_file)) {
-            if (unlink($target_file)) {
-                $this->stockDao->deleteDocByDocId(['aktien_document_id' => $docid]);
-            } else {
-                
-            }
-        } else {
-            
-        }
-
+        $this->stockService->deleteAktienDoc($docid);
         return $this->redirectToRoute('stock_verify', [
             'userid' => $userid
         ]);
@@ -163,7 +152,6 @@ class StockController extends AbstractController
     {
         $error = '';
        
-        // $dokument = '';
         $category = '';
         $infos = '';
 
@@ -182,15 +170,17 @@ class StockController extends AbstractController
             // $error = 'failed';
 
             if ($error == '') {
+
                 if ($_FILES['dokument']['error'] == 0) {
+                    
+                    //delete docs if exits-----
+                    $this->stockService->deleteAktienDoc2($userid, $category);
+                    
+                    //upload new-doc-----------
                     // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename($_FILES['dokument']['name']);
-                    // $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename($_FILES['dokument']['name']);
                     // $path = '/var/www/html/bilder/1/b00619003/files/'.basename($_FILES['dokument']['name']);
-                    // $path = '/var/www/html/bilder/1/b00619003/files/';
 
-                    $rs = $this->stockDao->getDocDirByUserId(['user_id' => $userid]);
-                    $path = $rs->verzeichnis;
-
+                    $path = $this->stockDao->getDocDirByUserId(['user_id' => $userid])->verzeichnis;
                     if ($category == 'Aktienkaufvertrag') {
                         $dokument_name = 'Aktienkaufvertrag.pdf';
                     } elseif ($category == 'Rechnung') {
@@ -198,48 +188,40 @@ class StockController extends AbstractController
                     } else {
                         $dokument_name = 'Urkunde.pdf';
                     }
-                    $target_path = $path.$dokument_name; // echo $target_path; exit;
+                    $target_path = $path.$dokument_name;
     
                     if(move_uploaded_file($_FILES['dokument']['tmp_name'], $target_path)) {
-                        // if(strlen($dokument)>0){
-                        //     unlink('/var/www/html/dokumente/ivd24/'.$dokument);
-                        // }
+
+                        $this->stockDao->insertAktienDoc([
+                            'user_id' => $userid,
+                            'document_cateogory' => $category,
+                            'document_name' => $dokument_name,
+                            'document_info' => $infos,
+                            'document_path' => $path
+                        ]);
+        
+                        return $this->redirectToRoute('stock_verify', [
+                            'userid' => $userid
+                        ]);
+                        
                     } else {
                         $error = $error."an error by uploading the file ---";
                     }
+
                 } else {
                     $error = $error."please select 1 file ---";
                 }
-            }
-
-            if ($error == '') {
-
-                $this->stockDao->insertAktienDoc([
-                    'user_id' => $userid,
-                    'document_cateogory' => $category,
-                    'document_name' => $dokument_name,
-                    'document_info' => $infos,
-                    'document_path' => $path
-                ]);
-
-                return $this->redirectToRoute('stock_verify', [
-                    'userid' => $userid
-                ]);
 
             }
 
         }
 
         if ($request->isMethod('GET')) {
-            // $temp = $this->templateService->getTemplateById($tempid);
-            // $templatename = $temp->titel;
-            // $template = $temp->nachricht;
-            // $dokument1 = $temp->document_path;
+            
         }
 
         return $this->render('stock/docupload.html.twig', [
             'user_id'  => $userid,
-            // 'dokument' => $dokument,
             'category' => $category,
             'categories' => [
                 [
@@ -255,6 +237,7 @@ class StockController extends AbstractController
             'infos' => $infos,
             'error' => $error
         ]);
+        
     }
 
     //-------------------------------
@@ -378,7 +361,7 @@ class StockController extends AbstractController
         }
 
         if ($request->isMethod('GET')) {
-            $betreff = "Ladung zu Sammlung";
+            $betreff = "Einladung zur Versammlung";
             $template_id = $temps[0]->mail_template_id;
         }
 

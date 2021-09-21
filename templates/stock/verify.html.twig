@@ -37,9 +37,9 @@
                         {% for doc in docs %}
                            Document: <b>{{doc.document_name}}</b> | <a onclick='showConfirm(event)' href="{{ path('stock_docdelete', {'userid': makler.user_id, 'docid': doc.aktien_document_id}) }}">doc-delete</a><br>
                            {# <button class="btn btn-primary btn-sm">doc delete</button> #}
-                           {# Document-path: {{doc.document_path}}<br><br> #}
                         {% endfor %}
                         
+                        <br>
                         <h4>Anzahl Aktien: {{makler.aktien_az}}</h4>
                         {% for item in aktien %}
                            Aktienhash: {{item.aktienhash}}<br>

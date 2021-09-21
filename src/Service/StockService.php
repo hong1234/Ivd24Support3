@@ -195,6 +195,13 @@ class StockService
         return $aktien;
     }
 
+    public function verifyUserAktien(int $user_id){
+        $rs = $this->stockDao->updateVerified([
+            'user_id' => $user_id
+        ]);
+        return $rs;
+    }
+
     public function aktienDoc($user_id){
         $docs = $this->stockDao->getAktienDoc([
             'user_id' => $user_id
@@ -202,11 +209,36 @@ class StockService
         return $docs;
     }
 
-    public function verifyUserAktien(int $user_id){
-        $rs = $this->stockDao->updateVerified([
-            'user_id' => $user_id
+    public function deleteAktienDoc(int $docid){
+        $doc = $this->stockDao->getAktienDocByDocId(['aktien_document_id' => $docid]);
+        $this->deleteDoc($doc);
+    }
+
+    public function deleteAktienDoc2(int $userid, string $category){
+        $stmt = $this->stockDao->getAktienDocByUserIdAndCategory([
+            'user_id' => $userid,
+            'document_cateogory' => $category
         ]);
-        return $rs;
+        while($doc = $stmt->fetch()) {
+            $this->deleteDoc($doc);
+        }
+    }
+
+    public function deleteDoc($doc){
+        $docid = $doc->aktien_document_id;
+        $document_path = $doc->document_path;
+        $dokument_name = $doc->document_name;
+        $target_file = $document_path.$dokument_name;
+
+        if (file_exists($target_file)) {
+            if (unlink($target_file)) {
+                $this->stockDao->deleteDocByDocId(['aktien_document_id' => $docid]);
+            } else {
+                
+            }
+        } else {
+            
+        }
     }
 
     //--------------

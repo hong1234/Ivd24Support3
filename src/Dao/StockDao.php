@@ -146,6 +146,11 @@ class StockDao extends BaseDao {
         $this->doSQL($sql, $values);
     }
 
+    public function getAktienDocByUserIdAndCategory(iterable $values=[]){
+        $sql = "SELECT * FROM aktien_documents  WHERE user_id = :user_id AND document_cateogory = :document_cateogory";
+        return $this->doQueryObj($sql, $values);
+    }
+
     public function getAktienDocByDocId(iterable $values=[]){
         $sql = "SELECT * FROM aktien_documents WHERE aktien_document_id = :aktien_document_id";
         return $this->doQueryObj($sql, $values)->fetch();
