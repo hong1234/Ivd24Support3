@@ -13,8 +13,7 @@
          <div class="row">
             <!-- left column -->
             <div class="col-md-6">
-               {# <form action="/supporter/stock/verify/{{user_id}}" method="POST"> #}
-               <form action="{{ path('stock_verify', {'userid': user_id}) }}" method="POST">
+               
                   <div class="box box-warning">
                      <div class="box-body">
                      
@@ -29,6 +28,7 @@
                         Telefon: {{makler.telefon}}<br><br>
 
                         <h4>Dokumenten zum Aktienkauf</h4>
+                        <a href="{{ path('stock_docupload', {'userid': makler.user_id}) }}"><button class="btn btn-primary">Dokumente hochladen</button></a><br>
                         {% for doc in docs %}
                            Document: {{doc.document_name}}<br>
                            Document-path: {{doc.document_path}}<br><br>
@@ -44,11 +44,13 @@
                      </div>
                      
 			            <div class="box-footer">
+                        {# <form action="/supporter/stock/verify/{{user_id}}" method="POST"> #}
+                        <form action="{{ path('stock_verify', {'userid': user_id}) }}" method="POST">
                         <button type="submit" class="btn btn-primary" name="savebutton" value="true">Aktien Kauf verifizieren</button>
+                        </form>
                      </div>
                      <!-- /.box-body -->
-                  </div>
-               </form>
+                  </div> 
             </div>
          </div>
       </section>

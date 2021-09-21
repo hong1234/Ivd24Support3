@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dokument upload{% endblock %}
+
+{% block head %}
+  
+{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <section class="content-header">
+
+        <h1>Dokument Upload</h1>
+        {% if error|length %}
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        {% endif %}
+      </section>
+      <!-- Main content -->
+      <section class="content">
+        
+        <div class="row">
+          
+          <!-- left column -->
+          <div class="col-md-6">
+            <div class="box box-warning">
+                {# <div class="box-header with-border">
+                    <h3 class="box-title">Supporter anlegen</h3>
+                </div> #}
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <!-- text input -->
+                  <form action="{{path('stock_docupload', {'userid': user_id})}}" method="POST" enctype="multipart/form-data">
+                    
+                    <div class="form-group">
+                        <label for="Dokument">Dokument</label>
+                        <input class="form-control" type="file" name="dokument" id="dokument">
+                    </div>
+                    <div class="form-group">
+                        <label for="Category">Category</label>
+                        <select id="category" name="category" class="form-control" required>
+                        {% for cat in categories %}
+                            <option value={{ cat.cat_name|e }} {% if cat.cat_name == category %} selected {% endif %}>{{ cat.cat_name|e }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Infos">Infos</label>
+                        <input type="text" class="form-control" id="infos" name="infos" placeholder="" value="{{infos}}">
+                    </div>
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-primary" name="savebutton" value="true">Speichern</button>
+                    </div>
+                  </form>
+                    
+                </div>
+			    <div class="box-footer">
+                    
+                </div>
+                <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block zusatz %}
+    
+{% endblock %}

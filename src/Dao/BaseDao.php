@@ -7,7 +7,8 @@ use App\Entity\Result;
 
 class BaseDao {
     
-    // public $em;// $em->getConnection() => Doctrine\DBAL\Connection
+    // public $em;
+    // $em->getConnection() => Doctrine\DBAL\Connection
 
     // public function __construct(EntityManagerInterface $em) {
     //     $this->em = $em;
@@ -16,22 +17,18 @@ class BaseDao {
     // public function doQuery($sql, $values){
     //     $stmt = $this->em->getConnection()->prepare($sql);  // Doctrine\DBAL\Statement
     //     if(!$stmt->execute($values)) {
-    //         //throw new \Exception("DoQuery faild!"); 
+    //         throw new \Exception("DoQuery faild!"); 
     //     }  
     //     return $stmt;
-    //     //return $stmt->fetchAll(); $stmt->fetch();
+    //     return $stmt->fetchAll(); $stmt->fetch();
     // }
 
     // public function doSQL($sql, $values){
     //     $stmt = $this->em->getConnection()->prepare($sql);
     //     if(!$stmt->execute($values)){
-    //         //throw new \Exception("DoSQL faild!");
+    //         throw new \Exception("DoSQL faild!");
     //     } 
     //     return true;
-    // }
-
-    // public function getEm(){
-    //     return $this->em;
     // }
 
     //---------------
@@ -77,42 +74,7 @@ class BaseDao {
         return $this->connection;
     }
 
-    //---------------
-
-    public function insertSendQueue(iterable $values=[]){
-        $sql = "INSERT INTO send_queue SET
-                user_id         = :user_id, 
-                sendername      = :sendername,
-                absender_mail   = :absender_mail,
-                reply_mail      = :reply_mail,
-                empfaenger_name = :empfaenger_name,
-                empfaenger_mail = :empfaenger_mail,
-                betreff         = :betreff,
-                nachricht       = :nachricht_html,
-                nachricht_plain = :nachricht_plain,
-                insertdate      = :insertdate
-                ";
-        return $this->doSQL($sql, $values);
-    }
-
-    public function insertSendQueue2(iterable $values=[]){
-        $sql = "INSERT INTO send_queue SET
-                user_id         = :user_id, 
-                sendername      = :sendername,
-                absender_mail   = :absender_mail,
-                reply_mail      = :reply_mail,
-                empfaenger_name = :empfaenger_name,
-                empfaenger_mail = :empfaenger_mail,
-                betreff         = :betreff,
-                nachricht       = :nachricht_html,
-                nachricht_plain = :nachricht_plain,
-                angang_datei_jn = :anhang_datei_jn,
-                angang_datei    = :anhang_datei,
-                anhang_datei_data = :anhang_datei_data,
-                insertdate      = :insertdate
-                ";
-        return $this->doSQL($sql, $values);
-    }
+    //----------------
 
     public function getAllRowsInTable(string $tabName) {
         $sql = "SELECT * FROM ".$tabName;
@@ -153,6 +115,52 @@ class BaseDao {
             $sql = $sql."$key = '$value'";
         }
         return $this->doQueryObj($sql, $values)->fetch(); 
+    }
+
+    //---------------
+
+    public function insertSendQueue(iterable $values=[]){
+        $sql = "INSERT INTO send_queue SET
+                user_id         = :user_id, 
+                sendername      = :sendername,
+                absender_mail   = :absender_mail,
+                reply_mail      = :reply_mail,
+                empfaenger_name = :empfaenger_name,
+                empfaenger_mail = :empfaenger_mail,
+                betreff         = :betreff,
+                nachricht       = :nachricht_html,
+                nachricht_plain = :nachricht_plain,
+                insertdate      = :insertdate
+                ";
+        return $this->doSQL($sql, $values);
+    }
+
+    public function insertSendQueue2(iterable $values=[]){
+        $sql = "INSERT INTO send_queue SET
+                user_id         = :user_id, 
+                sendername      = :sendername,
+                absender_mail   = :absender_mail,
+                reply_mail      = :reply_mail,
+                empfaenger_name = :empfaenger_name,
+                empfaenger_mail = :empfaenger_mail,
+                betreff         = :betreff,
+                nachricht       = :nachricht_html,
+                nachricht_plain = :nachricht_plain,
+                angang_datei_jn = :anhang_datei_jn,
+                angang_datei    = :anhang_datei,
+                anhang_datei_data = :anhang_datei_data,
+                insertdate      = :insertdate
+                ";
+        return $this->doSQL($sql, $values);
+    }
+
+    //-------------------------
+    public function getDocDirByUserId(iterable $values=[]) {
+        $sql = "SELECT user_makler_config.user_id, CONCAT('/var/www/html/bilder/', config_server.verzeichnis, '/', user_makler_config.bilderordner, '/files/') AS verzeichnis
+                FROM user_makler_config
+                LEFT JOIN config_server ON user_makler_config.bilderserver_id = config_server.config_server_id
+                WHERE user_id = :user_id";
+        return $this->doQueryObj($sql, $values)->fetch();
     }
 
 }

@@ -130,11 +130,6 @@ class StockDao extends BaseDao {
         return $this->doQuery($sql, $values)->fetch();
     }
 
-    public function getAktienDoc(iterable $values=[]){
-        $sql = "SELECT * FROM aktien_documents WHERE user_id = :user_id";
-        return $this->doQuery($sql, $values)->fetchAll();
-    }
-
     public function updateVerified(iterable $values=[]){
         $sql  = "UPDATE aktien SET purchase_verified = 1 WHERE user_id = :user_id";
         return $this->doSQL($sql, $values);
@@ -143,6 +138,24 @@ class StockDao extends BaseDao {
     public function getAktienAnzahlByUserId(iterable $values=[]){
         $sql = "SELECT count(*) AS ak_anzahl FROM aktien WHERE purchase_date IS NOT NULL AND user_id = :user_id";
         return $this->doQuery($sql, $values)->fetch();
+    }
+
+    //-------------------
+
+    public function getAktienDoc(iterable $values=[]){
+        $sql = "SELECT * FROM aktien_documents WHERE user_id = :user_id";
+        return $this->doQuery($sql, $values)->fetchAll();
+    }
+
+    public function insertAktienDoc(iterable $values=[]){
+        $sql = "INSERT INTO aktien_documents SET
+                user_id = :user_id,
+                document_cateogory = :document_cateogory,
+                document_name = :document_name,
+                document_info = :document_info,
+                document_path = :document_path
+                ";
+        return $this->doSQL($sql, $values);
     }
 
     //----------------------------------------------------------

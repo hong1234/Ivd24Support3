@@ -97,7 +97,108 @@ class StockController extends AbstractController
         ]);
     }
 
-    //-----------
+    /**
+     * @Route("/stock/docupload/{userid}", name="stock_docupload", requirements={"userid"="\d+"})
+     */
+    public function docUpload(int $userid, Request $request)
+    {
+        $error = '';
+       
+        // $dokument = '';
+        $category = '';
+        $infos = '';
+
+        if ($request->isMethod('POST') && $request->request->get('savebutton')) {
+            //post parameters
+            $safePost = $request->request;
+            // var_dump($safePost); 
+            // var_dump($_FILES['dokument']); 
+            // exit;
+
+            $category = $safePost->get('category');
+            $infos    = $safePost->get('infos');
+
+            //validation
+            // $error = $validator->isValidInput($safePost);
+            // $error = 'failed';
+
+            if ($error == '') {
+                if ($_FILES['dokument']['error'] == 0) {
+                    // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename($_FILES['dokument']['name']);
+                    // $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename($_FILES['dokument']['name']);
+                    // $path = '/var/www/html/bilder/1/b00619003/files/'.basename($_FILES['dokument']['name']);
+                    // $path = '/var/www/html/bilder/1/b00619003/files/';
+
+                    $rs = $this->stockDao->getDocDirByUserId(['user_id' => $userid]);
+                    $path = $rs->verzeichnis;
+
+                    if ($category == 'Aktienkaufvertrag') {
+                        $dokument_name = 'Aktienkaufvertrag.pdf';
+                    } elseif ($category == 'Rechnung') {
+                        $dokument_name = 'Rechnung.pdf';
+                    } else {
+                        $dokument_name = 'Urkunde.pdf';
+                    }
+                    $target_path = $path.$dokument_name; // echo $target_path; exit;
+    
+                    if(move_uploaded_file($_FILES['dokument']['tmp_name'], $target_path)) {
+                        // if(strlen($dokument)>0){
+                        //     unlink('/var/www/html/dokumente/ivd24/'.$dokument);
+                        // }
+                    } else {
+                        $error = $error."an error by uploading the file ---";
+                    }
+                } else {
+                    $error = $error."please select 1 file ---";
+                }
+            }
+
+            if ($error == '') {
+
+                $this->stockDao->insertAktienDoc([
+                    'user_id' => $userid,
+                    'document_cateogory' => $category,
+                    'document_name' => $dokument_name,
+                    'document_info' => $infos,
+                    'document_path' => $path
+                ]);
+
+                return $this->redirectToRoute('stock_verify', [
+                    'userid' => $userid
+                ]);
+
+            }
+
+        }
+
+        if ($request->isMethod('GET')) {
+            // $temp = $this->templateService->getTemplateById($tempid);
+            // $templatename = $temp->titel;
+            // $template = $temp->nachricht;
+            // $dokument1 = $temp->document_path;
+        }
+
+        return $this->render('stock/docupload.html.twig', [
+            'user_id'  => $userid,
+            // 'dokument' => $dokument,
+            'category' => $category,
+            'categories' => [
+                [
+                    'cat_name' => 'Aktienkaufvertrag'
+                ],
+                [
+                    'cat_name' => 'Rechnung'
+                ],
+                [
+                    'cat_name' => 'Urkunde'
+                ]
+            ],
+            'infos' => $infos,
+            'error' => $error
+        ]);
+    }
+
+    //-------------------------------
 
     /**
      * @Route("/stock/allmeeting", name="stock_allmeeting")
