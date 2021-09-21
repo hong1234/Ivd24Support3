@@ -76,24 +76,59 @@ class StockController extends AbstractController
      */
     public function verifyUserAktien(int $userid, Request $request)
     {
+        $error = '';
+
+        $docs = $this->stockService->aktienDoc($userid);
+        $makler = $this->stockService->maklerData($userid);
+        $aktien = $this->stockService->maklerAktien($userid);
+
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
-            $this->stockService->verifyUserAktien($userid);
-            return $this->redirectToRoute('stock_notverified', [
-                //'paramName' => 'value'
-            ]);
+
+            //validation
+            // $error = $validator->isValidInput($safePost);
+            $i = 0;
+            $doc = [];
+            while ($i < count($docs))
+            {
+                $document_cateogory = $docs[$i]['document_cateogory'];
+                if($document_cateogory == 'Aktienkaufvertrag'){
+                    $doc['Aktienkaufvertrag'] = 1;
+                } 
+
+                if($document_cateogory == 'Rechnung'){
+                    $doc['Rechnung'] = 1;
+                } 
+                $i++;
+            }
+
+            if(!isset($doc['Aktienkaufvertrag'])){
+                $error = $error.'Doc Aktienkaufvertrag.pdf fehlt ---';
+            }
+
+            if(!isset($doc['Rechnung'])){
+                $error = $error.'Doc Rechnung.pdf fehlt ---';
+            }
+
+            if ($error == '') {
+
+                $this->stockService->verifyUserAktien($userid);
+                return $this->redirectToRoute('stock_notverified', [
+                    //'paramName' => 'value'
+                ]);
+            }
+            
         }
 
         if ($request->isMethod('GET')) {
-            $makler = $this->stockService->maklerData($userid);
-            $aktien = $this->stockService->maklerAktien($userid);
-            $docs   = $this->stockService->aktienDoc($userid);
-            // var_dump($aktien); exit;
+            
         }
+
         return $this->render('stock/verify.html.twig', [
             'user_id' => $userid,
             'makler' => $makler,
             'aktien' => $aktien,
-            'docs' => $docs
+            'docs'  => $docs,
+            'error' => $error
         ]);
     }
 

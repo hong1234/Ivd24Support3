@@ -7,6 +7,11 @@
 
       <section class="content-header">
         <h1>Aktien Kauf verifizieren</h1>
+        {% if error|length %}
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        {% endif %}
       </section>
       <!-- Main content -->
       <section class="content">
@@ -64,7 +69,7 @@
 
   <script>
         function showConfirm(event){
-            var answer = window.confirm("Wollen Sie diese Datei wirklich abschließen ?");
+            var answer = window.confirm("Wollen Sie diese Datei wirklich löschen ?");
             if (answer==false) {
                 event.preventDefault();
             }
