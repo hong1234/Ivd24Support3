@@ -98,6 +98,30 @@ class StockController extends AbstractController
     }
 
     /**
+     * @Route("/stock/{userid}/docdelete/{docid}", name="stock_docdelete", requirements={"userid"="\d+", "docid"="\d+"})
+     */
+    public function docDelete(int $userid, int $docid)
+    {
+        $path = $this->stockDao->getDocDirByUserId(['user_id' => $userid])->verzeichnis;
+        $dokument_name = $this->stockDao->getAktienDocByDocId(['aktien_document_id' => $docid])->document_name;
+        $target_file = $path.$dokument_name;
+
+        if (file_exists($target_file)) {
+            if (unlink($target_file)) {
+                $this->stockDao->deleteDocByDocId(['aktien_document_id' => $docid]);
+            } else {
+                
+            }
+        } else {
+            
+        }
+
+        return $this->redirectToRoute('stock_verify', [
+            'userid' => $userid
+        ]);
+    }
+
+    /**
      * @Route("/stock/docupload/{userid}", name="stock_docupload", requirements={"userid"="\d+"})
      */
     public function docUpload(int $userid, Request $request)

@@ -65,7 +65,7 @@ class StockService
         return $donutData;
     }
 
-    public function getStakeholderStruktur() {
+    public function getStakeholderStruktur() { 
         $rs = array();
 
         $AnzahlAktienGesamt = $this->getStockNumber();

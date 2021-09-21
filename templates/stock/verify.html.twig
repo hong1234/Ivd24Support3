@@ -28,10 +28,11 @@
                         Telefon: {{makler.telefon}}<br><br>
 
                         <h4>Dokumenten zum Aktienkauf</h4>
-                        <a href="{{ path('stock_docupload', {'userid': makler.user_id}) }}"><button class="btn btn-primary">Dokumente hochladen</button></a><br>
+                        <a href="{{ path('stock_docupload', {'userid': makler.user_id}) }}"><button class="btn btn-primary">Dokumente hochladen</button></a><br><br>
                         {% for doc in docs %}
-                           Document: {{doc.document_name}}<br>
-                           Document-path: {{doc.document_path}}<br><br>
+                           Document: <b>{{doc.document_name}}</b> | <a onclick='showConfirm(event)' href="{{ path('stock_docdelete', {'userid': makler.user_id, 'docid': doc.aktien_document_id}) }}">doc-delete</a><br>
+                           {# <button class="btn btn-primary btn-sm">doc delete</button> #}
+                           {# Document-path: {{doc.document_path}}<br><br> #}
                         {% endfor %}
                         
                         <h4>Anzahl Aktien: {{makler.aktien_az}}</h4>
@@ -57,4 +58,17 @@
 
    </div>
   
+{% endblock %}
+
+{% block zusatz %}
+
+  <script>
+        function showConfirm(event){
+            var answer = window.confirm("Wollen Sie diese Datei wirklich abschließen ?");
+            if (answer==false) {
+                event.preventDefault();
+            }
+        }
+    </script>
+    
 {% endblock %}

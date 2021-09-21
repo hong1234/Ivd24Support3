@@ -141,6 +141,15 @@ class StockDao extends BaseDao {
     }
 
     //-------------------
+    public function deleteDocByDocId(iterable $values=[]){
+        $sql = "DELETE FROM aktien_documents WHERE aktien_document_id = :aktien_document_id";
+        $this->doSQL($sql, $values);
+    }
+
+    public function getAktienDocByDocId(iterable $values=[]){
+        $sql = "SELECT * FROM aktien_documents WHERE aktien_document_id = :aktien_document_id";
+        return $this->doQueryObj($sql, $values)->fetch();
+    }
 
     public function getAktienDoc(iterable $values=[]){
         $sql = "SELECT * FROM aktien_documents WHERE user_id = :user_id";
