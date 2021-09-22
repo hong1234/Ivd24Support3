@@ -60,8 +60,8 @@ class StatisticUserService
     
             $this->sqSer->addToSendQueue('statisticuser_new', [
                 'user_id'  => $user_id,
+                'email' => $email,
                 'username' => $username, 
-                'email' => $email, 
                 'passwort' => $passwort,
                 'geschaeftsstelle' => $geschaeftsstelle
             ]);
@@ -97,8 +97,8 @@ class StatisticUserService
 
             $this->sqSer->addToSendQueue('statisticuser_edit', [
                 'user_id'  => $user_id,
+                'email'    => $email,
                 'username' => $username, 
-                'email'    => $email, 
                 'passwort' => $passwort,
                 'geschaeftsstelle' => $geschaeftsstelle
             ]);

@@ -40,18 +40,31 @@ class StockDao extends BaseDao {
     }
 
     public function shareHolderList(iterable $values=[]){
-        // $sql = "SELECT user_makler.user_id, user_makler.mitgliedsnummer, user_makler.vorname, user_makler.name, user_makler.email, user_makler.firma, count(aktien.aktien_id) AS aktien_az, user_account.user_id_stakeholder, user_stakeholder.stakeholderinfos AS stakeholder
+        // $sql = "SELECT user_makler.user_id, user_makler.mitgliedsnummer, user_makler.vorname, user_makler.name, user_makler.firma, user_makler.email,
+        //         (SELECT count(aktien.user_id) FROM aktien WHERE aktien.user_id = user_makler.user_id) AS aktien_az,
+        //         user_account.user_id_stakeholder, user_stakeholder.stakeholderinfos AS stakeholder, aktien_documents.aktien_document_id AS aktien_doc_id, aktien_documents.document_name
         //         FROM user_makler
-        //         LEFT JOIN aktien ON user_makler.user_id = aktien.user_id
-        //         LEFT JOIN user_account ON user_account.user_id = aktien.user_id
-        //         LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_account.user_id_stakeholder";
+        //         LEFT JOIN user_account ON user_account.user_id = user_makler.user_id
+        //         LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_account.user_id_stakeholder
+        //         LEFT JOIN aktien_documents ON aktien_documents.user_id = user_makler.user_id
+        //         WHERE user_account.art_id = 2 AND user_account.recht_id = 3
+        //         ";
 
-        $sql = "SELECT user_makler.user_id, user_makler.mitgliedsnummer, user_makler.vorname, user_makler.name, user_makler.firma, user_makler.email,
-                (SELECT count(aktien.user_id) FROM aktien WHERE aktien.user_id = user_makler.user_id) AS aktien_az,
-                user_account.user_id_stakeholder, user_stakeholder.stakeholderinfos AS stakeholder
-                FROM user_makler
+        // $sql = "SELECT user_makler.user_id, user_makler.mitgliedsnummer, user_makler.vorname, user_makler.name, user_makler.firma, user_makler.email, akt.aktien_az, 
+        //         user_stakeholder.stakeholder_id, user_stakeholder.stakeholderinfos AS stakeholder, aktien_documents.aktien_document_id, aktien_documents.document_name
+        //         FROM (SELECT aktien.user_id, count(aktien.user_id) AS aktien_az FROM aktien GROUP BY aktien.user_id) AS akt
+        //         LEFT JOIN user_makler ON user_makler.user_id = akt.user_id
+        //         LEFT JOIN user_account ON user_account.user_id = user_makler.user_id
+        //         LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_makler.user_id
+        //         LEFT JOIN aktien_documents ON aktien_documents.user_id = user_makler.user_id
+        //         WHERE user_account.art_id = 2 AND user_account.recht_id = 3
+        //         ";
+        $sql = "SELECT user_makler.user_id, user_makler.mitgliedsnummer, user_makler.vorname, user_makler.name, user_makler.firma, user_makler.email, akt.aktien_az, 
+                user_stakeholder.stakeholder_id, user_stakeholder.stakeholderinfos AS stakeholder
+                FROM (SELECT aktien.user_id, count(aktien.user_id) AS aktien_az FROM aktien GROUP BY aktien.user_id) AS akt
+                LEFT JOIN user_makler ON user_makler.user_id = akt.user_id
                 LEFT JOIN user_account ON user_account.user_id = user_makler.user_id
-                LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_account.user_id_stakeholder
+                LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_makler.user_id
                 WHERE user_account.art_id = 2 AND user_account.recht_id = 3
                 ";
         return $this->doQueryObj($sql, $values);

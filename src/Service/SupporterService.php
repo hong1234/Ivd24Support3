@@ -51,8 +51,8 @@ class SupporterService
             
             $this->sqSer->addToSendQueue('supporter_new', [
                 'user_id'   => $user_id,
+                'email'     => $email,
                 'username'  => $username, 
-                'email'     => $email, 
                 'passwort'  => $passwort
             ]);
 
@@ -85,8 +85,8 @@ class SupporterService
              
             $this->sqSer->addToSendQueue('supporter_edit', [
                 'user_id'  => $user_id,
-                'username' => $username, 
-                'email'    => $email, 
+                'email'    => $email,
+                'username' => $username,  
                 'passwort' => $passwort
             ]);
 

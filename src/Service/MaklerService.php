@@ -146,8 +146,12 @@ class MaklerService
 
             $this->sqService->addToSendQueue('makler_new', [
                 'user_id'  => $user_id,
-                'username' => $username,
                 'email'    => $email,
+                'anrede'   => $anrede,
+                'titel'    => $titel,
+                'vorname'  => $vorname,
+                'nachname' => $name,
+                'username' => $username,
                 'passwort' => $passwort
             ]);
             

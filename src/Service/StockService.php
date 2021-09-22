@@ -133,31 +133,30 @@ class StockService
         
         $rs = array();
         while ($row = $stmt->fetch()) {
+            $row2 = array();
+            $links = "links";
+                    
+            $row2[] = $row->user_id; 
+                    
+            $row2[] = $row->mitgliedsnummer;
+            $row2[] = $row->vorname.' '.$row->name;
+            $row2[] = $row->firma;
+            $row2[] = $row->email;
+            $row2[] = $row->aktien_az;
 
-            if($row->aktien_az > 0){
-
-                $row2 = array();
-                $row2[] = $row->user_id;
-                $row2[] = $row->mitgliedsnummer;
-                $row2[] = $row->vorname.' '.$row->name;
-                $row2[] = $row->firma;
-                $row2[] = $row->email;
-                $row2[] = $row->aktien_az;
-                if($row->user_id_stakeholder == NULL){
-                    $row2[] = '--';
-                } else {
-                    $row2[] = $row->stakeholder;
-                }
-            
-                $links = "links";
-                // $links = "<a href=".$this->router->generate('makler_edit', array('uid' => $row['userId'])).">Aktienkaufvertrag</a><br>";
-                // $links = $links."<a href=".$this->router->generate('makler_ftp_edit', array('uid' => $row['userId'])).">Rechnung zum Aktienkauf</a><br>";
-            
-                $row2[] = $links;
-
-                $rs[] = $row2;
+            if($row->stakeholder_id == NULL){
+                $row2[] = '--';
+            } else {
+                $row2[] = $row->stakeholder;
             }
+            
+            // if($row->aktien_document_id != NULL){
+            //     $links = $links."<a href=".$this->router->generate('stock_docdownload', array('docid' => $row->aktien_document_id))." target='_blank'>$row->document_name</a><br>";
+            // } 
 
+            $row2[] = $links;
+
+            $rs[] = $row2;
         }
 
         return $rs;
@@ -296,8 +295,8 @@ class StockService
 
         $email = $row->email;
         if($mode == 'test'){
-            $email = 'technik@ivd24.de'; 
-            // $email = 'vuanhde@yahoo.de';
+            // $email = 'technik@ivd24.de'; 
+            $email = 'vuanhde@yahoo.de';
         }
 
         $anrede  = $row->anrede;
@@ -329,8 +328,8 @@ class StockService
 
         $email = $row->email;
         if($mode == 'test'){
-            $email = 'technik@ivd24.de'; 
-            // $email = 'vuanhde@yahoo.de';
+            // $email = 'technik@ivd24.de'; 
+            $email = 'vuanhde@yahoo.de';
         }
 
         $name  = $row->name;
