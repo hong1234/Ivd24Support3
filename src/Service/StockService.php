@@ -133,18 +133,20 @@ class StockService
         
         $rs = array();
         while ($row = $stmt->fetch()) {
-            if($row['aktien_az']>0){
+
+            if($row->aktien_az > 0){
+
                 $row2 = array();
-                $row2[] = $row['user_id'];
-                $row2[] = $row['mitgliedsnummer'];
-                $row2[] = $row['vorname'].' '.$row['name'];
-                $row2[] = $row['firma'];
-                $row2[] = $row['email'];
-                $row2[] = $row['aktien_az'];
-                if($row['user_id_stakeholder'] == NULL){
+                $row2[] = $row->user_id;
+                $row2[] = $row->mitgliedsnummer;
+                $row2[] = $row->vorname.' '.$row->name;
+                $row2[] = $row->firma;
+                $row2[] = $row->email;
+                $row2[] = $row->aktien_az;
+                if($row->user_id_stakeholder == NULL){
                     $row2[] = '--';
                 } else {
-                    $row2[] = $row['stakeholder'];
+                    $row2[] = $row->stakeholder;
                 }
             
                 $links = "links";
@@ -155,6 +157,7 @@ class StockService
 
                 $rs[] = $row2;
             }
+
         }
 
         return $rs;
@@ -202,6 +205,8 @@ class StockService
         return $rs;
     }
 
+    //------------------
+
     public function aktienDoc($user_id){
         $docs = $this->stockDao->getAktienDoc([
             'user_id' => $user_id
@@ -239,6 +244,15 @@ class StockService
         } else {
             
         }
+    }
+
+    public function getTargetDocPath(int $docid){
+        $doc = $this->stockDao->getAktienDocByDocId(['aktien_document_id' => $docid]);
+        $docid = $doc->aktien_document_id;
+        $document_path = $doc->document_path;
+        $dokument_name = $doc->document_name;
+        $target_file = $document_path.$dokument_name;
+        return $target_file;
     }
 
     //--------------

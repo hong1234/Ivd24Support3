@@ -60,6 +60,8 @@ class StockController extends AbstractController
         ]);
     }
 
+    //------verify----------
+
     /**
      * @Route("/stock/notverified", name="stock_notverified")
      */
@@ -132,7 +134,31 @@ class StockController extends AbstractController
         ]);
     }
 
-    //----------------
+    //----aktien-documente------------
+
+    /**
+     * @Route("/stock/docdownload/{docid}", name="stock_docdownload", requirements={"userid"="\d+", "docid"="\d+"})
+     */
+    public function docDownload(int $docid)
+    {
+        $downloaded_file = $this->stockService->getTargetDocPath($docid);
+        if (file_exists($downloaded_file)) {
+
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($downloaded_file).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($downloaded_file));
+            readfile($downloaded_file);
+            exit;
+        }
+
+        // return $this->redirectToRoute('stock_verify', [
+        //     'userid' => $userid
+        // ]);
+    }
 
     /**
      * @Route("/stock/{userid}/docdelete/{docid}", name="stock_docdelete", requirements={"userid"="\d+", "docid"="\d+"})

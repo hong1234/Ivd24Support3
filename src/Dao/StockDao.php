@@ -54,7 +54,7 @@ class StockDao extends BaseDao {
                 LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_account.user_id_stakeholder
                 WHERE user_account.art_id = 2 AND user_account.recht_id = 3
                 ";
-        return $this->doQuery($sql, $values);
+        return $this->doQueryObj($sql, $values);
     }
 
     public function notShareHolderList(iterable $values=[]){
