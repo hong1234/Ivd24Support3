@@ -171,7 +171,7 @@ class StockService
                 }
 
                 if($row->aktien_document_id != NULL){
-                    $links = $links."<a href=".$this->router->generate('stock_docdownload', array('docid' => $row->aktien_document_id))." target='_blank'>$row->document_name</a><br>";
+                    $links = $links."<a href=".$this->router->generate('stock_docdownload', array('docid' => $row->aktien_document_id)).">$row->document_name</a><br>";
                 } else {
                     $links = $links."";
                 }
@@ -180,7 +180,7 @@ class StockService
 
             if($row->user_id == $user_id && $lock == 0){
                 if($row->aktien_document_id != NULL){
-                    $links = $links."<a href=".$this->router->generate('stock_docdownload', array('docid' => $row->aktien_document_id))." target='_blank'>$row->document_name</a><br>";
+                    $links = $links."<a href=".$this->router->generate('stock_docdownload', array('docid' => $row->aktien_document_id)).">$row->document_name</a><br>";
                 } else {
                     $links = $links."";
                 }
