@@ -58,6 +58,7 @@ class StockDao extends BaseDao {
                 LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_makler.user_id
                 LEFT JOIN aktien_documents ON aktien_documents.user_id = user_makler.user_id
                 WHERE user_account.art_id = 2 AND user_account.recht_id = 3
+                ORDER BY user_makler.user_id ASC
                 ";
 
         return $this->doQueryObj($sql, $values);

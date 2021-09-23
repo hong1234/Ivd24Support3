@@ -156,10 +156,6 @@ class StockController extends AbstractController
         //     exit;
         // }
 
-        // return $this->redirectToRoute('stock_verify', [
-        //     'userid' => $userid
-        // ]);
-
         return $this->file($downloaded_file);
     }
 
