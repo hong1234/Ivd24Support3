@@ -248,24 +248,10 @@ class StockService
 
     public function deleteAktienDoc(int $docid){
         $doc = $this->stockDao->getAktienDocByDocId(['aktien_document_id' => $docid]);
-        $this->deleteDoc($doc);
-    }
-
-    public function deleteAktienDoc2(int $userid, string $category){
-        $stmt = $this->stockDao->getAktienDocByUserIdAndCategory([
-            'user_id' => $userid,
-            'document_cateogory' => $category
-        ]);
-        while($doc = $stmt->fetch()) {
-            $this->deleteDoc($doc);
-        }
-    }
-
-    public function deleteDoc($doc){
-        $docid = $doc->aktien_document_id;
+        $docid         = $doc->aktien_document_id;
         $document_path = $doc->document_path;
         $dokument_name = $doc->document_name;
-        $target_file = $document_path.$dokument_name;
+        $target_file   = $document_path.$dokument_name;
 
         if (file_exists($target_file)) {
             if (unlink($target_file)) {

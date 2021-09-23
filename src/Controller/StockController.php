@@ -178,6 +178,7 @@ class StockController extends AbstractController
         $error = '';
        
         $category = '';
+        $dokument_name = '';
         $infos = '';
 
         if ($request->isMethod('POST') && $request->request->get('savebutton')) {
@@ -190,29 +191,34 @@ class StockController extends AbstractController
             $category = $safePost->get('category');
             $infos    = $safePost->get('infos');
 
+            if ($category == 'Aktienkaufvertrag') {
+                $dokument_name = 'Aktienkaufvertrag.pdf';
+            } elseif ($category == 'Rechnung') {
+                $dokument_name = 'Rechnung.pdf';
+            } else {
+                $dokument_name = 'Urkunde.pdf';
+            }
+
             //validation
             // $error = $validator->isValidInput($safePost);
             // $error = 'failed';
+            $rs = $this->stockDao->getAktienDocByUserIdAndCategory([
+                'user_id' => $userid,
+                'document_cateogory' => $category
+            ]);
+
+            if(count($rs) > 0){
+                $error = $error."Dok $dokument_name ist vorhanden. Bitte löschen Sie dieses zuerst und versuchen es dann erneut! ---";
+            }
 
             if ($error == '') {
 
                 if ($_FILES['dokument']['error'] == 0) {
-                    
-                    //delete docs if exits-----
-                    $this->stockService->deleteAktienDoc2($userid, $category);
-                    
                     //upload new-doc-----------
                     // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename($_FILES['dokument']['name']);
                     // $path = '/var/www/html/bilder/1/b00619003/files/'.basename($_FILES['dokument']['name']);
 
                     $path = $this->stockDao->getDocDirByUserId(['user_id' => $userid])->verzeichnis;
-                    if ($category == 'Aktienkaufvertrag') {
-                        $dokument_name = 'Aktienkaufvertrag.pdf';
-                    } elseif ($category == 'Rechnung') {
-                        $dokument_name = 'Rechnung.pdf';
-                    } else {
-                        $dokument_name = 'Urkunde.pdf';
-                    }
                     $target_path = $path.$dokument_name;
     
                     if(move_uploaded_file($_FILES['dokument']['tmp_name'], $target_path)) {
