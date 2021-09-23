@@ -142,22 +142,25 @@ class StockController extends AbstractController
     public function docDownload(int $docid)
     {
         $downloaded_file = $this->stockService->getTargetDocPath($docid);
-        if (file_exists($downloaded_file)) {
 
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="'.basename($downloaded_file).'"');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($downloaded_file));
-            readfile($downloaded_file);
-            exit;
-        }
+        // if (file_exists($downloaded_file)) {
+
+        //     header('Content-Description: File Transfer');
+        //     header('Content-Type: application/octet-stream');
+        //     header('Content-Disposition: attachment; filename="'.basename($downloaded_file).'"');
+        //     header('Expires: 0');
+        //     header('Cache-Control: must-revalidate');
+        //     header('Pragma: public');
+        //     header('Content-Length: ' . filesize($downloaded_file));
+        //     readfile($downloaded_file);
+        //     exit;
+        // }
 
         // return $this->redirectToRoute('stock_verify', [
         //     'userid' => $userid
         // ]);
+
+        return $this->file($downloaded_file);
     }
 
     /**

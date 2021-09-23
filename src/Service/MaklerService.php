@@ -63,10 +63,12 @@ class MaklerService
         $mkategorie_id = $safePost->get('mkategorie_id');
 
         $mitgliedsnummer = $safePost->get('mitgliedsnummer');
+        
         $anrede  = $safePost->get('anrede');
         $titel   = $safePost->get('titel');
         $vorname = $safePost->get('vorname');
         $name    = $safePost->get('name');
+        
         $strasse = $safePost->get('strasse');
         $plz     = $safePost->get('plz');
         $ort     = $safePost->get('ort');
@@ -76,8 +78,8 @@ class MaklerService
         $telefax  = $safePost->get('telefax');
         $homepage = $safePost->get('homepage');
 	    
-        $username    = $safePost->get('username');
         $email       = $safePost->get('email');
+        $username    = $safePost->get('username');
         $passwort    = $safePost->get('passwort');
         $ftppasswort = $safePost->get('ftppasswort');
         $seo_url     = $safePost->get('seo_url');

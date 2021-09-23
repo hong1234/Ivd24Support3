@@ -17,7 +17,7 @@ class SendQueue
     public function addToSendQueue($modus, $data=[]) {
 
         $user_id = $data['user_id'];
-        $email = $data['email'];
+        $email   = $data['email'];
         // $email = '';
         // if(isset($data['email'])){
         //     $email = $data['email'];
@@ -27,10 +27,11 @@ class SendQueue
         $titel    = '';
         $vorname  = '';
         $nachname = '';
-        $geschaeftsstelle = '';
-
+        
         $username = '';
         $passwort = '';
+
+        $geschaeftsstelle = '';
         
         if(isset($data['anrede'])){
             $anrede = $data['anrede'];
@@ -63,6 +64,8 @@ class SendQueue
             $geschaeftsstelle = $data['geschaeftsstelle'];
         }
 
+        //--------------
+
         $sendername      = 'IVD24Immobilien';
         $absender_mail   = 'noreply@ivd24immobilien.de';
         $reply_mail      = 'noreply@ivd24immobilien.de';
@@ -78,7 +81,7 @@ class SendQueue
             $betreff  = "Ihr Account bei ivd24immobilien.de wurde freigeschaltet";
             $nachricht_plain = "sehen html text";
             
-            $nachricht_html = $this->twig->render('email/new.makler.html.twig', [
+            $nachricht_html = $this->twig->render('email/new.makler.html.twig', [ 
                 'anrede'   => $anrede,
                 'titel'    => $titel,
                 'vorname'  => $vorname,
@@ -167,7 +170,9 @@ class SendQueue
 
     }
 
+    // Einladung zur Versammlung
     public function addToSendQueue2($data=[]) {
+
         $hauptversammlung_id = $data['versammlung_id'];
         $user_id = $data['user_id'];
         $user_id_md5 = md5($user_id);
