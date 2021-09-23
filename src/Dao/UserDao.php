@@ -16,8 +16,7 @@ class UserDao extends BaseDao {
     }
 
     public function updateSupportUser(iterable $values=[]){
-        $sql = "UPDATE user_account 
-                SET
+        $sql = "UPDATE user_account SET
                 username  = :username, 
                 email     = :email,
                 kennwort  = :kennwort
@@ -53,13 +52,12 @@ class UserDao extends BaseDao {
     }
 
     public function updateStatisticUser(iterable $values=[]){
-        $sql   =   "UPDATE user_account 
-                    SET
-                    username             = :username, 
-                    email                = :email,
-                    kennwort             = :kennwort,
-                    geschaeftsstellen_id = :geschaeftsstellen_id
-                    WHERE       user_id  = :user_id";
+        $sql = "UPDATE user_account SET
+                username             = :username, 
+                email                = :email,
+                kennwort             = :kennwort,
+                geschaeftsstellen_id = :geschaeftsstellen_id
+                WHERE       user_id  = :user_id";
         return $this->doSQL($sql, $values);
     }
 
@@ -67,25 +65,24 @@ class UserDao extends BaseDao {
     
     public function insertAccountForStatisticUser(iterable $values=[]){
         $sql = "INSERT INTO user_account SET 
-                    art_id                = :art_id, 
-                    recht_id              = :recht_id,
-                    geschaeftsstellen_id  = :geschaeftsstellen_id,
-                    kennwort              = :kennwort,
-                    username              = :username,
-                    email                 = :email,
-                    registrierungsdatum   = :regdate,
-                    authentifiziert       = :authentifiziert, 
-                    gesperrt              = :gesperrt,
-                    loeschung             = :loeschung,
-                    newsletter            = :newsletter
+                art_id               = :art_id, 
+                recht_id             = :recht_id,
+                geschaeftsstellen_id = :geschaeftsstellen_id,
+                kennwort             = :kennwort,
+                username             = :username,
+                email                = :email,
+                registrierungsdatum  = :regdate,
+                authentifiziert      = :authentifiziert, 
+                gesperrt             = :gesperrt,
+                loeschung            = :loeschung,
+                newsletter           = :newsletter
                 ";
 
         return $this->doSQL($sql, $values);
     }
 
     public function insertAccountForSupporter(iterable $values=[]){
-        $sql = "INSERT INTO user_account 
-                SET 
+        $sql = "INSERT INTO user_account SET
                 art_id               = :art_id, 
                 recht_id             = :recht_id,
                 geschaeftsstellen_id = :geschaeftsstellen_id,
@@ -103,8 +100,7 @@ class UserDao extends BaseDao {
     }
 
     public function insertAccountForMakler(iterable $values=[]){
-        $sql = "INSERT INTO user_account 
-                SET 
+        $sql = "INSERT INTO user_account SET
                 art_id              = '2', 
                 recht_id            = '3',
                 kennwort            = :md5_pw,

@@ -70,8 +70,7 @@ class ObjectDao extends BaseDao {
     //-----------
 
     public function insertObjectDaylyStatistic(iterable $values=[]) {
-        $sql = "INSERT INTO hong_object_statistic 
-                SET 
+        $sql = "INSERT INTO hong_object_statistic SET 
                 object_gesamt     = :object_gesamt,
                 object_frei       = :object_frei,
                 object_nicht_frei = :object_nicht_frei,

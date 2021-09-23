@@ -15,12 +15,12 @@ class GeoDao extends BaseDao {
     }
 
     public function getBundeslandByPLZobj(iterable $values=[]) {
-        $sql = "SELECT plz, bundesland FROM geodb_plz_ort WHERE plz = :plz group by plz, bundesland";
+        $sql = "SELECT plz, bundesland FROM geodb_plz_ort WHERE plz = :plz GROUP BY plz, bundesland";
         return $this->doQueryObj($sql, $values)->fetch();
     }
 
     public function getBundeslandByPLZ(iterable $values=[]) {
-        $sql = "SELECT plz, bundesland FROM geodb_plz_ort WHERE plz = :plz group by plz, bundesland";
+        $sql = "SELECT plz, bundesland FROM geodb_plz_ort WHERE plz = :plz GROUP BY plz, bundesland";
         return $this->doQuery($sql, $values)->fetch();
     }
 

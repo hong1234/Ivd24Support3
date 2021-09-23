@@ -50,23 +50,16 @@ class StockDao extends BaseDao {
         //         WHERE user_account.art_id = 2 AND user_account.recht_id = 3
         //         ";
 
-        // $sql = "SELECT user_makler.user_id, user_makler.mitgliedsnummer, user_makler.vorname, user_makler.name, user_makler.firma, user_makler.email, akt.aktien_az, 
-        //         user_stakeholder.stakeholder_id, user_stakeholder.stakeholderinfos AS stakeholder, aktien_documents.aktien_document_id, aktien_documents.document_name
-        //         FROM (SELECT aktien.user_id, count(aktien.user_id) AS aktien_az FROM aktien GROUP BY aktien.user_id) AS akt
-        //         LEFT JOIN user_makler ON user_makler.user_id = akt.user_id
-        //         LEFT JOIN user_account ON user_account.user_id = user_makler.user_id
-        //         LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_makler.user_id
-        //         LEFT JOIN aktien_documents ON aktien_documents.user_id = user_makler.user_id
-        //         WHERE user_account.art_id = 2 AND user_account.recht_id = 3
-        //         ";
         $sql = "SELECT user_makler.user_id, user_makler.mitgliedsnummer, user_makler.vorname, user_makler.name, user_makler.firma, user_makler.email, akt.aktien_az, 
-                user_stakeholder.stakeholder_id, user_stakeholder.stakeholderinfos AS stakeholder
+                user_stakeholder.stakeholder_id, user_stakeholder.stakeholderinfos AS stakeholder, aktien_documents.aktien_document_id, aktien_documents.document_name
                 FROM (SELECT aktien.user_id, count(aktien.user_id) AS aktien_az FROM aktien GROUP BY aktien.user_id) AS akt
-                LEFT JOIN user_makler ON user_makler.user_id = akt.user_id
-                LEFT JOIN user_account ON user_account.user_id = user_makler.user_id
+                INNER JOIN user_makler ON user_makler.user_id = akt.user_id
+                INNER JOIN user_account ON user_account.user_id = user_makler.user_id
                 LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_makler.user_id
+                LEFT JOIN aktien_documents ON aktien_documents.user_id = user_makler.user_id
                 WHERE user_account.art_id = 2 AND user_account.recht_id = 3
                 ";
+
         return $this->doQueryObj($sql, $values);
     }
 
@@ -82,12 +75,12 @@ class StockDao extends BaseDao {
     //---------
 
     public function getStakeholders(iterable $values=[]){
-        $sql = "SELECT * FROM user_account where art_id = 5";
+        $sql = "SELECT * FROM user_account WHERE art_id = 5";
         return $this->doQuery($sql, $values)->fetchAll();
     }
 
     public function getMembersOfStakeholder(iterable $values=[]){
-        $sql = "SELECT * FROM user_account where user_id_stakeholder = :user_id_stakeholder";
+        $sql = "SELECT * FROM user_account WHERE user_id_stakeholder = :user_id_stakeholder";
         return $this->doQuery($sql, $values)->fetchAll();
     }
 
@@ -245,22 +238,22 @@ class StockDao extends BaseDao {
 
     public function insertHauptversammlungEmailCommunication(iterable $values=[]){
         $sql = "INSERT INTO hauptversammlung_email_communication SET 
-                    hauptversammlung_id = :hauptversammlung_id,
-                    user_id = :user_id,
-                    geschaeftsstelle_id = :geschaeftsstelle_id,
-                    send_mail_template_id = :mail_template_id,
-                    registration_link = 'abc', 
-                    insert_date = NOW()";
+                hauptversammlung_id = :hauptversammlung_id,
+                user_id = :user_id,
+                geschaeftsstelle_id = :geschaeftsstelle_id,
+                send_mail_template_id = :mail_template_id,
+                registration_link = 'abc', 
+                insert_date = NOW()";
         return $this->doSQL($sql, $values);
     }
 
     public function insertHauptversammlungEmailCommunication2(iterable $values=[]){
         $sql = "INSERT INTO hauptversammlung_email_communication SET 
-                    hauptversammlung_id = :hauptversammlung_id,
-                    geschaeftsstelle_id = :geschaeftsstelle_id,
-                    send_mail_template_id = :mail_template_id,
-                    registration_link = 'abc',  
-                    insert_date = NOW()";
+                hauptversammlung_id = :hauptversammlung_id,
+                geschaeftsstelle_id = :geschaeftsstelle_id,
+                send_mail_template_id = :mail_template_id,
+                registration_link = 'abc',  
+                insert_date = NOW()";
         return $this->doSQL($sql, $values);
     }
 

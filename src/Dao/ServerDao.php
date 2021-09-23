@@ -22,8 +22,7 @@ class ServerDao extends BaseDao {
     }
 
     public function updateServerConfig(iterable $values=[]){
-        $sql = "UPDATE user_makler_config 
-                SET 
+        $sql = "UPDATE user_makler_config SET 
                 ftp_pause = :ftp_pause,
                 ftp_import_after_break = :ftp_import_after_break 
                 WHERE user_id= :user_id";

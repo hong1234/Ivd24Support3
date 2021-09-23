@@ -132,38 +132,71 @@ class StockService
         $stmt = $this->stockDao->shareholderList();
         
         $rs = array();
+        
+        $row2 = array();
+        $links = "";
+
+        $user_id = 0;
+        $count = 0;
+
         while ($row = $stmt->fetch()) {
-            $row2 = array();
-            $links = "links";
-                    
-            $row2[] = $row->user_id; 
-                    
-            $row2[] = $row->mitgliedsnummer;
-            $row2[] = $row->vorname.' '.$row->name;
-            $row2[] = $row->firma;
-            $row2[] = $row->email;
-            $row2[] = $row->aktien_az;
 
-            if($row->stakeholder_id == NULL){
-                $row2[] = '--';
-            } else {
-                $row2[] = $row->stakeholder;
+            $count++;
+            $lock = 0;
+
+            if($row->user_id != $user_id){
+
+                $lock = 1;
+                $user_id = $row->user_id;
+                
+                if($count > 1){
+                    $row2[] = $links;
+                    $rs[] = $row2;
+                }
+
+                $row2 = array();
+                $links = "";
+
+                $row2[] = $row->user_id;  
+                $row2[] = $row->mitgliedsnummer;
+                $row2[] = $row->vorname.' '.$row->name;
+                $row2[] = $row->firma;
+                $row2[] = $row->email;
+                $row2[] = $row->aktien_az;
+
+                if($row->stakeholder_id == NULL){
+                    $row2[] = '--';
+                } else {
+                    $row2[] = $row->stakeholder;
+                }
+
+                if($row->aktien_document_id != NULL){
+                    $links = $links."<a href=".$this->router->generate('stock_docdownload', array('docid' => $row->aktien_document_id))." target='_blank'>$row->document_name</a><br>";
+                } else {
+                    $links = $links."";
+                }
+
             }
-            
-            // if($row->aktien_document_id != NULL){
-            //     $links = $links."<a href=".$this->router->generate('stock_docdownload', array('docid' => $row->aktien_document_id))." target='_blank'>$row->document_name</a><br>";
-            // } 
 
-            $row2[] = $links;
+            if($row->user_id == $user_id && $lock == 0){
+                if($row->aktien_document_id != NULL){
+                    $links = $links."<a href=".$this->router->generate('stock_docdownload', array('docid' => $row->aktien_document_id))." target='_blank'>$row->document_name</a><br>";
+                } else {
+                    $links = $links."";
+                }
+            }
 
-            $rs[] = $row2;
         }
+
+        $row2[] = $links;
+        $rs[] = $row2;
 
         return $rs;
     }
 
     public function notVerifiedList() {
         $stmt = $this->stockDao->getNotVerifiedAktien();
+
         $rs = array();
         while ($row = $stmt->fetch()) {
             $row2 = array();
