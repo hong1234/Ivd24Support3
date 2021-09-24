@@ -55,7 +55,7 @@ class StockDao extends BaseDao {
                 FROM (SELECT aktien.user_id, count(aktien.user_id) AS aktien_az FROM aktien GROUP BY aktien.user_id) AS akt
                 INNER JOIN user_makler ON user_makler.user_id = akt.user_id
                 INNER JOIN user_account ON user_account.user_id = user_makler.user_id
-                LEFT JOIN user_stakeholder ON user_stakeholder.user_id = user_makler.user_id
+                LEFT JOIN user_stakeholder ON user_stakeholder.stakeholder_id = user_account.user_id_stakeholder
                 LEFT JOIN aktien_documents ON aktien_documents.user_id = user_makler.user_id
                 WHERE user_account.art_id = 2 AND user_account.recht_id = 3
                 ORDER BY user_makler.user_id ASC
