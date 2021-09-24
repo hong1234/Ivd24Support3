@@ -34,12 +34,15 @@
 
                         <h4>Dokumenten zum Aktienkauf</h4>
                         <a href="{{ path('stock_docupload', {'userid': makler.user_id}) }}"><button class="btn btn-primary">Dokumente hochladen</button></a><br><br>
-                        {% for doc in docs %}
-                           Document: <b>{{doc.document_name}}</b> | <a onclick='showConfirm(event)' href="{{ path('stock_docdelete', {'userid': makler.user_id, 'docid': doc.aktien_document_id}) }}">doc-delete</a><br>
-                           {# <button class="btn btn-primary btn-sm">doc delete</button> #}
-                        {% endfor %}
+                        {% if docs|length > 0 %}
+                           Dokumente:<br>
+                           {% for doc in docs %}
+                              <a onclick='showConfirm(event)' href="{{ path('stock_docdelete', {'userid': makler.user_id, 'docid': doc.aktien_document_id}) }}">delete</a> | <strong>{{doc.document_name}}</strong><br>
+                              {# <button class="btn btn-primary btn-sm">doc-delete</button> #}
+                           {% endfor %}
+                           <br>
+                        {% endif %}
                         
-                        <br>
                         <h4>Anzahl Aktien: {{makler.aktien_az}}</h4>
                         {% for item in aktien %}
                            Aktienhash: {{item.aktienhash}}<br>

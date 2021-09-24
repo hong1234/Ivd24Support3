@@ -201,7 +201,6 @@ class StockController extends AbstractController
 
             //validation
             // $error = $validator->isValidInput($safePost);
-            // $error = 'failed';
             $rs = $this->stockDao->getAktienDocByUserIdAndCategory([
                 'user_id' => $userid,
                 'document_cateogory' => $category
@@ -215,7 +214,6 @@ class StockController extends AbstractController
 
                 if ($_FILES['dokument']['error'] == 0) {
                     //upload new-doc-----------
-                    // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename($_FILES['dokument']['name']);
                     // $path = '/var/www/html/bilder/1/b00619003/files/'.basename($_FILES['dokument']['name']);
 
                     $path = $this->stockDao->getDocDirByUserId(['user_id' => $userid])->verzeichnis;
