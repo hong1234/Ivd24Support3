@@ -52,7 +52,7 @@ class MailTemplateController extends AbstractController
             // var_dump($safePost); var_dump($_FILES['dokument']); exit;
 
             $templatename = $safePost->get('templatename');
-            $template = $safePost->get('template');
+            $template     = $safePost->get('template');
 
             //validation
             // $error = $validator->isValidStatisticUserInput($safePost);
@@ -65,22 +65,25 @@ class MailTemplateController extends AbstractController
             }
 
             if ($error == '') {
-                if(isset($_FILES['dokument'])) {
-                    if ($_FILES['dokument']['error'] == 0) {
+
+                if(isset($_FILES['dokument'])) { // es gibt file-input 'dokument' in form
+
+                    if ($_FILES['dokument']['error'] == 0) { // eine Datei gewählt zu upload
                         // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename($_FILES['dokument']['name']);
-                        // $path = '/var/www/html/ivd24SupportTool/public/dokumente/'.basename($_FILES['dokument']['name']);
-                        $path = '/var/www/html/dokumente/ivd24/'.basename($_FILES['dokument']['name']);
+                        $doc_dir = '/var/www/html/dokumente/ivd24/';
+                        $path = $doc_dir.basename($_FILES['dokument']['name']);
         
                         if(move_uploaded_file($_FILES['dokument']['tmp_name'], $path)) {
-                            // $dokument = $path;
                             $dokument = basename($_FILES['dokument']['name']);
                         } else{
                             $error = $error."There was an error uploading the file ---";
                         }
                     }
+
                 }
+
             }
-            
+
             if ($error == '') {
                 $this->templateService->insertTemplate($templatename, $template, $dokument);
                 return $this->redirectToRoute('template_list', [
@@ -121,8 +124,8 @@ class MailTemplateController extends AbstractController
             // var_dump( $safePost); exit;
 
             $templatename = $safePost->get('templatename');
-            $template  = $safePost->get('template');
-            $dokument1 = $safePost->get('dokument1');
+            $template     = $safePost->get('template');
+            $dokument1    = $safePost->get('dokument1');
 
             //validation
             // $error = $validator->isValidStatisticUserInput($safePost);
@@ -135,28 +138,30 @@ class MailTemplateController extends AbstractController
             }
 
             if ($error == '') {
-                if(isset($_FILES['dokument'])) {
-                    if ($_FILES['dokument']['error'] == 0) {
+
+                if(isset($_FILES['dokument'])) { // es gibt file-input 'dokument' in form
+
+                    $doc_dir = '/var/www/html/dokumente/ivd24/';
+                    if(strlen($dokument1)>0){ // delete aktuelle Doc-Datei
+                        unlink($doc_dir.$dokument1);
+                    }
+
+                    if ($_FILES['dokument']['error'] == 0) { // eine Datei gewählt
                         // $path = $this->getParameter('kernel.project_dir').'/public/dokumente/'.basename($_FILES['dokument']['name']);
-                        // $path = '/var/www/html/ivd24SupportTool'.'/public/dokumente/'.basename($_FILES['dokument']['name']);
-                        $path = '/var/www/html/dokumente/ivd24/'.basename($_FILES['dokument']['name']);
+                        $path = $doc_dir.basename($_FILES['dokument']['name']);
         
                         if(move_uploaded_file($_FILES['dokument']['tmp_name'], $path)) {
-                            if(strlen($dokument1)>0){
-                                unlink('/var/www/html/dokumente/ivd24/'.$dokument1);
-                            }
-                            // $dokument1 = $path;
-                            $dokument1 = basename($_FILES['dokument']['name']);
+                            $dokument1 = basename($_FILES['dokument']['name']); // neue Doc-Datei
                         } else{
+                            $dokument1 = '';
                             $error = $error."There was an error uploading the file ---";
                         }
+
                     } else {
-                        if(strlen($dokument1)>0){
-                            unlink('/var/www/html/dokumente/ivd24/'.$dokument1);
-                        }
                         $dokument1 = '';
                     }
-                } 
+                }
+
             }
 
             if ($error == '') {
@@ -195,6 +200,12 @@ class MailTemplateController extends AbstractController
      */
     public function templateDelete($tempid)
     {
+        $doc_dir   = '/var/www/html/dokumente/ivd24/';
+        $dokument1 = $this->templateService->getTemplateById($tempid)->document_path;
+        if(strlen($dokument1)>0){ // delete aktuelle Doc-Datei
+            unlink($doc_dir.$dokument1);
+        }
+        
         $this->tempDao->deleteTemplate([
             'template_id' => $tempid
         ]);
